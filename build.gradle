@@ -36,6 +36,13 @@ dependencies {
 	implementation 'commons-beanutils:commons-beanutils:1.9.4'
 		// https://mvnrepository.com/artifact/org.json/json
 	implementation 'org.json:json:20240303'
+
+	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:11.0.0-M19'
+   	implementation 'jakarta.servlet:jakarta.servlet-api' //스프링부트 3.0 이상
+   	implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api' //스프링부트 3.0 이상
+
+   	implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl' //스프링부트 3.0 이상
+	
 	
 	
 }
