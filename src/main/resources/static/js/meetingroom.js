@@ -100,7 +100,7 @@ $(document).ready(function() {
 									$("#videolocal").parent().parent().unblock();
 									if(!on)
 										return;
-									$('#publish').remove();
+									//$('#video-publish-btn').remove();
 									// This controls allows us to override the global room bitrate cap
 									$('#bitrate').parent().parent().removeClass('hide').show();
 									$('#bitrate a').click(function() {
@@ -199,11 +199,12 @@ $(document).ready(function() {
 													}
 												}
 												if(remoteFeed != null) {
-													Janus.debug("Feed " + remoteFeed.rfid + " (" + remoteFeed.rfdisplay + ") has left the room, detaching");
-													$('#remote'+remoteFeed.rfindex).empty().hide();
-													$('#videoremote'+remoteFeed.rfindex).empty();
-													feeds[remoteFeed.rfindex] = null;
-													remoteFeed.detach();
+													//Janus.debug("Feed " + remoteFeed.rfid + " (" + remoteFeed.rfdisplay + ") has left the room, detaching");
+													//$('#remote'+remoteFeed.rfindex).empty().hide();
+													//$('#videoremote'+remoteFeed.rfindex).empty();
+													$('#videoremote'+remoteFeed.rfindex).html('<img class="video-layout-inner" id="myvideo-unpublished" src="/image/no-video.png" >'); //송출이 안될시 이미지로 대체
+													//feeds[remoteFeed.rfindex] = null;
+													//remoteFeed.detach();
 												}
 											} else if(msg["error"]) {
 												if(msg["error_code"] === 426) {
@@ -249,15 +250,23 @@ $(document).ready(function() {
 									mystream = stream;
 									$('#videojoin').hide();
 									$('#videos').removeClass('hide').show();
-									if($('#myvideo').length === 0) {
-										$('#videolocal').append('<video class="video_layout_inner" id="myvideo" autoplay playsinline muted="muted"/>');
-										// Add a 'mute' button
-										$('#videolocal').append('<button class="btn btn-warning btn-xs" id="mute" style="position: absolute; bottom: 0px; left: 0px; margin: 15px;">Mute</button>');
-										$('#mute').click(toggleMute);
-										// Add an 'unpublish' button
-										$('#videolocal').append('<button class="btn btn-warning btn-xs" id="unpublish" style="position: absolute; bottom: 0px; right: 0px; margin: 15px;">Unpublish</button>');
-										$('#unpublish').click(unpublishOwnFeed);
+									if($('#myname').length === 0){
+										$('#myname-box').html('<span class="text-white text-xs font-bold" id="myname">'+ myusername+'</span>');
 									}
+									if($('#myvideo').length===0){
+										$('#videolocal').remove('#myvideo-unpublished');
+										$('#videolocal').html('<video class="video-layout-inner" id="myvideo" controls autoplay playsinline muted="muted"/>');
+									}// Add a 'mute' button
+									if($('#mute').length===0){
+										$('#user_ui_options').append('<button class="btn btn-warning btn-xs" id="mute" style="position: absolute; bottom: 0px; left: 0px; margin: 15px;">Mute</button>');
+										$('#mute').click(toggleMute);
+									}
+									if($('#video-publish-btn').length===0){	
+										// Add an 'unpublish' button
+										$('#user_ui_options').append('<button class="btn btn-warning btn-xs" id="video-publish-btn" style="position: absolute; bottom: 0px; right: 0px; margin: 15px;">Unpublish</button>');
+										$('#video-publish-btn').click(unpublishOwnFeed);
+									}
+									
 									$('#publisher').removeClass('hide').html(myusername).show();
 									Janus.attachMediaStream($('#myvideo').get(0), stream);
 									$("#myvideo").get(0).muted = "muted";
@@ -294,8 +303,11 @@ $(document).ready(function() {
 								oncleanup: function() {
 									Janus.log(" ::: Got a cleanup notification: we are unpublished now :::");
 									mystream = null;
-									$('#videolocal').html('<button id="publish" class="btn btn-primary">Publish</button>');
-									$('#publish').click(function() { publishOwnFeed(true); });
+									if($("myvideo-unpublished").length===0){
+										$('#videolocal').remove('#myvideo');
+										$('#videolocal').html('<img class="video-layout-inner" id="myvideo-unpublished" src="/image/no-video.png" >'); // 수정이 필요한 부분, 타인 화상화면의 출력을 제어할때는 원본을 참고할것
+									}
+									$('#video-publish-btn').click(function() { publishOwnFeed(true); });//publish-btn으로 변경 예정
 									$("#videolocal").parent().parent().unblock();
 									$('#bitrate').parent().parent().addClass('hide');
 									$('#bitrate a').unbind('click');
@@ -370,7 +382,7 @@ function registerUsername() {
 			$('#register').removeAttr('disabled').click(registerUsername);
 			return;
 		}
-		if(/[^a-zA-Z0-9]/.test(username)) {
+		if(/[^가-힣a-zA-Z0-9]/.test(username)) {
 			$('#you')
 				.removeClass().addClass('label label-warning')
 				.html('닉네임은 영문만 가능합니다.');
@@ -435,10 +447,13 @@ function participantsList(room){
     }});
 }
 
-// [jsflux] 내 화상화면 시작
+
+function publishFeed(user,useAudio){}
+
+
 function publishOwnFeed(useAudio) {
 	// Publish our stream
-	$('#publish').attr('disabled', true).unbind('click');
+	
 	sfutest.createOffer(
 		{
 			// Add data:true here if you want to publish datachannels as well
@@ -462,14 +477,15 @@ function publishOwnFeed(useAudio) {
 				// allowed codecs in a room. With respect to the point (2) above,
 				// refer to the text in janus.plugin.videoroom.jcfg for more details
 				sfutest.send({ message: publish, jsep: jsep });
+				$('#video-publish-btn').text("Unpublish").off("click").on('click',function() { unpublishOwnFeed(); })
 			},
 			error: function(error) {
 				Janus.error("WebRTC error:", error);
 				if(useAudio) {
-					 publishOwnFeed(false);
+					publishOwnFeed(false);// 음성출력관련해서 문제가 생긴건 아닌지 음성 출력을 false로 하고 현재함수를 다시 호출
 				} else {
 					bootbox.alert("WebRTC error... " + error.message);
-					$('#publish').removeAttr('disabled').click(function() { publishOwnFeed(true); });
+					$('#video-publish-btn').text('publish').off('click').on('click',function() { publishOwnFeed(true); });
 				}
 			}
 		});
@@ -477,20 +493,23 @@ function publishOwnFeed(useAudio) {
 
 // [jsflux] 음소거
 function toggleMute() {
-	var muted = sfutest.isAudioMuted();
-	Janus.log((muted ? "Unmuting" : "Muting") + " local stream...");
-	if(muted)
-		sfutest.unmuteAudio();
-	else
-		sfutest.muteAudio();
-	muted = sfutest.isAudioMuted();
-	$('#mute').html(muted ? "Unmute" : "Mute");
+		name = $('#myvideo').prop('tagName');
+		if(name==='VIDEO'){
+		var muted = sfutest.isAudioMuted();
+		Janus.log((muted ? "Unmuting" : "Muting") + " local stream...");
+		if(muted)
+			sfutest.unmuteAudio();
+		else
+			sfutest.muteAudio();
+		muted = sfutest.isAudioMuted();
+		$('#mute').html(muted ? "Unmute" : "Mute");
+	}
 }
 
-// [jsflux] 방나가기
+// [jsflux] 영상송출 중단하기
 function unpublishOwnFeed() {
 	// Unpublish our stream
-	$('#unpublish').attr('disabled', true).unbind('click');
+	$('#video-publish-btn').text('Publish').off('click').on('click',function(){publishOwnFeed(true);});
 	var unpublish = { request: "unpublish" };
 	sfutest.send({ message: unpublish });
 }
@@ -560,7 +579,7 @@ function newRemoteFeed(id, display, audio, video) {
 							remoteFeed.spinner.spin();
 						}
 						Janus.log("Successfully attached to feed " + remoteFeed.rfid + " (" + remoteFeed.rfdisplay + ") in room " + msg["room"]);
-						$('#remote'+remoteFeed.rfindex).removeClass('hide').html(remoteFeed.rfdisplay).show();
+						$('#remote'+remoteFeed.rfindex).removeClass('hide').html('<span class="text-white text-xs font-bold" id="participants'+remoteFeed.rfindex+'-name">'+ remoteFeed.rfdisplay +'</span>').show();//다른 참여자의 이름 송출
 					} else if(event === "event") {
 						// Check if we got a simulcast-related event from this publisher
 						var substream = msg["substream"];
@@ -615,7 +634,8 @@ function newRemoteFeed(id, display, audio, video) {
 					addButtons = true;
 					// No remote video yet
 					$('#videoremote'+remoteFeed.rfindex).append('<video class="rounded centered" id="waitingvideo' + remoteFeed.rfindex + '" width="100%" height="100%" />');
-					$('#videoremote'+remoteFeed.rfindex).append('<video class="rounded centered relative hide" id="remotevideo' + remoteFeed.rfindex + '" width="100%" height="100%" autoplay playsinline/>');
+					$('#videoremote'+remoteFeed.rfindex).append('<video class="video-layout-inner" id="remotevideo' + remoteFeed.rfindex + '" autoplay controls playsinline/>');
+					
 					$('#videoremote'+remoteFeed.rfindex).append(
 						'<span class="label label-primary hide" id="curres'+remoteFeed.rfindex+'" style="position: absolute; bottom: 0px; left: 0px; margin: 15px;"></span>' +
 						'<span class="label label-info hide" id="curbitrate'+remoteFeed.rfindex+'" style="position: absolute; bottom: 0px; right: 0px; margin: 15px;"></span>');
