@@ -201,10 +201,10 @@ $(document).ready(function() {
 												if(remoteFeed != null) {
 													//Janus.debug("Feed " + remoteFeed.rfid + " (" + remoteFeed.rfdisplay + ") has left the room, detaching");
 													//$('#remote'+remoteFeed.rfindex).empty().hide();
-													//$('#videoremote'+remoteFeed.rfindex).empty();
+													$('#videoremote'+remoteFeed.rfindex).empty();
 													$('#videoremote'+remoteFeed.rfindex).html('<img class="video-layout-inner" id="myvideo-unpublished" src="/image/no-video.png" >'); //송출이 안될시 이미지로 대체
-													//feeds[remoteFeed.rfindex] = null;
-													//remoteFeed.detach();
+													feeds[remoteFeed.rfindex] = null;
+													remoteFeed.detach();
 												}
 											} else if(msg["error"]) {
 												if(msg["error_code"] === 426) {
@@ -258,14 +258,16 @@ $(document).ready(function() {
 										$('#videolocal').html('<video class="video-layout-inner" id="myvideo" controls autoplay playsinline muted="muted"/>');
 									}// Add a 'mute' button
 									if($('#mute').length===0){
-										$('#user_ui_options').append('<button class="btn btn-warning btn-xs" id="mute" type="button" style="position: absolute; bottom: 0px; left: 0px; margin: 0px padding: 0px;">'
+										$('#user_ui_options').append('<button class="btn btn-warning btn-xs" id="mute" type="button" margin: 0px padding: 0px;">'
 										+'<img class="bottom-bar-button-icon-layout" src="/image/now-unmute.png"/>'
 										+'</button>');
 										$('#mute').click(toggleMute);
 									}
 									if($('#video-publish-btn').length===0){	
 										// Add an 'unpublish' button
-										$('#user_ui_options').append('<button class="btn btn-warning btn-xs" id="video-publish-btn" style="position: absolute; bottom: 0px; right: 0px; margin: 15px;">Unpublish</button>');
+										$('#user_ui_options').append('<button class="btn btn-warning btn-xs" id="video-publish-btn" style="margin: 0px; padding:0px;">'
+										+'<img class="bottom-bar-button-icon-layout" src="/image/now-cam-on.png"/>'
+										+'</button>');
 										$('#video-publish-btn').click(unpublishOwnFeed);
 									}
 									
@@ -479,7 +481,7 @@ function publishOwnFeed(useAudio) {
 				// allowed codecs in a room. With respect to the point (2) above,
 				// refer to the text in janus.plugin.videoroom.jcfg for more details
 				sfutest.send({ message: publish, jsep: jsep });
-				$('#video-publish-btn').text("Unpublish").off("click").on('click',function() { unpublishOwnFeed(); })
+				$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/image/now-cam-on.png"/>').off("click").on('click',function() { unpublishOwnFeed(); })
 			},
 			error: function(error) {
 				Janus.error("WebRTC error:", error);
@@ -487,7 +489,7 @@ function publishOwnFeed(useAudio) {
 					publishOwnFeed(false);// 음성출력관련해서 문제가 생긴건 아닌지 음성 출력을 false로 하고 현재함수를 다시 호출
 				} else {
 					bootbox.alert("WebRTC error... " + error.message);
-					$('#video-publish-btn').text('publish').off('click').on('click',function() { publishOwnFeed(true); });
+					$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/image/now-cam-off.png"/>').off('click').on('click',function() { publishOwnFeed(true); });
 				}
 			}
 		});
@@ -511,7 +513,8 @@ function toggleMute() {
 // [jsflux] 영상송출 중단하기
 function unpublishOwnFeed() {
 	// Unpublish our stream
-	$('#video-publish-btn').text('Publish').off('click').on('click',function(){publishOwnFeed(true);});
+	$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/image/now-cam-off.png"/>').off('click').on('click',function(){publishOwnFeed(true);});
+	
 	var unpublish = { request: "unpublish" };
 	sfutest.send({ message: unpublish });
 }
@@ -632,6 +635,11 @@ function newRemoteFeed(id, display, audio, video) {
 			onremotestream: function(stream) {
 				Janus.debug("Remote feed #" + remoteFeed.rfindex + ", stream:", stream);
 				var addButtons = false;
+
+				if($('#remotevideo' + remoteFeed.rfindex).length !==0){ // unpublish 버튼을 눌러 송출불가 이미지가 떠있을시 
+					$('#videoremote'+remoteFeed.rfindex).empty();
+				}	
+
 				if($('#remotevideo'+remoteFeed.rfindex).length === 0) {
 					addButtons = true;
 					// No remote video yet
