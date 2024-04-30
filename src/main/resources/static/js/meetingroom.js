@@ -258,7 +258,9 @@ $(document).ready(function() {
 										$('#videolocal').html('<video class="video-layout-inner" id="myvideo" controls autoplay playsinline muted="muted"/>');
 									}// Add a 'mute' button
 									if($('#mute').length===0){
-										$('#user_ui_options').append('<button class="btn btn-warning btn-xs" id="mute" style="position: absolute; bottom: 0px; left: 0px; margin: 15px;">Mute</button>');
+										$('#user_ui_options').append('<button class="btn btn-warning btn-xs" id="mute" type="button" style="position: absolute; bottom: 0px; left: 0px; margin: 15px;">'
+										+'<img class="bottom-bar-button-layout" src="/image/now-unmute.png"/>'
+										+'</button>');
 										$('#mute').click(toggleMute);
 									}
 									if($('#video-publish-btn').length===0){	
@@ -502,7 +504,7 @@ function toggleMute() {
 		else
 			sfutest.muteAudio();
 		muted = sfutest.isAudioMuted();
-		$('#mute').html(muted ? "Unmute" : "Mute");
+		$('#mute').html(muted ? '<img class="bottom-bar-button-layout" src="/image/now-mute.png"/>' : '<img class="bottom-bar-button-layout" src="/image/now-unmute.png"/>');
 	}
 }
 

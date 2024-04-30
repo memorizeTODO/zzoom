@@ -25,8 +25,11 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
     
     :root{
         --vw : 100;
-        --vh : 95;
-        --meetingroom-grid-container-h : calc(var(--vh) * 1vh);
+        --vh : 100;
+
+        --bottom-bar-h : 30px;
+
+        --meetingroom-grid-container-h : calc(var(--vh) * 1vh - var(--bottom-bar-h));
         --meetingroom-grid-container-w : calc(var(--vw) * 1vw);
         /*width가 384px 미만일 때 사용*/
         --meetingroom-flex-container-h : 100%;
@@ -155,17 +158,21 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
     }
     .bottom-bar-layout{
         width:  100vw;
-        height: 5vh;
+        height: var(--bottom-bar-h);
+        object-fit: scale-down;
         min-height: 2rem;
         background: #151515;
+    }
+
+    .bottom-bar-button-layout{
+        height: var(--bottom-bar-h);
+        width: auto;
     }
 
     .hide{
         display: none !important;
         
     }
-
-   
 
     .alert-flex-layout{
         position : absolute;
