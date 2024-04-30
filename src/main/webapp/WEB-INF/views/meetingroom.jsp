@@ -27,7 +27,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
         --vw : 100;
         --vh : 100;
 
-        --bottom-bar-h : 30px;
+        --bottom-bar-h : 50px;
 
         --meetingroom-grid-container-h : calc(var(--vh) * 1vh - var(--bottom-bar-h));
         --meetingroom-grid-container-w : calc(var(--vw) * 1vw);
