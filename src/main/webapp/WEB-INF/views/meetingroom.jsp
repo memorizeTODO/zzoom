@@ -162,11 +162,17 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
         object-fit: scale-down;
         min-height: 2rem;
         background: #151515;
+        place-items: center;
+        place-content:center;
     }
 
-    .bottom-bar-button-layout{
-        height: var(--bottom-bar-h);
+    .bottom-bar-button-icon-layout{
+        height: calc(var(--bottom-bar-h) / 10 * 7 );
         width: auto;
+    }
+    .bottom-bar-flex-layout{
+    	flex-direction: row;
+    	align-content: center;
     }
 
     .hide{
@@ -231,7 +237,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
         <div>
 
         <div class="fixed bottom-0 left-0 z-50 bottom-bar-layout dark:bg-gray-700 dark:border-gray-600"> <!--하단 네비게이터 바-->
-            <div class="grid h-full max-w-lg grid-cols-4 mx-auto font-medium" id="user_ui_options"><!--그리드 컨테이너-->
+            <div class="flex bottom-bar-flex-layout h-full max-w-lg mx-auto font-medium" id="user_ui_options"><!--그리드 컨테이너-->
             </div>
         </div>
     </div>
