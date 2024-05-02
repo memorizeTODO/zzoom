@@ -9,6 +9,7 @@ server = "https://janus.jsflux.co.kr/janus"; //jsflux janus server url
 var janus = null;
 var sfutest = null;
 var opaqueId = "videoroomtest-"+Janus.randomString(12);
+var is_mute = false;
 
 var myroom = 1234;	// Demo room
 if(getQueryStringValue("room") !== "") //getQueryStringValue(파라미터)에서 파라미터 값이 빈 문자열이 아니라면 함수의 리턴 값을 int형으로 바꿔 지정함  
@@ -20,6 +21,8 @@ var mypvtid = null;
 
 var feeds = [];
 var bitrateTimer = [];
+
+
 
 var doSimulcast = (getQueryStringValue("simulcast") === "yes" || getQueryStringValue("simulcast") === "true");
 var doSimulcast2 = (getQueryStringValue("simulcast2") === "yes" || getQueryStringValue("simulcast2") === "true");
@@ -62,6 +65,18 @@ $(document).ready(function() {
 											$(this).attr('disabled', true);
 											janus.destroy();
 										});
+									$('#exit').on('click',function() {
+											$('#meetingroom').hide();
+											$('#videojoin').show();
+
+											$(this).attr('disabled', true);
+											janus.destroy();
+/* 											feeds[0]=null;
+											feeds[0].detach();
+											var leaving = { request: "leaving" };
+											sfutest.send({ message: leaving }); */
+											
+									});
 
                     Janus.log("Room List > ");
                     //roomList();
@@ -128,7 +143,7 @@ $(document).ready(function() {
 											Janus.log("Successfully joined room " + msg["room"] + " with ID " + myid);
 											if(subscriber_mode) {
 												$('#videojoin').hide();
-												$('#videos').removeClass('hide').show();
+												$('#meetingroom').removeClass('hide').show();
 											} else {
 												publishOwnFeed(true);
 											}
@@ -169,7 +184,7 @@ $(document).ready(function() {
 												var leaving = msg["leaving"];
 												Janus.log("Publisher left: " + leaving);
 												var remoteFeed = null;
-												for(var i=1; i<6; i++) {
+												for(var i=1; i<feeds.length; i++) {
 													if(feeds[i] && feeds[i].rfid == leaving) {
 														remoteFeed = feeds[i];
 														break;
@@ -177,32 +192,33 @@ $(document).ready(function() {
 												}
 												if(remoteFeed != null) {
 													Janus.debug("Feed " + remoteFeed.rfid + " (" + remoteFeed.rfdisplay + ") has left the room, detaching");
-													$('#remote'+remoteFeed.rfindex).empty().hide();
+													$('#remote'+remoteFeed.rfindex).empty();
 													$('#videoremote'+remoteFeed.rfindex).empty();
 													feeds[remoteFeed.rfindex] = null;
 													remoteFeed.detach();
 												}
-											} else if(msg["unpublished"]) {
+											}
+											else if(msg["unpublished"]) {
 												// One of the publishers has unpublished?
 												var unpublished = msg["unpublished"];
 												Janus.log("Publisher left: " + unpublished);
-												if(unpublished === 'ok') {
+												/* if(unpublished === 'ok') {
 													// That's us
 													sfutest.hangup();
 													return;
-												}
+												} */
 												var remoteFeed = null;
-												for(var i=1; i<6; i++) {
+												for(var i=1; i<feeds.length; i++) {
 													if(feeds[i] && feeds[i].rfid == unpublished) {
 														remoteFeed = feeds[i];
 														break;
 													}
 												}
 												if(remoteFeed != null) {
-													//Janus.debug("Feed " + remoteFeed.rfid + " (" + remoteFeed.rfdisplay + ") has left the room, detaching");
-													//$('#remote'+remoteFeed.rfindex).empty().hide();
+													Janus.debug("Feed " + remoteFeed.rfid + " (" + remoteFeed.rfdisplay + ") has left the room, detaching");
+													$('#remote'+remoteFeed.rfindex).empty();
 													$('#videoremote'+remoteFeed.rfindex).empty();
-													$('#videoremote'+remoteFeed.rfindex).html('<img class="video-layout-inner" id="myvideo-unpublished" src="/image/no-video.png" >'); //송출이 안될시 이미지로 대체
+													//$('#videoremote'+remoteFeed.rfindex).html('<img class="video-layout-inner" id="myvideo-unpublished" src="/image/no-video.png" >'); //송출이 안될시 이미지로 대체
 													feeds[remoteFeed.rfindex] = null;
 													remoteFeed.detach();
 												}
@@ -249,27 +265,36 @@ $(document).ready(function() {
 									Janus.debug(" ::: Got a local stream :::", stream);
 									mystream = stream;
 									$('#videojoin').hide();
-									$('#videos').removeClass('hide').show();
+									$('#meetingroom').removeClass('hide').show();
 									if($('#myname').length === 0){
 										$('#myname-box').html('<span class="text-white text-xs font-bold" id="myname">'+ myusername+'</span>');
 									}
 									if($('#myvideo').length===0){
 										$('#videolocal').remove('#myvideo-unpublished');
 										$('#videolocal').html('<video class="video-layout-inner" id="myvideo" controls autoplay playsinline muted="muted"/>');
-									}// Add a 'mute' button
-									if($('#mute').length===0){
-										$('#user_ui_options').append('<button class="btn btn-warning btn-xs" id="mute" type="button" margin: 0px padding: 0px;">'
+										if($('#video-publish-btn').length){	
+											// Add an 'unpublish' button
+											$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/image/now-cam-on.png"/>')
+											$('#video-publish-btn').off('click').on('click',function(){unpublishOwnFeed();});
+											/* $('#user_ui_options').append('<button class="btn btn-warning btn-xs" id="video-publish-btn" style="margin: 0px; padding:0px;">'
+											+'<img class="bottom-bar-button-icon-layout" src="/image/now-cam-on.png"/>'
+											+'</button>'); */
+										}
+									}
+
+									if($('#mute').length){
+										if(is_mute===true){
+											$('#mute').html('<img class="bottom-bar-button-icon-layout" src="/image/now-mute.png"/>')
+											$('#mute').off('click').on('click',function(){toggleMute();});
+										}else{
+											$('#mute').html('<img class="bottom-bar-button-icon-layout" src="/image/now-unmute.png"/>')
+											$('#mute').off('click').on('click',function(){toggleMute();});
+										}
+										/* $('#user_ui_options').append('<button class="btn btn-warning btn-xs" id="mute" type="button" style="margin: 0px; padding: 0px;">'
 										+'<img class="bottom-bar-button-icon-layout" src="/image/now-unmute.png"/>'
-										+'</button>');
-										$('#mute').click(toggleMute);
+										+'</button>'); */
 									}
-									if($('#video-publish-btn').length===0){	
-										// Add an 'unpublish' button
-										$('#user_ui_options').append('<button class="btn btn-warning btn-xs" id="video-publish-btn" style="margin: 0px; padding:0px;">'
-										+'<img class="bottom-bar-button-icon-layout" src="/image/now-cam-on.png"/>'
-										+'</button>');
-										$('#video-publish-btn').click(unpublishOwnFeed);
-									}
+
 									
 									$('#publisher').removeClass('hide').html(myusername).show();
 									Janus.attachMediaStream($('#myvideo').get(0), stream);
@@ -343,7 +368,11 @@ function checkEnter(field, event) {
 	}
 }
 
-// [jsflux] 방생성 및 조인
+function exit(){ //회의방에서 나가기
+
+}
+
+// [jsflux] 화상회의방 생성 및 조인
 function registerUsername() {
 
 	if($('#roomname').length === 0) { // *방이름이  공백인 상태면
@@ -452,14 +481,14 @@ function participantsList(room){
 }
 
 
-function publishFeed(user,useAudio){}
+
 
 
 function publishOwnFeed(useAudio) {
 	// Publish our stream
 	
 	sfutest.createOffer(
-		{
+		{	
 			// Add data:true here if you want to publish datachannels as well
 			media: { audioRecv: false, videoRecv: false, audioSend: useAudio, videoSend: true },	// Publishers are sendonly
 			// If you want to test simulcasting (Chrome and Firefox only), then
@@ -481,12 +510,21 @@ function publishOwnFeed(useAudio) {
 				// allowed codecs in a room. With respect to the point (2) above,
 				// refer to the text in janus.plugin.videoroom.jcfg for more details
 				sfutest.send({ message: publish, jsep: jsep });
-				$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/image/now-cam-on.png"/>').off("click").on('click',function() { unpublishOwnFeed(); })
+				if(is_mute){ 
+					sfutest.muteAudio(); 
+				}else{
+					sfutest.unmuteAudio();
+				}
+				$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/image/now-cam-on.png"/>').off("click").on('click',function() { unpublishOwnFeed(); });
 			},
 			error: function(error) {
 				Janus.error("WebRTC error:", error);
 				if(useAudio) {
+					if (is_mute===false){
+						toggleMute();
+					}
 					publishOwnFeed(false);// 음성출력관련해서 문제가 생긴건 아닌지 음성 출력을 false로 하고 현재함수를 다시 호출
+					
 				} else {
 					bootbox.alert("WebRTC error... " + error.message);
 					$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/image/now-cam-off.png"/>').off('click').on('click',function() { publishOwnFeed(true); });
@@ -497,27 +535,58 @@ function publishOwnFeed(useAudio) {
 
 // [jsflux] 음소거
 function toggleMute() {
-		name = $('#myvideo').prop('tagName');
-		if(name==='VIDEO'){
+	name = $('#myvideo').prop('tagName');
+
+	if(is_mute){
+		is_mute = false;
+	}else{
+		is_mute = true;
+	}
+
+	if(name==='VIDEO'){
 		var muted = sfutest.isAudioMuted();
+		var is_exist_audioTrack=true;
 		Janus.log((muted ? "Unmuting" : "Muting") + " local stream...");
-		if(muted)
-			sfutest.unmuteAudio();
-		else
-			sfutest.muteAudio();
-		muted = sfutest.isAudioMuted();
-		$('#mute').html(muted ? '<img class="bottom-bar-button-icon-layout" src="/image/now-mute.png"/>' : '<img class="bottom-bar-button-icon-layout" src="/image/now-unmute.png"/>');
+		if(muted){
+			
+			is_exist_audioTrack=sfutest.unmuteAudio(); // 서버쪽에서 mute 상태라 응답이오면 unmute
+
+		}
+		else{
+			is_exist_audioTrack=sfutest.muteAudio(); // 서버쪽에서 unmute 상태라 응답이오면 mute
+		}
+
+		if(is_exist_audioTrack!==true){ //오디오 트랙이 없을때 
+			unpublishOwnFeed();
+			publishOwnFeed(true);
+			if(is_mute){ 
+				sfutest.muteAudio(); 
+			}else{
+				sfutest.unmuteAudio();
+			}
+		}
+
+		is_mute = sfutest.isAudioMuted(); //오디오트랙을 추가받지 못할것을 대비해 한번 더 서버쪽에서 갱신
+		$('#mute').html(is_mute ? '<img class="bottom-bar-button-icon-layout" src="/image/now-mute.png"/>' : '<img class="bottom-bar-button-icon-layout" src="/image/now-unmute.png"/>');
+	}else{
+		$('#mute').html(is_mute ? '<img class="bottom-bar-button-icon-layout" src="/image/now-mute.png"/>' : '<img class="bottom-bar-button-icon-layout" src="/image/now-unmute.png"/>');
 	}
 }
 
 // [jsflux] 영상송출 중단하기
 function unpublishOwnFeed() {
 	// Unpublish our stream
-	$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/image/now-cam-off.png"/>').off('click').on('click',function(){publishOwnFeed(true);});
+	
 	
 	var unpublish = { request: "unpublish" };
 	sfutest.send({ message: unpublish });
+	$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/image/now-cam-off.png"/>').off('click').on('click',function(){publishOwnFeed(true);});
 }
+/* function publishOwnFeed() {
+	$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/image/now-cam-on.png"/>').off("click").on('click',function() { unpublishOwnFeed(); });
+	var publish = { request: "publish" };
+	sfutest.send({ message: publish });
+} */
 
 // [jsflux] 새로운 유저 들어왔을때
 function newRemoteFeed(id, display, audio, video) {
@@ -693,13 +762,16 @@ function newRemoteFeed(id, display, audio, video) {
 					$('#curbitrate'+remoteFeed.rfindex).removeClass('hide').show();
 					bitrateTimer[remoteFeed.rfindex] = setInterval(function() {
 						// Display updated bitrate, if supported
+						if($('#remotevideo'+remoteFeed.rfindex).length!==0){
 						var bitrate = remoteFeed.getBitrate();
 						$('#curbitrate'+remoteFeed.rfindex).text(bitrate);
 						// Check if the resolution changed too
+						
 						var width = $("#remotevideo"+remoteFeed.rfindex).get(0).videoWidth;
 						var height = $("#remotevideo"+remoteFeed.rfindex).get(0).videoHeight;
 						if(width > 0 && height > 0)
 							$('#curres'+remoteFeed.rfindex).removeClass('hide').text(width+'x'+height).show();
+						}
 					}, 1000);
 				}
 			},
