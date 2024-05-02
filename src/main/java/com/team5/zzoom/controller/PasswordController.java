@@ -145,12 +145,20 @@ public class PasswordController {
     		    }
     		}
     	
-    		
+    	@PostMapping("/joinMeetingRoom")
+		public ResponseEntity<String> joinMeetingRoom(@RequestBody String parameter) {
+		    // DTO를 DAO에 전달하여 데이터베이스에 삽입
+		    System.out.println(parameter);
+		 
+		        return ResponseEntity.ok("Meeting created successfully.");
+
+		    }
+		}
+		
     	
     	
     	
     	
-}
     
     
     

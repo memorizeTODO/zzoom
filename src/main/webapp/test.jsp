@@ -121,7 +121,7 @@
         
         async function search() {
             
-            const res = await fetch('http://localhost:80/get/meetingroom?code=test2');
+            const res = await fetch('http://localhost:80/get/meetingroom?code=bab1211c');
 			const resJson = await res.json();
 			
             
