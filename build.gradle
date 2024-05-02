@@ -24,6 +24,7 @@ repositories {
 
 dependencies {
 
+
    // jsp
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
     // jakarta jstl
@@ -44,7 +45,6 @@ dependencies {
    implementation 'commons-beanutils:commons-beanutils:1.9.4'
    // https://mvnrepository.com/artifact/org.json/json
    implementation 'org.json:json:20240303'
-   
    
 }
 
