@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.team5.zzoom.dao.ReservationDAO">
+
+	<!-- 글작성 -->
+	<insert id="insertReservation" parameterType="Reservation">
+		insert into meeting(meeting_ID,member_ID,meeting_topic,meeting_passwd,meeting_member_num,meeting_start_date,
+							meeting_registration_date,member_name,meeting_join)
+			values(
+			#{meeting_id},#{member_id},
+			#{meeting_topic},#{meeting_passwd},#{meeting_member_num},#{meeting_start_date},
+			#{meeting_registration_date},#{member_name},#{meeting_join})
+	</insert>
+	
+	<select id="getReservationList" resultType="Reservation">
+		select * from meeting where member_ID = #{ID} 
+	</select>
+	
+	<select id="getReservation" parameterType="String" resultType="Reservation">
+		select * from meeting where meeting_ID = #{code}
+	</select>
+	
+	<update id="updateReservation" parameterType="Reservation">
+		update meeting 
+	set
+	    meeting_member_num = #{meeting_member_num},
+	    meeting_topic = #{meeting_topic},
+	    meeting_passwd = #{meeting_pass_wd},
+	    meeting_start_date = #{meeting_start_date},
+	    member_ID = #{member_id},
+	    member_name = #{member_name}
+		where meeting_ID = #{meeting_id}
+	</update>
+		
+</mapper>
