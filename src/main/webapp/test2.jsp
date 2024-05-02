@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,6 +20,7 @@
 
     <h2>Create Meeting</h2>
     <form id="insertForm">
+    <input type="hidden" id="meetingID" name="meetingID" value="get/">
     <label for="meetingMemberNum">meetingMemberNum:</label>
     <input type="number" id="meetingMemberNum" name="meetingMemberNum"><br>
     <label for="meetingTopic">meeting Topic:</label>
@@ -32,13 +35,13 @@
     <input type="text" id="memberID" name="memberID"><br>
 
 
-    <button type="button" onclick="saveMeeting()">Save</button>
+    <button type="button" onclick="updateMeeting()">update</button>
 	</form>
     
     <script>
        
 	
-	 var today = new Date();
+	var today = new Date();
 
     var year = today.getFullYear();
     var month = ('0' + (today.getMonth() + 1)).slice(-2);
@@ -48,37 +51,28 @@
 
     console.log(dateString);
 	
-    function saveMeeting() {
+    function updateMeeting() {
     	
-    	function uuidv4() {
-    	  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-    	    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-    	  );
-    	}
-    	var uuid = uuidv4();
-		var uuidresult = uuid.substring(0, 8); 
-        // 사용자가 입력한 데이터를 가져와서 JSON 객체 생성
         var jsonData = {
-        	meeting_id: ${"uuidresult"},
+            meeting_id: document.getElementById("meetingID").value,
             meeting_member_num: document.getElementById("meetingMemberNum").value,
             meeting_topic: document.getElementById("meetingTopic").value,
             meeting_passwd: document.getElementById("meetingPasswd").value,
             meeting_start_date: document.getElementById("meetingStartDate").value,
             member_id: document.getElementById("memberID").value,
             member_name: document.getElementById("memberName").value,
-            meeting_registration_date: ${"dateString"},
-            meeting_join: -1,                                 	
         };
 
         // AJAX를 사용하여 서버에 JSON 데이터 전송
         $.ajax({
             type: "POST",
-            url: "http://localhost:80/create-meeting", // 요청을 처리하는 컨트롤러의 엔드포인트
+            url: "http://localhost:80/update-meeting", // 요청을 처리하는 컨트롤러의 엔드포인트
             contentType: "application/json",
             data: JSON.stringify(jsonData), // JSON 데이터를 문자열로 변환하여 전송
             success: function(response) {
                 console.log("Success: " + response);
                 // 성공적으로 처리된 경우 실행할 코드
+                location.reload(true);
             },
             error: function(xhr, status, error) {
                 console.error("Error: " + error);
@@ -87,6 +81,7 @@
         });
     }		
     
+		
 
     
        /* $(document).ready(function(){
@@ -121,12 +116,20 @@
         
         async function search() {
             
-            const res = await fetch('http://localhost:80/get/meetingroom?code=test2');
+            const res = await fetch('http://localhost:80/get/meetingroom?code=bab1211c');
 			const resJson = await res.json();
-			
             
+			document.getElementById("meetingID").value = resJson.meeting_id;
+			document.getElementById("meetingMemberNum").value = resJson.meeting_member_num;
+			document.getElementById("meetingTopic").value = resJson.meeting_topic;
+			document.getElementById("meetingPasswd").value = resJson.meeting_passwd;
+			document.getElementById("meetingStartDate").value = resJson.meeting_start_date;
+			document.getElementById("memberName").value = resJson.member_name;
+			document.getElementById("memberID").value = resJson.member_id;
+			
 			console.log(resJson);
         }
+        
         search();
         
 		async function listsearch() {

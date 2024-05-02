@@ -3,6 +3,7 @@ package com.team5.zzoom.service;
 import java.util.List;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.ibatis.exceptions.PersistenceException;
@@ -19,10 +20,10 @@ import com.team5.zzoom.model.ReservationDTO;
 		@Autowired
 		private ReservationDAO dao;
 		
-		public int insertReservation(ReservationDTO w) {
+		public int insertReservation(ReservationDTO dto) {
 		    try {
 		        // insert 쿼리 실행
-		        dao.insertReservation(w);
+		        dao.insertReservation(dto);	
 		        
 		    } catch (PersistenceException e) {
 		        // MyBatis의 PersistenceException 처리
@@ -32,22 +33,28 @@ import com.team5.zzoom.model.ReservationDTO;
 		    return 1;
 		}
 		
-		public List<ReservationDTO> getReservationList() {
+		
+		
+		public List<ReservationDTO> getReservationList(String ID) {
 			
 			 
-			return dao.getReservationList();
+			return dao.getReservationList(ID);
+			
 			
 		}
+		
 		public ReservationDTO getReservation(String code) {
 
 			return dao.getReservation(code);
 			
 		}
+		
+		
 	    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-		public int updateReservation(ReservationDTO w) {
+		public int updateReservation(ReservationDTO dto) {
 	    	try {
 		        // insert 쿼리 실행
-	    		dao.updateReservation(w);
+	    		dao.updateReservation(dto);                                                                                 
 		        
 		    } catch (PersistenceException e) {
 		        // MyBatis의 PersistenceException 처리
@@ -56,6 +63,9 @@ import com.team5.zzoom.model.ReservationDTO;
 	    	
 	    	return 1;
 		}
+
+
+
 
 }
 

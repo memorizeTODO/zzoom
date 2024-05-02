@@ -59,15 +59,15 @@
 		var uuidresult = uuid.substring(0, 8); 
         // 사용자가 입력한 데이터를 가져와서 JSON 객체 생성
         var jsonData = {
-        	meeting_id: ${"uuidresult"},
-            meeting_member_num: document.getElementById("meetingMemberNum").value,
-            meeting_topic: document.getElementById("meetingTopic").value,
-            meeting_passwd: document.getElementById("meetingPasswd").value,
-            meeting_start_date: document.getElementById("meetingStartDate").value,
-            member_id: document.getElementById("memberID").value,
-            member_name: document.getElementById("memberName").value,
-            meeting_registration_date: ${"dateString"},
-            meeting_join: -1,                                 	
+            meetingID: ${"uuidresult"},
+            meetingMemberNum: document.getElementById("meetingMemberNum").value,
+            meetingTopic: document.getElementById("meetingTopic").value,
+            meetingPasswd: document.getElementById("meetingPasswd").value,
+            meetingStartDate: document.getElementById("meetingStartDate").value,
+            memberID: document.getElementById("memberID").value,
+            memberName: document.getElementById("memberName").value,
+            meetingRegistrationDate: ${"dateString"},
+            meetingJoin: -1,
         };
 
         // AJAX를 사용하여 서버에 JSON 데이터 전송
@@ -87,7 +87,54 @@
         });
     }		
     
+		function saveMeeting2() {
+    	
+    	function uuidv4() {
+    	  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+    	    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    	  );
+    	}
+    	var uuid = uuidv4();
+		var uuidresult = uuid.substring(0, 8); 
+        // 사용자가 입력한 데이터를 가져와서 JSON 객체 생성
+        var jsonData2 = {
+            meeting_id: ${"uuidresult"},
+            meeting_member_num: document.getElementById("meetingMemberNum").value,
+            meeting_topic: document.getElementById("meetingTopic").value,
+            meeting_passwd: document.getElementById("meetingPasswd").value,
+            meeting_start_date: document.getElementById("meetingStartDate").value,
+            member_id: document.getElementById("memberID").value,
+            member_name: document.getElementById("memberName").value,
+            meeting_registration_date: ${"dateString"},
+            meeting_join: -1,
+        };
 
+        // AJAX를 사용하여 서버에 JSON 데이터 전송
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:80/update-meeting", // 요청을 처리하는 컨트롤러의 엔드포인트
+            contentType: "application/json",
+            data: JSON.stringify(jsonData2), // JSON 데이터를 문자열로 변환하여 전송
+            success: function(response) {
+                console.log("Success: " + response);
+                // 성공적으로 처리된 경우 실행할 코드
+            },
+            error: function(xhr, status, error) {
+                console.error("Error: " + error);
+                // 오류 발생 시 실행할 코드
+            }
+        });
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
        /* $(document).ready(function(){
             $("#passwordForm").submit(function(event){
@@ -121,7 +168,7 @@
         
         async function search() {
             
-            const res = await fetch('http://localhost:80/get/meetingroom?code=test2');
+            const res = await fetch('http://localhost:80/get/meetingroom?code=e6593088');
 			const resJson = await res.json();
 			
             
