@@ -26,10 +26,10 @@ dependencies {
 
 
    // jsp
-    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
-    // jakarta jstl
-    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.0'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+   implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+   // jakarta jstl
+   implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.0'
+   implementation 'org.springframework.boot:spring-boot-starter-web'
    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
    
    compileOnly 'org.projectlombok:lombok'
