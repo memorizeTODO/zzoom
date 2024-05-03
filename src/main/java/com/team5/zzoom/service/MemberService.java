@@ -23,6 +23,7 @@ public class MemberService {
 	}
 	//아이디 찾기
 	public MemberDTO findId(MemberDTO member) {
+		System.out.println("서비스 진입");
 		return dao.findId(member);
 	}
 	// 로그인, 아이디 확인
