@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.team5.zzoom.model.MemberDTO;
-import com.team5.zzoom.service.MemberService;
+import com.team5.zzoom.service.MemberDAOImpl;
 
 import jakarta.servlet.http.HttpSession;
 
