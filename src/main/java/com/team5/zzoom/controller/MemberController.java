@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpSession;
 public class MemberController {
 
 	@Autowired
-	private MemberService service;
+	private MemberDAOImpl service;
 
 	// 메인 페이지 이동
 	@RequestMapping("main")
