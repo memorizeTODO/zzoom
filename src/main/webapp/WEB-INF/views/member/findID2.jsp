@@ -7,6 +7,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <title>아이디 찾기</title>
   <script>
@@ -24,7 +25,7 @@
     }
   </script>
 </head>
-
+<c:if test="empty mem">
 <body class="bg-gray-100 h-500 w-450">
   <div class="bg-white shadow-md rounded m-80 p-40 scroll-m-0">
     <h1 class="text-center text-xl font-bold">아이디 찾기</h1><br/>
@@ -55,53 +56,45 @@
     </div>
   </form>
 </div>
+</c:if>
+<%-- <c:if test="!empty mem">
+<body class="bg-gray-100 h-500 w-450">
+  <div class="bg-white shadow-md rounded m-80 p-40 scroll-m-0">
+    <h1 class="text-center text-xl font-bold">아이디 찾기 결과</h1><br/>
+    <div class="mb-5">
+      <label  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white font-bold">회원 아이디</label>
+      <input type="text" value= "가입된 아이디가 존재하지 않습니다."
+        class="bg-gray-50 border border-purple-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+    </div>
+    <div class="flex items-start mb-5">
+      <div class="flex items-center h-5">
+      </div>
+    </div>
+    <div class="grid gap-6 mb-6 md:grid-cols-2">
+    <input type="button" value="닫기" class="text-white bg-purple-400 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+    onclick="self.close();" />
+    </div>
+</div>
+</c:if> --%>
 
 <c:if test="!empty mem">
 <body class="bg-gray-100 h-500 w-450">
   <div class="bg-white shadow-md rounded m-80 p-40 scroll-m-0">
     <h1 class="text-center text-xl font-bold">아이디 찾기 결과</h1><br/>
     <div class="mb-5">
-      <label for="member_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white font-bold">회원 아이디</label>
-      <input type="text" name="member_id" id="member_id" value= "가입된 아이디가 존재하지 않습니다."
-        class="bg-gray-50 border border-purple-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-         />
+      <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white font-bold">회원 아이디</label>
+      <input type="text" value="${mem.member_id }"
+        class="bg-gray-50 border border-purple-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
     </div>
     <div class="flex items-start mb-5">
       <div class="flex items-center h-5">
-
       </div>
-
     </div>
     <div class="grid gap-6 mb-6 md:grid-cols-2">
     <input type="button" value="닫기" class="text-white bg-purple-400 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
     onclick="self.close();" />
     </div>
-  
-</div>
-</c:if>
-<c:if test="empty mem">
-<body class="bg-gray-100 h-500 w-450">
-  <div class="bg-white shadow-md rounded m-80 p-40 scroll-m-0">
-    <h1 class="text-center text-xl font-bold">아이디 찾기 결과</h1><br/>
-    <div class="mb-5">
-      <label for="member_passwd" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white font-bold">회원 아이디</label>
-      <input type="text" name="member_id" id="member_id" value= "가입된 아이디가 존재하지 않습니다."
-        class="bg-gray-50 border border-purple-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-         />
-    </div>
-    <div class="flex items-start mb-5">
-      <div class="flex items-center h-5">
-
-      </div>
-
-    </div>
-    <div class="grid gap-6 mb-6 md:grid-cols-2">
-    <input type="button" value="닫기" class="text-white bg-purple-400 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-    onclick="self.close();" />
-    </div>
-  
 </div>
 </c:if>
 </body>
-
 </html>

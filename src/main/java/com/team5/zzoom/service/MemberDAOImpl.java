@@ -7,7 +7,7 @@ import com.team5.zzoom.dao.MemberDAO;
 import com.team5.zzoom.model.MemberDTO;
 
 @Service
-public class MemberService {
+public class MemberDAOImpl {
 	@Autowired
 	private MemberDAO dao;
 
