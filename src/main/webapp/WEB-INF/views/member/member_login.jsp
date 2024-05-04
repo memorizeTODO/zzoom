@@ -13,12 +13,12 @@
 <script>
 	/*비번찾기 공지창*/
 	function passwd_find() {
-		window.open("findPasswdForm", "비번찾기", "width=450,height=500");
+		window.open("findPasswdForm", "비번찾기");
 		//자바 스크립트에서 window객체의 open("공지창경로와 파일명","공지창이름","공지창속성")
 		//메서드로 새로운 공지창을 만듬.폭이 400,높이가 400인 새로운 공지창을 만듬.단위는 픽셀
 	}
 	function id_find() {
-		window.open("findid", "아이디찾기", "width=450, height=500");
+		window.open("findid", "아이디찾기");
 	}
 </script>
 <title>Login Page</title>
