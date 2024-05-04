@@ -2,33 +2,216 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-<head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-   
-</head>
-<body>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />   
+        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>   
+        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>	
+
+        <nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-black-200 " ></nav>            
+                <div class="px-5 w-full flex flex-wrap items-center justify-between mx-auto  border-b-2">
+                    <a href="https://www.naver.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
+                        <img src="img\logozzoom.png" class="h-10" alt="ZZOM Logo" />
+                        <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span>
+                    </a>
+                    <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+                        <button type="button" class="text-white bg-purple-700 hover:bg-purple-400 
+                                                    focus:ring-10 focus:outline-none
+                                                     font-large rounded-lg text-md px-6 py-3 text-center mb-3">로그인</button>
+                    </div>   
+                    <div id="navbar-sticky" class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 justify-end">
+                        <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 
+                                   rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
+                        <li>
+                            <a href="#" aria-current="page"
+                            
+                            class="block py-3 px-4 bg-gray-900 text-gray-900 rounded md:bg-transparent md:text-purple-700 md:p-0">회의시작</a>
+                        </li> 
+                        <li>
+                            <a href="#" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 
+                                                md:hover:bg-transparent md:hover:text-purple-700 md:p-0">공지사항</a>
+                        </li>      
+                        <li>
+                            <a href="#" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 
+                                            md:hover:bg-transparent md:hover:text-purple-700 md:p-0">문의사항</a>
+                        </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>    
+        <!-- 하단 페이지 -->
+
+        <div class= "mx-10">   
+            <div class="my-20  px-20 py-20 bg-purple-600 rounded">
+                <form class="flex items-center max-w-lg max-h-lg mx-auto border-gray-300" id="insertForm">   
+                    <div class="relative w-full">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"></div>
+                        <input type="text" id="meeting_id"  name="meeting_id"
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                               focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" 
+                               placeholder="방 입장 코드를 입력해주세요" required />                                                                            
+                    </div>
+                    <button type="button" onclick="openModal()" 
+                            class="p-2.5 ms-2 text-sm font-medium 
+                                   text-white bg-blue-700 rounded-lg border border-blue-700 
+                                   hover:bg-blue-800 focus:ring-4 focus:outline-none 
+                                   focus:ring-blue-300">
+                        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                        </svg>
+           
+                    </button>
+                </form>      
+
+                
 
 
+                <!-- Modal toggle -->
+            <button data-modal-target="crud-modal" data-modal-toggle="crud-modal" type="hidden" id = "modal"></button>
+                       
+                	 
+            </div>
+            <div class="flex justify-center flex flex-col">
+                <div class="bg-gray-50 w-full h-72 p-10 my-10 overflow-y-scroll relative" >
+                    회의 등록
+	                    <div class="flex flex-row justify-start h-24 w-10/12 z-30 mr-10 px-5 py-5 rounded-lg bg-[#ffffff] border-2 border-black-100 mb-5 ">
+	                        <div class="w-auto h-auto  flex flex-col mx-5 px-5">
+	                            <div class="">  
+	                            </div>
+	                            <div>
+	                                    placename
+	                            </div>
+	                     </div>
+	                    </div> 
+	                    <div class="flex flex-row justify-start h-24 w-10/12 z-30 mr-10 px-5 py-5 rounded-lg bg-[#ffffff] border-2 border-black-100 mb-5 ">
+	                        <div class="w-auto h-auto relative flex flex-col mx-5 px-5">
+	                            <div class="">  
+	                                    addressname
+	                            </div>
+	                            <div>
+	                                    placename
+	                            </div>
+	                        </div>    
+	                     </div>
+	                     <div class="flex flex-row justify-start h-24 w-10/12 z-30 mr-10 px-5 py-5 rounded-lg bg-[#ffffff] border-2 border-black-100 mb-5 ">
+	                        <div class="relative flex flex-col mx-5 px-5">
+	                            <div class="">  
+	                                    addressname
+	                            </div>
+	                            <div>
+	                                    placename
+	                            </div>
+	                         </div>    	
+	                     </div>
+	                     <div class="flex flex-row justify-start h-24 w-10/12 z-30 mr-10 px-5 py-5 rounded-lg bg-[#ffffff] border-2 border-black-100 mb-5 ">
+	                        <div class="relative flex flex-col mx-5 px-5">
+	                            <div class="">  
+	                                    addressname
+	                            </div>
+	                            <div>
+	                                    placename
+	                            </div>
+	                         </div>    	
+	                     </div>
+	                     <div class="flex flex-row justify-start h-24 w-10/12 z-30 mr-10 px-5 py-5 rounded-lg bg-[#ffffff] border-2 border-black-100 mb-5 ">
+	                        <div class="relative flex flex-col mx-5 px-5">
+	                            <div class="">  
+	                                    addressname
+	                            </div>
+	                            <div>
+	                                    placename
+	                            </div>
+	                         </div>    	
+	                     </div>
+                    </div> 
+                    </div> 
+                </div>
+            <!-- Main modal --> 
+        <div id="crud-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <div class="relative p-4 w-full max-w-md max-h-full">
+                    <!-- Modal content -->
+                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                        <!-- Modal header -->
+                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                비밀번호 입력
+                            </h3>
+                            <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal">
+                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                </svg>
+                                <span class="sr-only">Close modal</span>
+                            </button>
+                        </div>
+                        <!-- Modal body -->
+                            <form class="max-w-sm mx-auto my-5" id = "passwdform">
+                                <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">         
+                                    </div>
+                                    <input type="text" id="enter-passwd" name="enter-passwd" maxlength='4' class="block w-full p-4 ps-10 text-lg text-gray-900 border border-gray-300 
+                                                                                    rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 " 
+                                                                                    placeholder="비밀번호를 입력해주세요" required />
 
+                                </div>
+                                <div class="flex justify-end">
+                                <button type="button" onclick="search()" class="text-white inline-flex flex justify-self-center bg-blue-700 hover:bg-blue-800 
+                                                            focus:ring-4 focus:outline-none focus:ring-blue-300 my-5
+                                                            font-medium rounded-lg  text-sm px-5 py-2.5 text-center">            
+                                <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
+                                입장
+                                </button>
+                                </div>
+                            </form>
+                            
+                        </form>
+                    </div>
+                </div>
+        </div> 
+    </div>
 
-
-
-
-
-
-    <h2>search Meeting</h2>
+    <!--  <h2>search Meeting</h2>
     <form id="insertForm">
     <label for="meeting_id">meeting_id:</label>
     <input type="text" id="meeting_id" name="meeting_id"><br>
-    <button type="button" onclick="search()">Save</button>
+    <button type="button" onclick="search()">코드입력</button>
+    <label for="meeting_id">meeting_passwd:</label>
+    <input type="text" id="meeting_passwd" name="meeting_passwd"><br>
+    <button type="button" onclick="enterpasswd()">비번입력</button>
 	</form>
-    
-    
+    -->
     <input type="text" id="display_room_num" name="display_room_num">
-    
     
     <script>
        
+    async function openModal(){
+    	var meeting_id = document.getElementById("meeting_id").value
+        const res = await fetch(`http://localhost:80/get/meetingroom?code=${"${meeting_id}"}`);
+		const resJson = await res.json();
+		//값 받아오깆
+		
+		var meeting_ID = resJson.meeting_id;
+			
+		if(meeting_ID != null ){
+			
+    	document.getElementById('modal').click();
+		}else{
+			document.getElementById("display_room_num").value = "방을 찾을 수 없습니다";
+		}
+    }
 	
 	 var today = new Date();
 
@@ -71,7 +254,7 @@
 
                 // 입력된 비밀번호를 가져옵니다.
                 var password = $("#password").val();
-
+	
                 // AJAX 요청을 생성합니다.
                 $.ajax({
                     type: "POST",
@@ -94,38 +277,56 @@
         });*/
         
         
+        
+        
         async function search() {
             var meeting_id = document.getElementById("meeting_id").value
             const res = await fetch(`http://localhost:80/get/meetingroom?code=${"${meeting_id}"}`);
 			const resJson = await res.json();
-			var room_num = resJson.meeting_room_num;
+			
 			var meeting_ID = resJson.meeting_id;
+				
+			var room_num = resJson.meeting_room_num;
 			meeting_room_num = 50000+Number(room_num);
-			document.getElementById("display_room_num").value = meeting_room_num;
-			 
-			 var jsonData = {
-			            meeting_id: ${"meeting_ID"},
-			            meeting_room_num: ${"meeting_room_num"},
-			        };
-
-			        // AJAX를 사용하여 서버에 JSON 데이터 전송
-			        $.ajax({
-			            type: "POST",
-			            url: "http://localhost:80/joinMeetingRoom", // 요청을 처리하는 컨트롤러의 엔드포인트
-			            contentType: "application/json",
-			            data: JSON.stringify(jsonData), // JSON 데이터를 문자열로 변환하여 전송
-			            success: function(response) {
-			                console.log("Success: " + response);
-			                // 성공적으로 처리된 경우 실행할 코드
-			                location.reload(true);
-			            },
-			            error: function(xhr, status, error) {
-			                console.error("Error: " + error);
-			                // 오류 발생 시 실행할 코드
-			            }
-			        });
-			 
-        }
+			
+				 		if(resJson.meeting_join == '1'){
+				 			
+				 			if(resJson.meeting_passwd = document.getElementById("enter-passwd").value){
+					 			document.getElementById("display_room_num").value = meeting_room_num;
+					 					
+								 			var jsonData = {
+										            meeting_id: ${"meeting_ID"},
+										            meeting_room_num: ${"meeting_room_num"},
+										        };
+				
+										        // AJAX를 사용하여 서버에 JSON 데이터 전송
+										        $.ajax({
+										            type: "POST",
+										            url: "http://localhost:80/joinMeetingRoom", // 요청을 처리하는 컨트롤러의 엔드포인트
+										            contentType: "application/json",
+										            data: JSON.stringify(jsonData), // JSON 데이터를 문자열로 변환하여 전송
+										            success: function(response) {
+										                console.log("Success: " + response);
+										                // 성공적으로 처리된 경우 실행할 코드
+										            },
+										            error: function(xhr, status, error) {
+										                console.error("Error: " + error);
+										                // 오류 발생 시 실행할 코드
+										            }
+										        });		
+					 				location.href="/zzoom/test4.jsp";
+					 		}else{
+							 	alert("비밀번호가 맞지 않습니다.");	
+					 		}
+				 		
+						}else{
+						 	alert("입장 불가능한 방입니다.");					 			
+						}
+						
+	        		}
+			
+			
+			
         
 		async function listsearch() {
             

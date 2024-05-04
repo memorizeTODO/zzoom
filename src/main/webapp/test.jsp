@@ -25,19 +25,17 @@
     <label for="meetingPasswd">meeting Passwd:</label>
     <input type="text" id="meetingPasswd" name="meetingPasswd"><br>
     <label for="meetingStartDate">meetingStartDate:</label>
-    <input type="date" id="meetingStartDate" name="meetingStartDate"><br>
+    <input type="datetime-local" id="meetingStartDate" name="meetingStartDate"><br>
     <label for="memberName">memberName:</label>
     <input type="text" id="memberName" name="memberName"><br>
     <label for="memberID">memberID:</label>
     <input type="text" id="memberID" name="memberID"><br>
-
-
     <button type="button" onclick="saveMeeting()">Save</button>
 	</form>
     
     <script>
        
-	
+	 	
 	 var today = new Date();
 
     var year = today.getFullYear();
@@ -67,7 +65,7 @@
             member_id: document.getElementById("memberID").value,
             member_name: document.getElementById("memberName").value,
             meeting_registration_date: ${"dateString"},
-            meeting_join: -1,                                 	
+            meeting_join: 1,                                 	
         };
 
         // AJAX를 사용하여 서버에 JSON 데이터 전송
