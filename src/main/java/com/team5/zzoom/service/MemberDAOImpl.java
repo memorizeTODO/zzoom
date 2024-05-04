@@ -7,7 +7,7 @@ import com.team5.zzoom.dao.MemberDAO;
 import com.team5.zzoom.model.MemberDTO;
 
 @Service
-public class MemberDAOImpl {
+public class MemberDAOImpl implements MemberDAO {
 	@Autowired
 	private MemberDAO dao;
 
@@ -33,18 +33,13 @@ public class MemberDAOImpl {
 	}
 
 	// 아이디(ajax) 중복 검사
-	public int memberCheckId(String memid) throws Exception {
+	public MemberDTO memberCheckId(String memid) throws Exception {
 		System.out.println("Access memberCheckId service");
 		System.out.println("서비스클래스 memid:" + memid);
-
-		int result = -1; // 사용 가능 아이디
-		MemberDTO mem = dao.memberCheckId(memid);
-		System.out.println("id중복 member:" + mem);
-
-		if (mem != null) {
-			result = 1; // 중복 아이디
-		}
-		return result;
+		MemberDTO mem = null;
+		mem = dao.memberCheckId(memid);
+		System.out.println("memid:" + memid);
+		return mem;
 	}
 
 	// 회원정보 수정에 기존 정보 표출
