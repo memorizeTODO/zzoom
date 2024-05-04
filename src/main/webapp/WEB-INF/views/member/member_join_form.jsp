@@ -13,6 +13,7 @@
 <link
 	href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
 	rel="stylesheet">
+	<script src="https://cdn.tailwindcss.com"></script>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="./js/member.js"></script>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
@@ -114,7 +115,7 @@
 				<button type="submit"
 					class="text-white bg-purple-400 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" >확인</button>
 				<button type="reset"
-					class="text-white bg-purple-400 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">취소</button>
+					class="text-white bg-purple-400 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onclick="history.go(-1);">취소</button>
 			</div>
 		</form>
 	</div>

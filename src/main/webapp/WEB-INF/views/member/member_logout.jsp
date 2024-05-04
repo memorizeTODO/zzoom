@@ -3,5 +3,5 @@
   
 <script>
   alert("로그아웃 되었습니다!");
-  location="member_loginout";
+  location="login";
 </script>

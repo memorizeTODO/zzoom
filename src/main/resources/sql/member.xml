@@ -59,7 +59,7 @@
 		select * from member
 		where
 		member_email = #{member_email} and
-		member_id = #{member_id}
+		member_id = #{member_id} and member_state = 0
 	</select>
 	
 	<!-- 아이디 찾기 -->
@@ -68,7 +68,7 @@
 		select * from member
 		where
 		member_email = #{member_email} and
-		member_passwd = #{member_passwd}
+		member_passwd = #{member_passwd} and member_state = 0
 	</select>
 
 </mapper>

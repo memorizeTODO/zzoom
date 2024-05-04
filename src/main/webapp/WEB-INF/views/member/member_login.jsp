@@ -1,53 +1,72 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
-<html>
+<html lang="en" class="scroll-smooth">
 <head>
 <meta charset="UTF-8">
-
 <script src="http://code.jquery.com/jquery-latest.js"></script>
-<link
-	href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-	rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <script>
-	/*비번찾기 공지창*/
+    function check() {
+      if ($.trim($("#member_id").val()) == "") {
+        alert("아이디를 입력해 주세요.");
+        $("#member_id").val("").focus();
+        return false;
+      }
+      if ($.trim($("#member_passwd").val()) == "") {
+        alert("비밀번호를 입력해 주세요.");
+        $("#member_passwd").val("").focus();
+        return false;
+      }
+    }
+	
 	function passwd_find() {
-		window.open("findPasswdForm", "비번찾기", "width=450,height=500");
-		//자바 스크립트에서 window객체의 open("공지창경로와 파일명","공지창이름","공지창속성")
-		//메서드로 새로운 공지창을 만듬.폭이 400,높이가 400인 새로운 공지창을 만듬.단위는 픽셀
+		window.open("findPasswdForm", "비번찾기");
 	}
 	function id_find() {
-		window.open("findid", "아이디찾기", "width=450, height=500");
+		window.open("findid", "아이디찾기");
 	}
-</script>
-<title>Login Page</title>
+  </script>
+<title>로그인</title>
 </head>
-<body>
-	<div id="login_wrap">
-		<h2 class="login_title">로그인</h2>
-		<form method="post" action="member_login" onsubmit="return check()">
-			<table id="login_t">
-				<tr>
-					<th>아이디</th>
-					<td><input name="member_id" id="member_id" size="20"
-						class="input_box" /></td>
-				</tr>
+<body class="bg-gray-100 h-500 w-450">
+  <div class="bg-white shadow-md rounded m-80 p-40 scroll-m-0">
+    <h1 class="text-center text-xl font-bold">로그인</h1><br/>
+  <form method="post" action="member_login" class="max-w-sm mx-auto" onsubmit="return check()">
+    <div class="mb-5">
+      <label for="member_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white font-bold">아이디</label>
+      <input type="text" name="member_id" id="member_id"
+        class="bg-gray-50 border border-purple-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        placeholder="아이디"/>
+    </div>
+    <div class="mb-5">
+      <label for="member_passwd" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white font-bold">비밀번호</label>
+      <input type="password" name="member_passwd" id="member_passwd"
+        class="bg-gray-50 border border-purple-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+         placeholder="•••••••••"/>
+    </div>
+    <div class="flex items-start mb-5">
+      <div class="flex items-center h-5">
 
-				<tr>
-					<th>비밀번호</th>
-					<td><input type="password" name="member_passwd"
-						id="member_passwd" size="20" class="input_box" /></td>
-				</tr>
-			</table>
+      </div>
 
-			<input type="submit" value="로그인" class="input_button" /> 
-			<input type="reset" value="취소" class="input_button" onclick="$('#member_id').focus();" /> <input type="button"
-					value="회원가입" class="input_button" onclick="location='join'" /> 
-			<input type="button" value="비번찾기" class="input_button" onclick="passwd_find()" /> <input type="button" value="아이디찾기"
-					class="input_button" onclick="id_find()" />
-		</form>
-	</div>
-
+    </div>
+    <div class="grid gap-6 mb-6 md:grid-cols-1">
+      <button type="submit"
+        class="text-white bg-purple-400 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">로그인</button>
+  	</div>
+  	
+    <div class="grid gap-6 mb-6 md:grid-cols-3">
+      <button type="button" onClick="location='join'"
+        class="text-white bg-purple-400 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">회원가입</button>
+      <button type="button" onClick="id_find();"
+        class="text-white bg-purple-400 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto sm:w-auto px-3 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">아이디 찾기</button>
+      <button type="button" onClick="passwd_find();"
+        class="text-white bg-purple-400 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-auto sm:w-auto px-2 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">비밀번호 찾기</button>
+       </div>
+  </form>
+</div>
 </body>
 </html>
