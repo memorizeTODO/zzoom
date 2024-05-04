@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.team5.zzoom.dao.MeetingRoomDAO">
+
+	<select id="getMemberList" parameterType="int" resultType="member">
+		select * from member
+		where member_nowroom_code = #{room_num}
+	</select>
+	
+	<update id="updateMemberNowRoomState" parameterType ="int">
+		update member 
+		set member_nowroom_code = #{meeting_room_num} 
+	</update>
+
+</mapper>
