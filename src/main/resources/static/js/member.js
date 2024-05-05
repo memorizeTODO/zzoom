@@ -151,76 +151,38 @@ function validate_userid(memid){
  }*/
 
  // 회원정보 수정 경고창 
-/*function edit_check(){
-	if($.trim($("#signup-password").val())==""){
+function edit_check(){
+	if($.trim($("#member_passwd").val())==""){
 		 alert("회원비번을 입력하세요!");
-		 $("#signup-password").val("").focus();
+		 $("#member_passwd").val("").focus();
 		 return false;
 	 }
-	 if($.trim($("#signup-confirm-password").val())==""){
+	 if($.trim($("#confirm_password").val())==""){
 		 alert("회원비번확인을 입력하세요!");
-		 $("#signup-confirm-password").val("").focus();
+		 $("#confirm_password").val("").focus();
 		 return false;
 	 }
-	 if($.trim($("#signup-password").val()) != $.trim($("#signup-confirm-password").val())){
+	 if($.trim($("#member_passwd").val()) != $.trim($("#confirm_password").val())){
 		 //!=같지않다 연산. 비번이 다를 경우
 		 alert("비번이 다릅니다!");
-		 $("#signup-password").val("");
-		 $("#signup-confirm-password").val("");
-		 $("#signup-password").focus();
+		 $("#member_passwd").val("");
+		 $("#confirm_password").val("");
+		 $("#member_passwd").focus();
 		 return false;
 	 }
-	 if($.trim($("#signup-name").val())==""){
-		 alert("회원이름을 입력하세요!");
-		 $("#signup-name").val("").focus();
-		 return false;
-	 }
-	 if($.trim($("#join_zip").val())==""){
-		 alert("우편번호를 입력하세요!");
-		 $("#join_zip").val("").focus();
-		 return false;
-	 }	 
-	 if($.trim($("#join_addr1").val())==""){
-		 alert("주소를 입력하세요!");
-		 $("#join_addr1").val("").focus();
-		 return false;
-	 }
-	 if($.trim($("#join_addr2").val())==""){
-		 alert("나머지 주소를 입력하세요!");
-		 $("#join_addr2").val("").focus();
-		 return false;
-	 }
-	 if($.trim($("#join_tel2").val())==""){
-		 alert("전화번호를 입력하세요!");
-		 $("#join_tel2").val("").focus();
-		 return false;
-	 }
-	 if($.trim($("#join_tel3").val())==""){
-		 alert("전화번호를 입력하세요!");
-		 $("#join_tel3").val("").focus();
-		 return false;
-	 }
-	 if($.trim($("#join_phone2").val())==""){
+	 
+	 if($.trim($("#member_phone").val())==""){
 		 alert("휴대전화번호를 입력하세요!");
-		 $("#join_phone2").val("").focus();
+		 $("#member_phone").val("").focus();
 		 return false;
 	 }
-	 if($.trim($("#join_phone3").val())==""){
-		 alert("휴대전화번호를 입력하세요!");
-		 $("#join_phone3").val("").focus();
-		 return false;
-	 }
-	 if($.trim($("#join_mailid").val())==""){
+	 
+	 if($.trim($("#member_email").val())==""){
 		 alert("메일 아이디를 입력하세요!");
-		 $("#join_mailid").val("").focus();
+		 $("#member_email").val("").focus();
 		 return false;
-	 }
-	 if($.trim($("#join_maildomain").val())==""){
-		 alert("메일 주소를 입력하세요!");
-		 $("#join_maildomain").val("").focus();
-		 return false;
-	 }	 	 
-}*/
+	 } 
+}
  
  
 

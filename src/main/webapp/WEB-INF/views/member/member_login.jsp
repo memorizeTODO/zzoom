@@ -23,10 +23,10 @@
     }
 	
 	function passwd_find() {
-		window.open("findPasswdForm", "비번찾기");
+		window.open("findPasswdForm", "비번찾기","width=1250,height=500,scrollbars=yes");
 	}
 	function id_find() {
-		window.open("findid", "아이디찾기");
+		window.open("findid", "아이디찾기","width=1250,height=500,scrollbars=yes");
 	}
   </script>
 <title>로그인</title>
