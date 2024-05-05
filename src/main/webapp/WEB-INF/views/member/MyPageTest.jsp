@@ -7,8 +7,9 @@
 <script src="http://code.jquery.com/jquery-latest.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
   <script>
-	function openDaumPostcode() {
+  function openDaumPostcode() {
 		new daum.Postcode(
 				{
 					oncomplete : function(data) {
@@ -18,7 +19,7 @@
 				}).open();
 	}
 	
-	// 회원정보 수정 경고창 
+	// 회원정보 수정 유효성 검사
 	function edit_check(){
 		if($.trim($("#member_passwd").val())==""){
 			 alert("비밀번호를 입력해 주세요.");
@@ -51,6 +52,7 @@
 		 } 
 	}
 </script>
+
 <title>마이페이지</title>
 </head>
 <body class="bg-gray-100 ">
@@ -114,7 +116,7 @@
 					</label> 
 					<input name="member_address" id="member_address" value="${member.member_address}" 
 						class="bg-gray-50 border border-purple-400 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-						placeholder="주소를 입력해 주세요." readonly onclick="openDaumPostcode()" />
+						placeholder="주소를 입력해 주세요." onclick="openDaumPostcode()"readonly />
 				</div>
 				<div>
 					<label for="member_address_detail"
@@ -145,5 +147,4 @@
 		</form>
 	</div>
 </body>
-
 </html>

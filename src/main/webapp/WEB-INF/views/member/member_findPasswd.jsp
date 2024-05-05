@@ -10,7 +10,7 @@
   <script src="http://code.jquery.com/jquery-latest.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <title>아이디 찾기</title>
+  <title>비밀번호 찾기</title>
   <script>
     function check() {
       if ($.trim($("#member_id").val()) == "") {

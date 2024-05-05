@@ -6,14 +6,15 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script src="http://code.jquery.com/jquery-latest.js"></script>
 <title>main page</title>
 </head>
 <body>
 <h1 align="center">메인페이지 import 예정</h1>
 
-${sessionScope.member_id} 님 환영 합니다.<br>
 
 <c:if test="${sessionScope.member_id != null}">
+${sessionScope.member_id} 님 환영 합니다.<br>
 	마이페이지
 </c:if>
 <c:if test="${sessionScope.member_id == null}">

@@ -23,7 +23,7 @@
     }
 	
 	function passwd_find() {
-		window.open("findPasswdForm", "비번찾기","width=1250,height=500,scrollbars=yes");
+		window.open("findPasswdForm", "비밀번호 찾기","width=1250,height=500,scrollbars=yes");
 	}
 	function id_find() {
 		window.open("findid", "아이디찾기","width=1250,height=500,scrollbars=yes");
@@ -39,7 +39,7 @@
       <label for="member_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white font-bold">아이디</label>
       <input type="text" name="member_id" id="member_id"
         class="bg-gray-50 border border-purple-400 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        placeholder="아이디"/>
+        placeholder="ID"/>
     </div>
     <div class="mb-5">
       <label for="member_passwd" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white font-bold">비밀번호</label>
