@@ -94,7 +94,7 @@ public class MemberController {
 
 		model.addAttribute("member", member);
 
-		return "member/MyPageTest";
+		return "member/member_myPage";
 	}
 
 	// 마이페이지 회원정보 수정
