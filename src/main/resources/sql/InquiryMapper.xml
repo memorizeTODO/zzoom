@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.team5.zzoom.dao.InquiryDAO">
+
+	<insert id="insert" parameterType="inquiry">
+		insert into
+		inquiry(member_id, member_name, inquiry_subject, inquiry_content, inquiry_date, inquiry_completed)
+		values(#{member_id}, #{member_name}, #{inquiry_subject}, #{inquiry_content}, now(), '1')
+	</insert>
+
+	<select id="getCount"  resultType="int">
+		select count(*) from inquiry
+	</select>
+
+	<!-- 문의사항 목록 -->
+	<select id="getBoardList"  parameterType="int"   resultType="inquiry">
+		select * from inquiry order by inquiry_id desc limit  #{start}, 10
+	</select>
+
+	<!-- 상세보기 select -->
+	<select id="getInquiry" parameterType="int" resultType="inquiry">
+		select * from inquiry where inquiry_id = #{inquiry_id}
+	</select>
+
+	<!-- 공지사항 수정 -->
+	<update id="update"  parameterType="inquiry">
+		update inquiry set inquiry_subject=#{inquiry_subject}, inquiry_content=#{inquiry_content}, inquiry_completed=#{inquiry_completed} where inquiry_id=#{inquiry_id}
+	</update>
+
+	<!-- 공지사항 삭제 -->
+	<delete id="delete" parameterType="int">
+		delete from inquiry where inquiry_id=#{inquiry_id}
+	</delete>
+	
+</mapper>
