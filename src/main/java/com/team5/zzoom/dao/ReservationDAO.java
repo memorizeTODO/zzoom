@@ -11,6 +11,7 @@ import com.team5.zzoom.model.ReservationDTO;
 	@Mapper
 	public interface ReservationDAO {
 		public int insertReservation(ReservationDTO dto); 
+		public void deleteReservation(String ID); 
 		public int updateReservation(ReservationDTO dto);
 		public ReservationDTO getReservation(String ID); 
 		public List<ReservationDTO> getReservationList(String ID);

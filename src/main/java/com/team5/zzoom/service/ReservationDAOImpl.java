@@ -33,7 +33,11 @@ import com.team5.zzoom.model.ReservationDTO;
 		    return 1;
 		}
 		
-		
+		public void deleteReservation(String code) {
+		        // delete 쿼리 실행
+		        dao.deleteReservation(code);	
+		        
+		    }
 		
 		public List<ReservationDTO> getReservationList(String ID) {
 			
@@ -50,7 +54,6 @@ import com.team5.zzoom.model.ReservationDTO;
 		}
 		
 		
-	    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 		public int updateReservation(ReservationDTO dto) {
 	    	try {
 		        // insert 쿼리 실행

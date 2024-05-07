@@ -89,7 +89,6 @@ public class ReservationDTO {
 	}
 	
 	
-	
 	private String meeting_id;
 	private String meeting_room_num;
 	private String meeting_num;
