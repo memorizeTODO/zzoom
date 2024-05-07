@@ -1,55 +1,55 @@
 ﻿// 유효성 검사
 function check(){
 	 if($.trim($("#member_id").val())==""){
-		 alert("회원아이디를 입력하세요!");
+		 alert("아이디를 입력해 주세요.");
 		 $("#member_id").val("").focus();
 		 return false;
 	 }
 	 if($.trim($("#member_passwd").val())==""){
-		 alert("회원비번을 입력하세요!");
+		 alert("비밀번호를 입력해 주세요.");
 		 $("#member_passwd").val("").focus();
 		 return false;
 	 }
 	 if($.trim($("#confirm_password").val())==""){
-		 alert("회원비번확인을 입력하세요!");
+		 alert("비밀번호 확인을 입력해 주세요.");
 		 $("#confirm_password").val("").focus();
 		 return false;
 	 }
 	 if($.trim($("#member_passwd").val()) != $.trim($("#confirm_password").val())){
-		 alert("비번이 다릅니다!");
+		 alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
 		 $("#member_passwd").val("");
 		 $("#confirm_password").val("");
 		 $("#member_passwd").focus();
 		 return false;
 	 }
 	 if($.trim($("#member_name").val())==""){
-		 alert("회원이름을 입력하세요!");
+		 alert("이름을 입력해 주세요.");
 		 $("#member_name").val("").focus();
 		 return false;
 	 }
 	 if($.trim($("#member_zipcode").val())==""){
-		 alert("우편번호를 입력하세요!");
+		 alert("우편번호를 입력해 주세요.");
 		 $("#member_zipcode").val("").focus();
 		 return false;
 	 }
 	 if($.trim($("#member_address").val())==""){
-		 alert("주소를 입력하세요!");
+		 alert("주소를 입력해 주세요.");
 		 $("#member_address").val("").focus();
 		 return false;
 	 }
 	 if($.trim($("#member_address_detail").val())==""){
-		 alert("나머지 주소를 입력하세요!");
+		 alert("상세주소를 입력해 주세요.");
 		 $("#member_address_detail").val("").focus();
 		 return false;
 	 }
 	
 	 if($.trim($("#member_phone").val())==""){
-		 alert("휴대전화번호를 입력하세요!");
+		 alert("휴대전화 번호를 입력해 주세요.");
 		 $("#member_phone").val("").focus();
 		 return false;
 	 }
 	 if($.trim($("#member_email").val())==""){
-		 alert("메일 아이디를 입력하세요!");
+		 alert("이메일을 입력해 주세요.");
 		 $("#member_email").val("").focus();
 		 return false;
 	 }

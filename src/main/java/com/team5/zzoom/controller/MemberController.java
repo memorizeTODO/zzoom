@@ -93,6 +93,7 @@ public class MemberController {
 		MemberDTO member = service.myPage(member_id);
 
 		model.addAttribute("member", member);
+		
 
 		return "member/member_myPage";
 	}
