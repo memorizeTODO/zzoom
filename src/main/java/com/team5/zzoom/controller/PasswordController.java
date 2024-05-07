@@ -62,7 +62,6 @@ public class PasswordController {
 				e.printStackTrace();
 				
 			}
-    	System.out.println(ReservationMap);
     	return ReservationMap;
     }
 	
@@ -150,7 +149,7 @@ public class PasswordController {
 		    // DTO를 DAO에 전달하여 데이터베이스에 삽입
 		    System.out.println(parameter);
 		 
-		        return ResponseEntity.ok("Meeting created successfully.");
+		    return ResponseEntity.ok("Meeting created successfully.");
 
 		    }
 		}
