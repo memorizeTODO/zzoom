@@ -24,7 +24,7 @@ public class MemberDTO {
 	private String member_stop_content;
 	private Date member_stop_start;
 	private Date member_stop_end;
-	
+	private Date member_meeting_keepalive;
 	
 	public String getMember_id() {
 		return member_id;
@@ -109,5 +109,11 @@ public class MemberDTO {
 	}
 	public void setMember_stop_end(Date member_stop_end) {
 		this.member_stop_end = member_stop_end;
+	}
+	public Date getMember_meeting_keepalive() {
+		return member_meeting_keepalive;
+	}
+	public void setMember_meeting_keepalive(Date member_meeting_keepalive) {
+		this.member_meeting_keepalive = member_meeting_keepalive;
 	}
 }
