@@ -378,7 +378,7 @@ function updateMeeting() {
             meeting_id: document.getElementById("updateMeetingID").value,
             member_id: document.getElementById("updateMemberID").value,
             member_name: document.getElementById("updateMemberName").value,
-            member_num: document.getElementById("updateMeetingMemberNum").value,
+            member_num: 6,
             meeting_topic: document.getElementById("updateMeetingTopic").value,
             meeting_passwd: document.getElementById("updateMeetingPasswd").value,
             meeting_start_date: document.getElementById("updateMeetingStartDate").value,
@@ -468,7 +468,7 @@ function updateMeeting() {
         // 사용자가 입력한 데이터를 가져와서 JSON 객체 생성
 		        var jsonData = {
 		        	meeting_id: ${"uuidresult"},
-		            meeting_member_num: document.getElementById("meetingMemberNum").value,
+		            meeting_member_num: 6,
 		            meeting_topic: document.getElementById("meetingTopic").value,
 		            meeting_passwd: document.getElementById("meetingPasswd").value,
 		            meeting_start_date: document.getElementById("meetingStartDate").value,

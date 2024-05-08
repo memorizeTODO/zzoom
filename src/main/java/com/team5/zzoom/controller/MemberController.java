@@ -89,7 +89,7 @@ public class MemberController {
 
 	}
 	
-	   @RequestMapping(value = "meeting_reservation", method = RequestMethod.POST)
+	   @RequestMapping("meeting_reservation")
 	   public String gotoMainPage(HttpSession session){
 	      return "member/meeting_reservation";
 	   }
