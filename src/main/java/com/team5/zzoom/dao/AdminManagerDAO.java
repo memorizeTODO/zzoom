@@ -8,6 +8,6 @@ import com.team5.zzoom.model.AdminManager;
 public interface AdminManagerDAO {
 	
 	// 관리자 로그인
-	AdminManager getManager(AdminManager manager);
+	public AdminManager getManager(AdminManager manager);
 
 }

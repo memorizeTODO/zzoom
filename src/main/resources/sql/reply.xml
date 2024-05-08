@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.team5.zzoom.dao.AdminReplyDAO">
+
+	<insert id="insert" parameterType="reply">
+		insert into reply(manager_id, member_id, inquiry_id, manager_name, reply_content, reply_date)
+		values(#{manager_id}, #{member_id}, #{inquiry_id}, #{manager_name}, #{reply_content}, now())
+	</insert>
+	
+	<!-- 문의 게시판 상태값을 2로 수정 -->
+	<update id="inquiryState" parameterType="int">
+		update inquiry set inquiry_completed='2' where inquiry_id=#{inquiry_id}
+	</update>
+
+</mapper>

@@ -1,25 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
-    
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>공지사항 목록</title>
-    <script>
-    function update1(member_id){
-    	
-    	location.href="memberupdate?member_id="+member_id;    	
-    }
-    
-    function delete1(member_id){
-    	
-    	location.href="memberdelete?member_id="+member_id;    	
-    }
-    </script>
+    <title>문의 답변글</title>
 </head>
 <body>
   
@@ -39,95 +27,36 @@
         </div>
     </div>
 </nav>
-</header>
+</header> 
 
 
-
-<div class = "mt-16 ml-44">
-<!-- 회원관리 상단바  -->
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr class="pl-10 ">  
-             <th scope="col" class="px-8 py-3">
-                <span class="w-full flex">번 호</span>  
-              </th>
-              <th scope="col" class="px-6 py-3">
-                 공지사항 제목
-              </th>
-              <th scope="col" class="px-6 py-3">
-                  날짜
-              </th>
-          </tr>
-      </thead>
-      <tbody>
+<div class = "mt-9 ml-44">
       
-      	<!-- 화면 출력 번호 -->
-		<c:set var="num" value="${listcount-(page-1)*10 }"/>
+      <!-- 문의 글작성 -->
+      <form method="post" action="reply">
+      	<input type="hidden" name="manager_id"  value="admin">
+      	<input type="hidden" name="member_id"  value="${member_id}">
+      	<input type="hidden" name="inquiry_id"  value="${inquiry_id}">
+      	<input type="hidden" name="manager_name"  value="관리자">
       
-      	<c:forEach var="m" items="${noticelist }">
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-center">
-           	  <td class="w-4 py-7">${num} 
-           			<c:set var="num" value="${num-1}"/> 
-           	   </td>
-              <td>
-              		<a href="noticedetail?notice_id=${m.notice_id}&page=${page}">
-              			${m.notice_subject }
-              		</a>
-              </td>
-             <%--  <td>${m.notice_content  }</td> --%>
-              <td>${m.notice_date  }</td>
-          </tr>
-      </c:forEach>    
-      </tbody>
-  </table>
-</div>
+      	<table align=center width=600>
+      		<caption><h1>문의 글작성</h1></caption>
+      		<tr>
+      			<td>내용</td>
+      		<td><textarea rows="5" cols="50" name="reply_content" required="required" autofocus="autofocus"></textarea></td>
+      		</tr>
+      		<tr>
+      	</table>
+      	<table align=center width=600>
+      			<td colsapn="2" align="right">
+      				<input type="submit" value="답변">
+      				<input type ="reset" value="취소">
+      			</td>
+      		</tr>
+      	</table>
+      </form>
 
-<!-- 페이지 처리 -->
-<center>
-<c:if test="${listcount > 0 }">
-
-<!-- 1page로 이동 -->
-<a href="noticelist?page=1" style="text-decoration:none"> < </a>
-
-<!-- 이전 블럭으로 이동 -->
-<c:if test="${startPage > 10 }">
-	<a href="noticelist?page=${startPage-10}">[이전]</a>
-</c:if>
-
-<!-- 각 블럭에 10개의 페이지 출력 -->
-<c:forEach var="i" begin="${startPage}" end="${endPage}">
-	<c:if test="${i == page }">   <!-- 현재 페이지 -->
-		[${i}]
-	</c:if>
-	<c:if test="${i != page }">   <!-- 현재 페이지가 아닌 경우 -->
-		<a href="noticelist?page=${i}">[${i}]</a>
-	</c:if>
-</c:forEach>
-
-<!-- 다음 블럭으로 이동 -->
-<c:if test="${endPage < pageCount }">
-	<a href="noticelist?page=${startPage+10}">[다음]</a>
-</c:if>
-
-<!-- 마지막 페이지로 이동 -->
-<a href="noticelist?page=${pageCount}" style="text-decoration:none"> > </a>
-
-</c:if>
-
-</center>	
-
-<div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse" style="float:right">
-            <!-- <button type="button"   onClick="location.href='noticeform' "
-            		class="text-white bg-blue-800 hover:bg-blue-300 focus:ring-10 focus:outline-none font-large rounded-lg text-md px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-               글작성
-            </button> -->
-            <button type="button" onClick="location.href='noticeform' "
-					class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">공지 작성
-			  </button>
-</div>
-
- <!-- 사이드바 -->
+<!-- 사이드바 -->
 <aside id="logo-sidebar" class="fixed top-0 left-0 z-200 w-200 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
     <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
         <ul class="space-y-2 font-medium">
@@ -166,7 +95,7 @@
           </li>
         </ul>
     </div>
-</aside> 
+</aside>
 
 </div>
 </body>

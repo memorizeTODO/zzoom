@@ -30,6 +30,20 @@ public class AdminNoticeService {
 		return dao.getNotice(notice_id);
 	}
 
+	public int insert(AdminNotice notice) {
+		return dao.insert(notice);
+	}
+
+	public int update(AdminNotice notice) {
+		return dao.update(notice);
+	}
+
+	public int delete(int notice_id) {
+		return dao.delete(notice_id);
+	}
+
+
+
 
 
 

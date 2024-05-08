@@ -9,13 +9,20 @@ import com.team5.zzoom.model.AdminNotice;
 @Mapper
 public interface AdminNoticeDAO {
 
-	int getCount();
+	public int getCount();
 
-	List<AdminNotice> getNoticelist(int start);
+	public List<AdminNotice> getNoticelist(int start);
 
-	void updatecount(int no);
+	public void updatecount(int no);
 
-	AdminNotice getNotice(int notice_id);
+	public AdminNotice getNotice(int notice_id);
+
+	public int insert(AdminNotice notice);
+
+	public int update(AdminNotice notice);
+
+	public int delete(int notice_id);
+
 
 	
 

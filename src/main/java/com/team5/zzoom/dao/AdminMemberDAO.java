@@ -9,15 +9,15 @@ import com.team5.zzoom.model.AdminMember;
 @Mapper
 public interface AdminMemberDAO {
 
-	int getCount();
+	public int getCount();
 
-	List<AdminMember> getMemberlist(int start);
+	public List<AdminMember> getMemberlist(int start);
 
-	AdminMember getMember(String member_id);
+	public AdminMember getMember(String member_id);
 	
-	int update(String member_id);
+	public int update(String member_id);
 
-	int delete(String member_id);
+	public int delete(String member_id);
 
 	
 

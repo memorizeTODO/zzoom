@@ -32,36 +32,24 @@
             <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span>
         </a>
         <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-            <button type="button"   onClick="location.href='adminlogout' "
-            		class="text-white bg-blue-800 hover:bg-blue-300 focus:ring-10 focus:outline-none font-large rounded-lg text-md px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                로그아웃
+  			 <button type="button"   onClick="location.href='adminlogout' "
+            	     class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-md px-4 py-2.5 text-center mt-2 mb-2">
+                     로그아웃
             </button>
         </div>
-       <!--  <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 justify-end"" id="navbar-sticky">
-            <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-                <li>
-                    <a href="#" class="block py-3 px-4 text-white bg-purple-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page">회의시작</a>
-                </li>
-                <li>
-                    <a href="#" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">공지사항</a>
-                </li>
-                <li>
-                    <a href="#" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">문의사항</a>
-                </li>
-            </ul>
-        </div> -->
+ 
     </div>
 </nav>
 </header> 
 
 
-<div class = "mt-12">
+<div class = "mt-16 ml-44">
 <!-- 회원관리 상단바  -->
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg pl-10">
-  <table class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400 ml-32 table-auto	">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 ">
-         <tr class="pl-10 "> 
-             <th scope="col" class="px-10 py-3">
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr class="pl-10 "> 
+             <th scope="col" class="px-8 py-3">
                 <span class="w-full flex">번 호</span>  
               </th>
               <th scope="col" class="px-6 py-3">
@@ -83,7 +71,7 @@
                   회원 상태
               </th>
               <th scope="col" class="px-6 py-3">
-                  회원 수정
+                  회원 복구
               </th>
                <th scope="col" class="px-6 py-3">
                   회원 탈퇴
@@ -113,8 +101,19 @@
  			  		</c:if>
  			  		
  			  </td>	
-              <td><input type="button"  value="수정" onClick="update1('${m.member_id}')"></td>
-              <td><input type="button"  value="탈퇴" onClick="delete1('${m.member_id}')"></td>
+              <td>
+              	<button type="button"  onClick="update1('${m.member_id}')"
+					  class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">복구
+			  	</button>
+              </td>
+              <td>
+              	<button type="button" onClick="delete1('${m.member_id}')"
+					  class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">탈퇴
+			  	</button>
+              </td>
+              
+              
+              
           </tr>
       </c:forEach>    
       </tbody>

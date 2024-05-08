@@ -7,16 +7,16 @@ import org.apache.ibatis.type.Alias;
 import lombok.Data;
 
 @Data
-@Alias("answer")
-public class AdminAnswer {
+@Alias("reply")
+public class AdminReply {
 	
-	private int answer_id;
+	private int reply_id;
 	private String manager_id;
 	private String member_id;
 	private int inquiry_id;
 	private String manager_name;
-	private String answer_contents;
-	private Date answer_date;
+	private String reply_content;
+	private Date reply_date;
 
 	
 	

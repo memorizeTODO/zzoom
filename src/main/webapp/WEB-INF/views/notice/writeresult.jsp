@@ -5,21 +5,21 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>회원 수정결과</title>
+<title>Insert title here</title>
 </head>
 <body>
 
 <c:if test="${result == 1 }">
 	<script>
-		alert("회원이 복구 되었습니다.");
-		location.href="memberlist";
+		alert("글작성 성공");
+		location.href="noticelist";
 	</script>
 </c:if>
 	
 <c:if test="${result != 1 }">
 	<script>
-		alert("회원이 복구 실패");
-		location.href="memberlist";
+		alert("글작성 실패");
+			
 	</script>
 </c:if>	 
 

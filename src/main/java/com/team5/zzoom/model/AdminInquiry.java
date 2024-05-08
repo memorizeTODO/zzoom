@@ -14,7 +14,10 @@ public class AdminInquiry {
 	private String member_id;
 	private String member_name;
 	private String inquiry_subject;
-	private String inquiry_contents;
+	private String inquiry_content;
 	private Date inquiry_date;
+	private String inquiry_count;
+	private String inquiry_completed;
+
 	
 }

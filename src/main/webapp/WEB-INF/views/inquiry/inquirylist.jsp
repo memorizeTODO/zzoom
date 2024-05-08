@@ -1,444 +1,146 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+    
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Document</title>
+    <title>문의사항 목록</title>
+    <script>
+    function reply1(inquiry_id, member_id){
+    	
+//    	alert(inquiry_id+":"+ member_id);
+    	
+    	location.href="replyform?inquiry_id="+inquiry_id+"&member_id="+member_id;    	
+    }
+    </script>
 </head>
 <body>
   
   <!-- 상단바 -->
+<header> 
 <nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
         <a href="adminmain" class="flex items-center space-x-3 rtl:space-x-reverse">
             <img src="img/zzoom_logo.png" class="h-10" alt="ZZOM Logo" />
             <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span>
         </a>
-        <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-            <button type="button"   onClick="location.href='adminlogout' "
-            		class="text-white bg-blue-800 hover:bg-blue-300 focus:ring-10 focus:outline-none font-large rounded-lg text-md px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                로그아웃
-            </button>
-        </div>
-       <!--  <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 justify-end"" id="navbar-sticky">
-            <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-                <li>
-                    <a href="#" class="block py-3 px-4 text-white bg-purple-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page">회의시작</a>
-                </li>
-                <li>
-                    <a href="#" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">공지사항</a>
-                </li>
-                <li>
-                    <a href="#" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">문의사항</a>
-                </li>
-            </ul>
-        </div> -->
+			<button type="button" onClick="location.href='adminlogout' "
+					class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-md px-4 py-2.5 text-center mt-2 mb-2">
+					로그아웃
+			</button>
+			</div>
+ 
     </div>
 </nav>
+</header> 
 
-<!-- 그냥 빈칸줄 -->
+<br>
+
+ <div class = "mt-10 ml-44">
+<!-- 회원관리 상단바  -->
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-  <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-        
-          <tr>
-              <th scope="col" class="p-4">
-                  <div class="flex items-center">
-                      <input id="checkbox-all-search" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      <label for="checkbox-all-search" class="sr-only">checkbox</label>
-                  </div>
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr class="pl-10 "> 
+             <th scope="col" class="px-30 py-3">
+                <span class="w-full flex">
+                  번호</span> 
               </th>
               <th scope="col" class="px-10 py-3">
-                 
+                  제목
               </th>
               <th scope="col" class="px-10 py-3">
-                  
+                  아이디
               </th>
               <th scope="col" class="px-10 py-3">
-                 
-              </th>
-              <th scope="col" class="px-10 py-3">
-                
-              </th>
-              <th scope="col" class="px-10 py-3">
-                 
-              </th>
-          </tr>
-      </thead>
-  </table>
-
-
-<!-- 회의관리 상단바-->
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg pl-10">
-  <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ml-32">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-        
-          <tr>
-              <th scope="col" class="p-4">
-                  <div class="flex items-center">
-                      <input id="checkbox-all-search" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      <label for="checkbox-all-search" class="sr-only">checkbox</label>
-                  </div>
-              </th>
-              <th scope="col" class="px-6 py-3">
-                  문의 번호
-              </th>
-              <th scope="col" class="px-6 py-3">
-                  문의사항 제목
-              </th>
-              <th scope="col" class="px-6 py-3">
                   작성자
               </th>
-              <th scope="col" class="px-6 py-3">
-                  회의 호스트
+              <th scope="col" class="px-10 py-3">
+                  작성일
               </th>
-              <th scope="col" class="px-6 py-3">
-                  회의 비밀번호
+              <th scope="col" class="px-10 py-3">
+                  조회수
+              </th>
+			  <th scope="col" class="px-10 py-3">
+                  답변여부
               </th>
           </tr>
       </thead>
-
       <tbody>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <td class="w-4 p-4">
-                  <div class="flex items-center">
-                      <input id="checkbox-table-search-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
-                  </div>
+      
+      	<!-- 화면 출력 번호 -->
+		<c:set var="num" value="${listcount-(page-1)*10 }"/>
+      
+      	<c:forEach var="m" items="${inquirylist }">
+          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-center">
+           <td class="w-4 py-7">${num} <c:set var="num" value="${num-1}"/> </td>
+              <td>${m.inquiry_subject }</td>
+              <td>${m.member_id }</td>
+              <td>${m.member_name }</td>
+              <td>${m.inquiry_date }</td>
+              <td>${m.inquiry_count }</td>
+ 			  <td>
+ 			  		<c:if test="${m.inquiry_completed == '1' }">
+ 			  			미답변
+ 			  		</c:if>
+ 			  		<c:if test="${m.inquiry_completed == '2' }">
+ 			  			답변완료
+ 			  		</c:if>
+ 			  		
+ 			  </td>	
+              <%-- <td><input type="button"  value="답변하기" onClick="reply1('${m.inquiry_id}','${m.member_id}')"></td> --%>
+              <td>
+              	<button type="button" onClick="reply1('${m.inquiry_id}','${m.member_id}')"
+					  class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">답변하기
+			  	</button>
               </td>
-              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  홍길동
-              </th>
-              <td class="px-6 py-4">
-                  MR.Hong
-              </td>
-              <td class="px-6 py-4">
-                  hong123
-              </td>
-              <td class="px-6 py-4">
-                  Yes
-              </td>
-              <td class="px-6 py-4">
-                  회의 난동
-              </td>
-              <td class="px-6 py-4">
-                  2024-04-19
-              </td>
-              <td class="px-6 py-4">
-                  2024-04-20
-              </td>
-              <td class="flex items-center px-6 py-4">
-                  <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">정지 해제</a>
-                  <a href="#" class="font-medium text-red-600 dark:text-red-500 hover:underline ms-3">강제 탈퇴</a>
-              </td>
-          </tr>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <td class="w-4 p-4">
-                  <div class="flex items-center">
-                      <input id="checkbox-table-search-2" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      <label for="checkbox-table-search-2" class="sr-only">checkbox</label>
-                  </div>
-              </td>
-              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  
-              </th>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="flex items-center px-6 py-4">
-                  <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                  <a href="#" class="font-medium text-red-600 dark:text-red-500 hover:underline ms-3">Remove</a>
-              </td>
-          </tr>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <td class="w-4 p-4">
-                  <div class="flex items-center">
-                      <input id="checkbox-table-search-3" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      <label for="checkbox-table-search-3" class="sr-only">checkbox</label>
-                  </div>
-              </td>
-              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  
-              </th>
-              <td class="px-6 py-4">
               
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="flex items-center px-6 py-4">
-                  <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                  <a href="#" class="font-medium text-red-600 dark:text-red-500 hover:underline ms-3">Remove</a>
-              </td>
-          </tr>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <td class="w-4 p-4">
-                  <div class="flex items-center">
-                      <input id="checkbox-table-search-3" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      <label for="checkbox-table-search-3" class="sr-only">checkbox</label>
-                  </div>
-              </td>
-              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  
-              </th>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="flex items-center px-6 py-4">
-                  <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                  <a href="#" class="font-medium text-red-600 dark:text-red-500 hover:underline ms-3">Remove</a>
-              </td>
-          </tr>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <td class="w-4 p-4">
-                  <div class="flex items-center">
-                      <input id="checkbox-table-search-3" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      <label for="checkbox-table-search-3" class="sr-only">checkbox</label>
-                  </div>
-              </td>
-              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  
-              </th>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td cl
               
-              ass="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="flex items-center px-6 py-4">
-                  <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                  <a href="#" class="font-medium text-red-600 dark:text-red-500 hover:underline ms-3">Remove</a>
-              </td>
-          </tr>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <td class="w-4 p-4">
-                  <div class="flex items-center">
-                      <input id="checkbox-table-search-3" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      <label for="checkbox-table-search-3" class="sr-only">checkbox</label>
-                  </div>
-              </td>
-              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  
-              </th>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
               
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="flex items-center px-6 py-4">
-                  <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                  <a href="#" class="font-medium text-red-600 dark:text-red-500 hover:underline ms-3">Remove</a>
-              </td>
+
           </tr>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <td class="w-4 p-4">
-                  <div class="flex items-center">
-                      <input id="checkbox-table-search-3" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      <label for="checkbox-table-search-3" class="sr-only">checkbox</label>
-                  </div>
-              </td>
-              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  
-              </th>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="flex items-center px-6 py-4">
-                  <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                  <a href="#" class="font-medium text-red-600 dark:text-red-500 hover:underline ms-3">Remove</a>
-              </td>
-          </tr>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <td class="w-4 p-4">
-                  <div class="flex items-center">
-                      <input id="checkbox-table-search-3" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      <label for="checkbox-table-search-3" class="sr-only">checkbox</label>
-                  </div>
-              </td>
-              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  
-              </th>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="flex items-center px-6 py-4">
-                  <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                  <a href="#" class="font-medium text-red-600 dark:text-red-500 hover:underline ms-3">Remove</a>
-              </td>
-          </tr>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <td class="w-4 p-4">
-                  <div class="flex items-center">
-                      <input id="checkbox-table-search-3" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      <label for="checkbox-table-search-3" class="sr-only">checkbox</label>
-                  </div>
-              </td>
-              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  
-              </th>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="flex items-center px-6 py-4">
-                  <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                  <a href="#" class="font-medium text-red-600 dark:text-red-500 hover:underline ms-3">Remove</a>
-              </td>
-          </tr>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <td class="w-4 p-4">
-                  <div class="flex items-center">
-                      <input id="checkbox-table-search-3" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      <label for="checkbox-table-search-3" class="sr-only">checkbox</label>
-                  </div>
-              </td>
-              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  
-              </th>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="px-6 py-4">
-                  
-              </td>
-              <td class="flex items-center px-6 py-4">
-                  <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                  <a href="#" class="font-medium text-red-600 dark:text-red-500 hover:underline ms-3">Remove</a>
-              </td>
-          </tr>
+      </c:forEach>    
       </tbody>
   </table>
 </div>
 
+<!-- 페이지 처리 -->
+<center>
+<c:if test="${listcount > 0 }">
 
+<!-- 1page로 이동 -->
+<a href="inquirylist?page=1" style="text-decoration:none"> < </a>
+
+<!-- 이전 블럭으로 이동 -->
+<c:if test="${startPage > 10 }">
+	<a href="inquirylist?page=${startPage-10}">[이전]</a>
+</c:if>
+
+<!-- 각 블럭에 10개의 페이지 출력 -->
+<c:forEach var="i" begin="${startPage}" end="${endPage}">
+	<c:if test="${i == page }">   <!-- 현재 페이지 -->
+		[${i}]
+	</c:if>
+	<c:if test="${i != page }">   <!-- 현재 페이지가 아닌 경우 -->
+		<a href="inquirylist?page=${i}">[${i}]</a>
+	</c:if>
+</c:forEach>
+
+<!-- 다음 블럭으로 이동 -->
+<c:if test="${endPage < pageCount }">
+	<a href="inquirylist?page=${startPage+10}">[다음]</a>
+</c:if>
+
+<!-- 마지막 페이지로 이동 -->
+<a href="inquirylist?page=${pageCount}" style="text-decoration:none"> > </a>
+
+</c:if>
+</center>		
+		
 
 
 <!-- 사이드바 -->
@@ -481,5 +183,7 @@
         </ul>
     </div>
 </aside>
+
+</div>
 </body>
 </html>

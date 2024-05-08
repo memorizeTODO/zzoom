@@ -5,8 +5,12 @@ import java.sql.Date;
 import org.apache.ibatis.type.Alias;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
+@Getter
+@Setter
 @Alias("notice")
 public class AdminNotice {
 	private int notice_id;

@@ -13,7 +13,7 @@
    <!-- 상단바 -->
 <nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
-      <a href="adminmain" class="flex items-center space-x-3 rtl:space-x-reverse">
+      <a href="mainpage" class="flex items-center space-x-3 rtl:space-x-reverse">
           <img src="img\zzoom_logo.png" class="h-10" alt="ZZOM Logo" />
           <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span>
       </a>
@@ -38,8 +38,11 @@
   </div>
   <div class="flex items-start mb-5">
   </div>
-  <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">로그인</button>
-</form>
+		<button type="submit"
+				class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-md px-4 py-2.5 text-center mt-3 mb-3">
+				로그인
+		</button>
+	</form>
 
 
 </body>

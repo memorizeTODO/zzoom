@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.team5.zzoom.dao.AdminMeetingDAO">
+
+	<!-- 데이터 갯수 -->
+	<select id="getCount" resultType="int">
+		select count(*) from meeting
+	</select>
+
+	<!-- 회의목록 -->
+	<select id="getMeetinglist" parameterType="int" resultType="meeting">
+		select * from meeting order by member_id desc limit #{start},10
+	</select>
+	
+	
+	<select id="getMeeting" parameterType="String" resultType="meeting">
+		select * from meeting where meeting_id=#{meeting_id}
+	</select>
+	
+	<!-- 회의 수정 -->
+	<update id="update" parameterType="meeting">
+		update meeting set 
+		meeting_start_date=#{meeting_start_date}, meeting_passwd=#{meeting_passwd}
+		where meeting_id=#{meeting_id}
+	</update>
+
+	<!-- 회의 삭제 -->
+	<delete id="delete" parameterType="meeting">
+		delete from meeting where meeting_id=#{meeting_id}
+	</delete>
+
+</mapper>

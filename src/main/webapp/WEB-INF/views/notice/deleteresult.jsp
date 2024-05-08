@@ -5,21 +5,21 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>회원 수정결과</title>
+<title>공지사항 글삭제</title>
 </head>
 <body>
 
 <c:if test="${result == 1 }">
 	<script>
-		alert("회원이 복구 되었습니다.");
-		location.href="memberlist";
+		alert("글삭제 성공");
+		location.href="noticelist?page="+${page};
 	</script>
 </c:if>
 	
 <c:if test="${result != 1 }">
 	<script>
-		alert("회원이 복구 실패");
-		location.href="memberlist";
+		alert("글삭제 실패");
+		history.go(-1);	
 	</script>
 </c:if>	 
 

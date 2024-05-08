@@ -5,21 +5,21 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>회원 수정결과</title>
+<title>회의 수정결과</title>
 </head>
 <body>
 
 <c:if test="${result == 1 }">
 	<script>
-		alert("회원이 복구 되었습니다.");
-		location.href="memberlist";
+		alert("회의가 수정 성공");
+		location.href="meetinglist";
 	</script>
 </c:if>
 	
 <c:if test="${result != 1 }">
 	<script>
-		alert("회원이 복구 실패");
-		location.href="memberlist";
+		alert("회의 목록 수정 실패");
+		location.href="meetinglist";
 	</script>
 </c:if>	 
 

@@ -8,8 +8,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>공지사항 목록</title>
-    <script>
+    <title>회의목록</title>
+<!--     <script>
     function update1(member_id){
     	
     	location.href="memberupdate?member_id="+member_id;    	
@@ -19,7 +19,7 @@
     	
     	location.href="memberdelete?member_id="+member_id;    	
     }
-    </script>
+    </script> -->
 </head>
 <body>
   
@@ -32,102 +32,42 @@
             <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span>
         </a>
         <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-   			<button type="button"   onClick="location.href='adminlogout' "
-            	    class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-md px-4 py-2.5 text-center mt-2 mb-2">
-                    로그아웃
+  			 <button type="button"   onClick="location.href='adminlogout' "
+            	     class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-md px-4 py-2.5 text-center mt-2 mb-2">
+                     로그아웃
             </button>
         </div>
+ 
     </div>
 </nav>
-</header>
+</header> 
 
 
-
-<div class = "mt-16 ml-44">
-<!-- 회원관리 상단바  -->
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr class="pl-10 ">  
-             <th scope="col" class="px-8 py-3">
-                <span class="w-full flex">번 호</span>  
-              </th>
-              <th scope="col" class="px-6 py-3">
-                 공지사항 제목
-              </th>
-              <th scope="col" class="px-6 py-3">
-                  날짜
-              </th>
-          </tr>
-      </thead>
-      <tbody>
-      
-      	<!-- 화면 출력 번호 -->
-		<c:set var="num" value="${listcount-(page-1)*10 }"/>
-      
-      	<c:forEach var="m" items="${noticelist }">
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-center">
-           	  <td class="w-4 py-7">${num} 
-           			<c:set var="num" value="${num-1}"/> 
-           	   </td>
-              <td>
-              		<a href="noticedetail?notice_id=${m.notice_id}&page=${page}">
-              			${m.notice_subject }
-              		</a>
-              </td>
-             <%--  <td>${m.notice_content  }</td> --%>
-              <td>${m.notice_date  }</td>
-          </tr>
-      </c:forEach>    
-      </tbody>
-  </table>
+<div class = "mt-12">
+  
+  
+<br><br><br>
+<form class="max-w-sm mx-auto" method="post" action="meetingupdate">
+<input type="hidden"  name="meeting_id" value="${meeting.meeting_id}">
+<input type="hidden"  name="page" value="${page}">
+  <div class="mb-5">
+    <label for="date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">회의 시작 날짜 </label>
+    <input type="date" id="date" name="meeting_start_date" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="" required />
+  </div>
+  <div class="mb-5">
+    <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">회의 비밀번호</label>
+    <input type="password" id="password" name="meeting_passwd" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required />
+  </div>
+  <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">수정</button>
+</form>
+  
 </div>
 
-<!-- 페이지 처리 -->
-<center>
-<c:if test="${listcount > 0 }">
 
-<!-- 1page로 이동 -->
-<a href="noticelist?page=1" style="text-decoration:none"> < </a>
+		
 
-<!-- 이전 블럭으로 이동 -->
-<c:if test="${startPage > 10 }">
-	<a href="noticelist?page=${startPage-10}">[이전]</a>
-</c:if>
 
-<!-- 각 블럭에 10개의 페이지 출력 -->
-<c:forEach var="i" begin="${startPage}" end="${endPage}">
-	<c:if test="${i == page }">   <!-- 현재 페이지 -->
-		[${i}]
-	</c:if>
-	<c:if test="${i != page }">   <!-- 현재 페이지가 아닌 경우 -->
-		<a href="noticelist?page=${i}">[${i}]</a>
-	</c:if>
-</c:forEach>
-
-<!-- 다음 블럭으로 이동 -->
-<c:if test="${endPage < pageCount }">
-	<a href="noticelist?page=${startPage+10}">[다음]</a>
-</c:if>
-
-<!-- 마지막 페이지로 이동 -->
-<a href="noticelist?page=${pageCount}" style="text-decoration:none"> > </a>
-
-</c:if>
-
-</center>	
-
-<div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse" style="float:right">
-            <!-- <button type="button"   onClick="location.href='noticeform' "
-            		class="text-white bg-blue-800 hover:bg-blue-300 focus:ring-10 focus:outline-none font-large rounded-lg text-md px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-               글작성
-            </button> -->
-            <button type="button" onClick="location.href='noticeform' "
-					class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">공지 작성
-			  </button>
-</div>
-
- <!-- 사이드바 -->
+<!-- 사이드바 -->
 <aside id="logo-sidebar" class="fixed top-0 left-0 z-200 w-200 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
     <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
         <ul class="space-y-2 font-medium">
@@ -166,7 +106,7 @@
           </li>
         </ul>
     </div>
-</aside> 
+</aside>
 
 </div>
 </body>
