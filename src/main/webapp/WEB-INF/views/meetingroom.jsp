@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
+<h4%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -19,8 +19,349 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+
 <script type="text/javascript" src="/js/janus.js"></script>
 <script type="text/javascript" src="/js/meetingroom.js"></script>
+
+
+
+<script>
+    var roomVariable= {
+    nowroom_num : null,
+    session_myID : null,
+    memberList : null,
+    session_myName : null,
+    topic : null,
+    representative : null ,
+    participants_now_num  : null,
+    participants_max_num  : null
+    };
+
+    $(document).ready(function() {
+
+	roomVariable.session_myID = '${sessionScope.member_id}';
+	roomVariable.nowroom_num = '${nowroom_num}';
+	if ((roomVariable.session_myID == 'null' || roomVariable.session_myID == null)&&(roomVariable.nowroom_num == 'null'|| roomVariable.nowroom_num == null) ){
+		console.error("session_myID = "+roomVariable.session_myID + ", nowroom_num = "+roomVariable.nowroom_num );
+		alert("session error");
+		history.back();
+	}
+	
+	
+	if(isMeetingRoomFull() == -1){ // 해당 회의룸이 꽉찼는지 체크(동기)
+		alert("isRoomFull error");
+		history.back();
+	}
+
+	if(isWatchingAnotherRoom() == true){ //다른방에 입장하고있거나 현재 방에 이미 입장한 상태인지 체크(동기)
+		history.back();
+	}
+
+	while(true){
+		if(updateMyNowRoomState('join')==true){ //내가 입장했음을 서버쪽에 업데이트(동기)
+			console.log("Success");
+			break;
+		}
+		setTimeout(() => console.log("waiting for retry update MyNowRoomState"), 2000);
+	
+	}
+	getMyInfo(false);
+	
+
+	setInterval(() => asyncTasks(), 2000); // 방에 있는동안 계속 작동할 비동기 작업들 모음(1초 간격으로 작동)
+
+	// Initialize the library (all console debuggers enabled)
+	Janus.init({debug: "all", callback: function() {
+		// Use a button to start the demo
+		 
+		generateJanus();
+		
+	}});
+
+	$('#exit').on('click',function() {
+       
+
+		$(this).attr('disabled', true);
+		if (janus!=null)
+		janus.destroy();
+
+		updateMyNowRoomState('left');
+		history.back(2); //회의룸으로 이동하게끔
+										
+	});
+
+	myroom = 50000 + Number(roomVariable.nowroom_num);
+    alert(myroom);
+});
+
+    function asyncTasks(){ 
+        getMyInfo(true);
+        getParticipants(); //참가자 리스트 불러오기/갱신 + 뷰쪽에 UI생성
+        updateKeepAlive(); //강제종료, 새로고침으로 인한 방 이탈 체크를 위해 db로 클라이언트의 keepalive를 갱신(일정시간 동안 갱신 안될 시 나간것으로 간주)
+        if (getNowRoomInfo() == false){ // 현재 방의 정보 갱신(주제, 현재인원, 최대인원, 대표자(개설자)등 )
+            alert("can't find this roomInfo");
+            history.back();
+        }
+        
+    }
+
+    function getMyInfo(isAsync){
+        var returnVal =false;
+        $.ajax({
+			            type: "GET",
+			            url: "get/myInfo?member_id="+roomVariable.session_myID, // 요청을 처리하는 컨트롤러의 엔드포인트
+                        contentType: "application/json",
+                        async: isAsync,
+                        
+			            success: function(res) {
+			                console.log("Success: " + res);
+			                // 성공적으로 처리된 경우 실행할 코드
+			                //location.reload(true);
+                            roomVariable.session_myName = res;
+                            returnVal = true;
+			            },
+			            error: function(xhr, status, error) {
+			                console.error("status: "+status+ "error :" + xhr.responseText);
+                            alert("status: "+status +" error: " + xhr.responseText);
+                            history.back();
+			                // 오류 발생 시 실행할 코드
+                            
+			            }
+		});
+        return returnVal;
+    }
+
+    
+
+    function updateMyNowRoomState(join_or_left){
+        var returnVal = false;
+        $.ajax({
+			            type: "POST",
+			            url: "put/myNowRoomState", // 요청을 처리하는 컨트롤러의 엔드포인트
+                        contentType: "application/json",
+                        data: JSON.stringify({ room_num : roomVariable.nowroom_num, member_id : roomVariable.session_myID, purpose : join_or_left }),// JSON 데이터를 문자열로 변환하여 전송
+                        async: false,
+                        
+			            success: function(res) {
+			                console.log("Success: " + res);
+			                // 성공적으로 처리된 경우 실행할 코드
+			                //location.reload(true);
+                            returnVal = true;
+			            },
+			            error: function(xhr, status, error) {
+			                console.error("status: "+status+ "error :" + xhr.responseText);
+                            alert("status: "+status +" error: " + xhr.responseText);
+                            history.back();
+			                // 오류 발생 시 실행할 코드
+                            
+			            }
+		});
+        return returnVal;
+    }
+
+    function isWatchingAnotherRoom(){
+        var returnVal = true;
+        $.ajax({
+			            type: "GET",
+			            url: "get/checkMyNowRoomState?room_num="+roomVariable.nowroom_num, // 요청을 처리하는 컨트롤러의 엔드포인트
+                        contentType: "application/json",
+                        async: false,
+                        data: {},// JSON 데이터를 문자열로 변환하여 전송
+
+                        
+			            success: function(res) {
+			                
+			                // 성공적으로 처리된 경우 실행할 코드
+                            if(res["response"] != -1){
+                                
+                                console.log("Success: 기존 방에 입장한 상태에서 또다른 방이나, 같은방에 중복 참여 하시고 계십니다\n"+res["response"]+"번방 입장상태"); 
+                                alert("기존 방에 입장한 상태에서 또다른 방이나, 같은방에 중복 참여 하시고 계십니다. ("+res["response"]+"번방 입장상태)");
+                                
+                            }else{
+                                returnVal = false;
+                                console.log("Success: 기존 방에 입장한 상태에서 또다른 방이나, 같은방에 중복 참여 하시지 않으셨습니다\n"+res["response"]);    
+                            }
+			                
+                            
+			            },
+			            error: function(xhr, status, error) {
+			                console.error("Error: " + error);
+			                // 오류 발생 시 실행할 코드
+                            alert("동일 방 다중 입장/다른 방 입장여부 확인 요청 오류 발생");
+                            console.log(res["log"]);
+                            
+			            }
+		});
+        return returnVal;
+    }
+
+    function getNowRoomInfo(){ // 컨트롤러 수정필요
+        returnVal = false;
+        $.ajax({
+                            type: "GET",
+                            url: "get/nowRoomInfo?room_num="+roomVariable.nowroom_num, // 요청을 처리하는 컨트롤러의 엔드포인트
+                            data: {}, 
+                            async: false,
+                            success: function(res) {
+                                
+                                // 성공적으로 처리된 경우 실행할 코드
+                                //location.reload(true);
+                                console.log(res);
+                                //alert(res);
+                                if(res!='null' || res!=null){
+                                    roomVariable.topic = res["topic"];
+                                    roomVariable.representative = res["representative"]; //개설자겸 대표자
+                                    roomVariable.participants_max_num = res["participants_max_num"]; // 현재 수용된 인원 수
+                                    roomVariable.participants_now_num = res["participants_now_num"]; // 최대 수용가능 인원 수
+                                    
+
+                                    returnVal = true;
+                                    console.log("getNowRoomInfo success: topic = "+roomVariable.topic);
+                                    $("#topic").html(roomVariable.topic);
+                                    $("#drawer-navigation-label").html("Participants "+ roomVariable.participants_now_num +" / "+roomVariable.participants_max_num);
+                                }
+                                
+                                
+                            },
+                            error: function(xhr, status, error) {
+                                console.error("status: "+status+ "error :" + xhr.responseText);
+                                alert("status: "+status +" error: " + xhr.responseText);
+                                
+                                // 오류 발생 시 실행할 코드
+                                //history.back(); //
+                            }
+        });
+        return returnVal;
+    }
+
+    function updateKeepAlive(){
+        var returnVal = false;
+        $.ajax({
+			            type: "POST",
+			            url: "put/keepAlive", // 요청을 처리하는 컨트롤러의 엔드포인트
+                        contentType: "application/json",
+                        data: JSON.stringify({ member_id : roomVariable.session_myID }),// JSON 데이터를 문자열로 변환하여 전송
+
+                        
+			            success: function(res) {
+			                console.log("Success: " + res);
+			                // 성공적으로 처리된 경우 실행할 코드
+			                
+                            returnVal = true;
+			            },
+			            error: function(xhr, status, error) {
+                            console.error("status: "+status+ "error :" + xhr.responseText);
+                            alert("status: "+status +" error: " + xhr.responseText);
+                            history.back();
+			                // 오류 발생 시 실행할 코드
+                            
+			            }
+		});
+        return returnVal;
+    }
+
+    
+
+    
+
+    function getParticipants(){
+        if ((roomVariable.session_myID == 'null' || roomVariable.session_myID == null)&&(roomVariable.nowroom_num == 'null'|| roomVariable.nowroom_num == null) ){
+            console.error("Error: can't identified your id, failed to load ParticipantList");
+            return;
+        }
+        
+            $.ajax({
+                            type: "GET",
+                            url: "get/memberList?room_num="+roomVariable.nowroom_num, // 요청을 처리하는 컨트롤러의 엔드포인트
+                            data: {}, 
+                            success: function(data) {
+                                
+                                // 성공적으로 처리된 경우 실행할 코드
+                                //location.reload(true);
+                                console.log(typeof(data['memberList']))
+                                roomVariable.memberList = data['memberList'];
+                                participants_now_num = roomVariable.memberList.length;
+                                var content='';
+                                $('#participantList').empty();
+                                for( var member of roomVariable.memberList){
+                                    console.log(member);
+                                    console.log("Success: " + member.member_name);
+                                    content +='<li>'
+                                            +  '<a href="#" class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-slate-900 dark:hover:bg-slate-900 group">'
+                                            +    '<span class="ms-3">'+member.member_name+'('+member.member_id+')</span>'
+                                            +  '</a>'
+                                            +'</li>'
+                                            
+                                }
+                                $('#participantList').html(content);
+                            },
+                            error: function(xhr, status, error) {
+                                console.error("Error: " + error);
+                                // 오류 발생 시 실행할 코드
+                                //history.back(); // 
+                            }
+            });
+        
+    }
+
+    function isMeetingRoomFull(){
+        var isSuccess= false;
+        var isFull = -1;
+        $.ajax({
+                            type: "GET",
+                            url: "get/checkMeetingRoomFull?room_num="+roomVariable.nowroom_num, // 요청을 처리하는 컨트롤러의 엔드포인트
+                            data: {},
+                            async: false, 
+                            success: function(data) {
+                                //data에는 방이 가득찼는지 아닌지를 표현해주는 데이터가 옴
+                                // 성공적으로 처리된 경우 실행할 코드
+                                //location.reload(true);
+                                console.log(typeof(data))
+                                isFull = parseInt(data);
+                                isSuccess = true;
+                                if ( isFull == -1 ){
+                                    alert("방이 가득 찼습니다");
+                                    //history.back();
+                                }else if(isFull == 1){
+                                    alert("방에 입장합니다");
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error("Error: " + error);
+                                // 오류 발생 시 실행할 코드
+                                //history.back(); // 
+                                alert("응답 오류");
+                                //history.back();
+                            }
+        });
+       
+            
+        return isFull;
+    }
+
+ 
+
+    
+
+   /*  window.addEventListener("beforeunload", function (e) {
+    // 여기에 원하는 코드를 작성합니다.
+    while(true){
+            if(updateMyNowRoomState('left')==true){
+                console.log("Success");
+                break;
+            }
+            setTimeout(() => console.log("waiting for retry update MyNowRoomState"), 3000);
+        
+    }
+
+    // 이벤트를 취소하려면 preventDefault()를 호출하고 returnValue 프로퍼티를 설정해야 합니다.
+    // 하지만 이렇게 하면 사용자에게 페이지를 떠나는 것에 대한 확인 메시지가 표시됩니다.
+    e.preventDefault();
+    e.returnValue = '';
+    }); */
+    //export {roomVariable };
+</script>
+
 
 <style>
     
@@ -36,7 +377,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
         --meetingroom-flex-container-h : 100%;
         --meetingroom-flex-container-w : 100%;
         --grid-rows-size: 2;
-        --grid-columns-size: 2;
+        --grid-columns-size: 3;
         --grid-gap-x:0.25rem;
         --grid-gap-y:0.25rem;
         --grid-template-width : calc(var(--meetingroom-grid-container-w) / var(--grid-columns-size) - var(--grid-gap-x)) ;
@@ -48,6 +389,17 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
     body {
         margin: 0;
         padding: 0;
+    }
+
+    
+    .drawer-open {
+        /* 스크롤바를 숨깁니다. */
+        scrollbar-width: none; /* 파이어폭스 */
+        -ms-overflow-style: none;  /* IE와 엣지 */
+    }
+
+    .drawer-open::-webkit-scrollbar {
+        display: none; /* 크롬, 사파리, 오페라 */
     }
 
     .name-box{
@@ -195,6 +547,8 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
         bottom: 0px;
     }
 
+    
+
 
     .hide{
         display: none !important;
@@ -208,7 +562,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
 
 
 
-<title>Insert title here</title>
+<title>Meeting Room</title>
 
 
 </head>
@@ -216,13 +570,13 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
 
 <body>
     
-    <div class="container" id="videojoin"><br/>
+    <!-- <div class="container" id="videojoin"><br/>
         <button id = "start" style="border: 1px solid black;">야누스 객체 초기화</button><br/>
         <input type="text" id = "roomname" value="" placeholder="방번호를 입력해 주세요 ex: 1234"/><br/>
         <input type="text" id = "username" value="" placeholder="성함을 입력해 주세요 ex: jsw"/><br/>
         <button id = "register" style="border: 1px solid black;" onclick="">대화방 참여</button>
-    </div>
-    <div class="main hide" id="meetingroom">
+    </div> -->
+    <div class="main" id="meetingroom">
         <div >
             <div class="meetingroom-container gap-1" >
 
@@ -242,6 +596,15 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
                     <div class = "name-box" id = "remote3"></div>
                     <div class = "video-box rounded-lg" id = "videoremote3"></div>
                 </div>
+                <div class="video-layout1">
+                    <div class = "name-box" id = "remote4"></div>
+                    <div class = "video-box rounded-lg" id = "videoremote3"></div>
+                </div>
+                <div class="video-layout1">
+                    <div class = "name-box" id = "remote5"></div>
+                    <div class = "video-box rounded-lg" id = "videoremote3"></div>
+                </div>
+
                 
             </div>
         </div>
@@ -249,106 +612,69 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
         <div class="alert-flex-layout" id="alert-flex">
         </div>
 
-        <div class="fixed bottom-0 left-0 z-50 bottom-bar-layout dark:bg-gray-700 dark:border-gray-600"> <!--하단 네비게이터 바-->
+        <div class="fixed bottom-0 left-0 z-50 bottom-bar-layout dark:bg-gray-700 dark:border-gray-600 "> <!--하단 네비게이터 바-->
             
             <div class="flex flex-row h-auto w-auto mx-auto flex-nowrap font-medium" id="user_ui_options"><!--플렉스 컨테이너-->
                 <div class="flex flex-row" style="width:20%" >
                     <button class="btn btn-warning btn-xs" id="exit" style="margin : 0; padding: 0px; margin-left: 0.5rem">
-                        <img class="bottom-bar-button-icon-layout" src="/image/exit-room.png"/>
+                        <img class="bottom-bar-button-icon-layout" src="/img/exit-room.png"/>
                     </button>
                 </div>
-                <div class="flex flex-row" style="width:80%" >
+                <div class="flex flex-row" style="width:30%" >
                     <button class="btn btn-warning btn-xs" id="video-publish-btn" style="margin-right: 0.5rem; padding:0px;" >
-                        <img class="bottom-bar-button-icon-layout" src="/image/now-cam-off.png"/>
+                        <img class="bottom-bar-button-icon-layout" src="/img/now-cam-off.png"/>
                     </button>
                     <button class="btn btn-warning btn-xs" id="mute" type="button" style="margin-right: 0rem; padding: 0px;">
-                        <img class="bottom-bar-button-icon-layout" src="/image/now-mute.png"/>
+                        <img class="bottom-bar-button-icon-layout" src="/img/now-mute.png"/>
                     </button>
                 </div>
+                <div class="flex flex-row" style="width:50%" >
+                    <div class="text-center" id="topic-button">
+                        <button data-popover-target="topic-popover-box" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="button">
+                        TOPIC
+                        </button>
+                     </div>
+                </div>
+
+
                 <div class="flex flex-row">
-                    <button class="btn btn-warning btn-xs" data-drawer-target="drawer-navigation" data-drawer-toggle="drawer-navigation" data-drawer-placement="right" aria-controls="drawer-navigation" style="margin-right: 0.5rem">
-                        <img class="bottom-bar-button-icon-layout" src="/image/more.png"/>
+                    <button class="btn btn-warning btn-xs" data-drawer-target="drawer" data-drawer-toggle="drawer" data-drawer-placement="right" aria-controls="drawer" style="margin-right: 0.5rem">
+                        <img class="bottom-bar-button-icon-layout" src="/img/more.png"/>
                     </button>
                 </div>
-                
+
                 
             </div>
         </div>
-    </div> 
+    </div>
     
-    <!-- drawer component -->
-    <div id="drawer-navigation" class="rounded-l-lg fixed side-bar-layout z-40 p-4 overflow-y-auto transition-transform translate-x-full dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-navigation-label" style="background:#424242;">
+    <div data-popover id="topic-popover-box" role="tooltip" class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
+        <div class="px-3 py-2 bg-gray-100 border-b border-gray-200 rounded-t-lg dark:border-gray-600 dark:bg-gray-700">
+            <h3 class="text-center font-semibold text-gray-900 dark:text-white" id="topic-head">회의 주제</h3>
+        </div>
+        <div class="px-3 py-2">
+            <h4 class="text-center" id="topic"></h4>
+        </div>
+        <div data-popper-arrow></div>
+    </div>
+
+    <!-- side drawer component -->
+    <div id="drawer" class="rounded-l-lg fixed side-bar-layout z-40 p-4 overflow-y-auto transition-transform translate-x-full dark:bg-gray-800 drawer-open" tabindex="-1" aria-labelledby="drawer-navigation-label" style="background:#424242;">
         <h5 id="drawer-navigation-label" class="text-base font-semibold text-white uppercase dark:text-gray-400">Participants</h5>
-        <button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation" class="text-white bg-transparent rounded-lg text-sm p-1.5 absolute top-2.5 end-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" >
+        <button type="button" data-drawer-hide="drawer" aria-controls="drawer" class="text-white bg-transparent rounded-lg text-sm p-1.5 absolute top-2.5 end-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" >
             <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
             <span class="sr-only">Participants</span>
         </button>
         <div class="py-4 overflow-y-auto">
-            <ul class="space-y-2 font-medium">
-                <li>
-                    <a href="#" class="flex items-center p-2 text-white rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
-                        <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
-                        <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
-                    </svg>
-                    <span class="ms-3">Dashboard</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
-                        <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z"/>
-                    </svg>
-                    <span class="flex-1 ms-3 whitespace-nowrap">Kanban</span>
-                    <span class="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">Pro</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z"/>
-                    </svg>
-                    <span class="flex-1 ms-3 whitespace-nowrap">Inbox</span>
-                    <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">3</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-                        <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"/>
-                    </svg>
-                    <span class="flex-1 ms-3 whitespace-nowrap">Users</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
-                        <path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z"/>
-                    </svg>
-                    <span class="flex-1 ms-3 whitespace-nowrap">Products</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 16">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"/>
-                    </svg>
-                    <span class="flex-1 ms-3 whitespace-nowrap">Sign In</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.96 2.96 0 0 0 .13 5H5Z"/>
-                        <path d="M6.737 11.061a2.961 2.961 0 0 1 .81-1.515l6.117-6.116A4.839 4.839 0 0 1 16 2.141V2a1.97 1.97 0 0 0-1.933-2H7v5a2 2 0 0 1-2 2H0v11a1.969 1.969 0 0 0 1.933 2h12.134A1.97 1.97 0 0 0 16 18v-3.093l-1.546 1.546c-.413.413-.94.695-1.513.81l-3.4.679a2.947 2.947 0 0 1-1.85-.227 2.96 2.96 0 0 1-1.635-3.257l.681-3.397Z"/>
-                        <path d="M8.961 16a.93.93 0 0 0 .189-.019l3.4-.679a.961.961 0 0 0 .49-.263l6.118-6.117a2.884 2.884 0 0 0-4.079-4.078l-6.117 6.117a.96.96 0 0 0-.263.491l-.679 3.4A.961.961 0 0 0 8.961 16Zm7.477-9.8a.958.958 0 0 1 .68-.281.961.961 0 0 1 .682 1.644l-.315.315-1.36-1.36.313-.318Zm-5.911 5.911 4.236-4.236 1.359 1.359-4.236 4.237-1.7.339.341-1.699Z"/>
-                    </svg>
-                    <span class="flex-1 ms-3 whitespace-nowrap">Sign Up</span>
-                    </a>
-                </li>
+            <ul class="space-y-2 font-medium" id="participantList">
             </ul>
         </div>
     </div>
+
+   
+
+
+    
 
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>

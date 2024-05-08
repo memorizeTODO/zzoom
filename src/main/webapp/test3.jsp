@@ -111,7 +111,7 @@
 			        // AJAX를 사용하여 서버에 JSON 데이터 전송
 			        $.ajax({
 			            type: "POST",
-			            url: "http://localhost:80/joinMeetingRoom", // 요청을 처리하는 컨트롤러의 엔드포인트
+			            url: "/joinMeetingRoom", // 요청을 처리하는 컨트롤러의 엔드포인트
 			            contentType: "application/json",
 			            data: JSON.stringify(jsonData), // JSON 데이터를 문자열로 변환하여 전송
 			            success: function(response) {
@@ -124,6 +124,7 @@
 			                // 오류 발생 시 실행할 코드
 			            }
 			        });
+			       
 			 
         }
         
