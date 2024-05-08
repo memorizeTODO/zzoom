@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.team5.zzoom.dao.AdminManagerDAO">
+
+	
+	<!-- 관리자 로그인 -->
+	<select id="getManager" parameterType="manager" resultType="manager">
+	    select * from manager where manager_id=#{manager_id} and manager_passwd=#{manager_passwd}
+	</select>
+
+</mapper>
