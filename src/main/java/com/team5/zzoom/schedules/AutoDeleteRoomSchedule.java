@@ -1,42 +1,56 @@
-/*
- * package com.team5.zzoom.schedules;
- * 
- * import java.sql.Timestamp; import java.util.Date; import java.util.List;
- * 
- * import org.springframework.beans.factory.annotation.Autowired; import
- * org.springframework.scheduling.annotation.Scheduled;
- * 
- * import com.team5.zzoom.model.MeetingRoomDTO; import
- * com.team5.zzoom.service.MeetingRoomDAOImpl;
- * 
- * public class AutoDeleteRoomSchedule {
- * 
- * @Autowired MeetingRoomDAOImpl meetingRoomService;
- * 
- * @Scheduled(cron = "* 0/10 * * * ?") public void autoDelete() { Date date =
- * new Date();// 현재시각으로부터 하루 전 date.setDate(d.getDate - 1);
- * 
- * List<MeetingRoomDTO> meetingRoomList = null; meetingRoomList =
- * meetingRoomService.getAllMeetingRoom(); if(meetingRoomList!=null) {
- * for(MeetingRoomDTO meetingRoom : meetingRoomList) { Timestamp
- * meetingRoomStartDate = meetingRoom.getMeeting_start_date(); int comparison =
- * 1; if(memberKeepAlive!= null) {
- * comparison=nowMinus3.compareTo(memberKeepAlive);// 가져온 멤버쪽의 keepAlive값이
- * null이면 그냥 연결 해제 처리(1~) }
- * 
- * System.out.println("success2 : "+ comparison); if (comparison <= 0) {
- * System.out.
- * println("nowMinus3(현재 시간으로부터 5초전)은 memberKeepAlive와 같거나 이전 시간을 나타냅니다.(연결상태로 간주)"
- * ); } else { System.out.
- * println("nowMinus3(현재 시간으로부터 5초전)은 memberKeepAlive보다 이후의 시간을 나타냅니다.(연결해제 됨)"
- * ); // 화상회의룸에서 제거
- * meetingRoomService.updateMyNowRoomState(member.getMember_id(), null);
- * //keepAlive 값 제거 meetingRoomService.updateKeepAlive(member.getMember_id(),
- * null); meetingRoomService.updateMeetingNowNum(Integer.parseInt(member.
- * getMember_nowRoom_code()),member.getMember_nowRoom_code()); //미팅룸 현재 참여자수 갱신
- * } }
- * 
- * } }
- * 
- * }
- */
+package com.team5.zzoom.schedules;
+
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date; import java.util.List;
+  
+import org.springframework.beans.factory.annotation.Autowired; 
+import org.springframework.scheduling.annotation.Scheduled;
+  
+import com.team5.zzoom.model.MeetingRoomDTO; 
+import com.team5.zzoom.service.MeetingRoomDAOImpl;
+  
+public class AutoDeleteRoomSchedule {
+	@Autowired 
+	MeetingRoomDAOImpl meetingRoomService;
+	//매일 자정 1분 후에 작동
+	@Scheduled(cron = "0 1 0 * * ?")
+	public void autoDelete() { 
+		Date nowMinus2d = new Date();// 현재시각으로부터 하루 전
+		
+		
+		
+		Calendar cal = Calendar.getInstance();
+        cal.setTime(nowMinus2d);
+
+        // 하루를 뺍니다.
+        cal.add(Calendar.DAY_OF_MONTH, -2);
+        nowMinus2d = cal.getTime();
+        List<MeetingRoomDTO> meetingRoomList = null;
+        meetingRoomList= meetingRoomService.getAllMeetingRoom();
+        
+        if (meetingRoomList==null) {
+        	return; // 생성되어있는 방이 아예 없으면 스케쥴러 종료
+        }
+        
+        for(MeetingRoomDTO meetingRoom : meetingRoomList) {
+	        if(meetingRoom.getMeeting_start_date() == null){
+	        	//해당 meeting레코드 삭제
+	        	meetingRoomService.deleteMeetingRoom(meetingRoom.getMeeting_id());
+		        continue;
+	        }
+	        if (nowMinus2d.before(meetingRoom.getMeeting_start_date())) {
+	            System.out.println("nowMinus2d은 meetingRoomStartDate보다 이전입니다. pass");
+	            
+	        } else {
+	            System.out.println("nowMinus2d은 meetingRoomStartDate보다 이후이거나 동일한 날짜로 삭제 대상입니다 ex: 시작일이 25일인 데이터는 27일 자정이 지나면 삭제됨");
+	          //해당 meeting레코드 삭제
+	            meetingRoomService.deleteMeetingRoom(meetingRoom.getMeeting_id());
+	        } 
+        }
+	}	
+}
+	
+	
+
+ 
