@@ -27,11 +27,6 @@
                         <img src="img\logozzoom.png" class="h-10" alt="ZZOM Logo" />
                         <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span>
                     </a>
-                    <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-                        <button type="button" class="text-white bg-purple-700 hover:bg-purple-400 
-                                                    focus:ring-10 focus:outline-none
-                                                     font-large rounded-lg text-md px-6 py-3 text-center mb-3">로그인</button>
-                    </div>   
                     <div id="navbar-sticky" class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 justify-end">
                         <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 
                                    rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
