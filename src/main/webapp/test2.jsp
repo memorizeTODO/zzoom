@@ -20,7 +20,7 @@
 
     <h2>Create Meeting</h2>
     <form id="insertForm">
-    <input type="hidden" id="meetingID" name="meetingID" value="get/">
+    <input type="hidden" id="meetingID" name="meetingID">
     <label for="meetingMemberNum">meetingMemberNum:</label>
     <input type="number" id="meetingMemberNum" name="meetingMemberNum"><br>
     <label for="meetingTopic">meeting Topic:</label>

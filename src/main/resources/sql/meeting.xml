@@ -17,6 +17,10 @@
 		select * from meeting where member_ID = #{ID} 
 	</select>
 	
+	<select id="deleteReservation" resultType="Reservation">
+		delete from meeting where meeting_ID = #{code} 
+	</select>
+	
 	<select id="getReservation" parameterType="String" resultType="Reservation">
 		select * from meeting where meeting_ID = #{code}
 	</select>
@@ -26,7 +30,7 @@
 	set
 	    meeting_member_num = #{meeting_member_num},
 	    meeting_topic = #{meeting_topic},
-	    meeting_passwd = #{meeting_pass_wd},
+	    meeting_passwd = #{meeting_passwd},
 	    meeting_start_date = #{meeting_start_date},
 	    member_ID = #{member_id},
 	    member_name = #{member_name}

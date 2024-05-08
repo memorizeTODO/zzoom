@@ -1,145 +1,3 @@
-<<<<<<< HEAD
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-   
-</head>
-<body>
-
-
-
-
-
-
-
-
-
-    <h2>search Meeting</h2>
-    <form id="insertForm">
-    <label for="meeting_id">meeting_id:</label>
-    <input type="text" id="meeting_id" name="meeting_id"><br>
-    <button type="button" onclick="search()">Save</button>
-	</form>
-    
-    
-    <input type="text" id="display_room_num" name="display_room_num">
-    
-    
-    <script>
-       
-	
-	 var today = new Date();
-
-    var year = today.getFullYear();
-    var month = ('0' + (today.getMonth() + 1)).slice(-2);
-    var day = ('0' + today.getDate()).slice(-2);
-
-    var dateString = year + '-' + month  + '-' + day;
-
-    console.log(dateString);
-	
-    function joinMeeting() {
-    	
-  
-
-           
-
-        // AJAX를 사용하여 서버에 JSON 데이터 전송
-        $.ajax({
-            type: "POST",
-            url: "http://localhost:80/create-meeting", // 요청을 처리하는 컨트롤러의 엔드포인트
-            contentType: "application/json",
-            data: JSON.stringify(jsonData), // JSON 데이터를 문자열로 변환하여 전송
-            success: function(response) {
-                console.log("Success: " + response);
-                // 성공적으로 처리된 경우 실행할 코드
-            },
-            error: function(xhr, status, error) {
-                console.error("Error: " + error);
-                // 오류 발생 시 실행할 코드
-            }
-        });
-    }		
-              
-    
-       /* $(document).ready(function(){
-            $("#passwordForm").submit(function(event){
-                // 폼의 기본 동작을 막습니다.
-                event.preventDefault();
-
-                // 입력된 비밀번호를 가져옵니다.
-                var password = $("#password").val();
-
-                // AJAX 요청을 생성합니다.
-                $.ajax({
-                    type: "POST",
-                    contentType: "text/plain",
-                    url: "http://localhost:80/check-password",
-                    data: password,
-                    success: function(data){
-                        // 서버에서 받은 결과를 처리합니다.
-                        if(data === "success") {
-                            $("#result").text("비밀번호가 맞습니다.");
-                        } else {
-                            $("#result").text("비밀번호가 틀렸습니다.");
-                        }
-                    },
-                    error: function(e){
-                        console.log("Error:", e);
-                    }
-                });
-            });
-        });*/
-        
-        
-        async function search() {
-            var meeting_id = document.getElementById("meeting_id").value
-            const res = await fetch(`http://localhost:80/get/meetingroom?code=${"${meeting_id}"}`);
-			const resJson = await res.json();
-			var room_num = resJson.meeting_room_num;
-			var meeting_ID = resJson.meeting_id;
-			meeting_room_num = 50000+Number(room_num);
-			document.getElementById("display_room_num").value = meeting_room_num;
-			 
-			 var jsonData = {
-			            meeting_id: ${"meeting_ID"},
-			            meeting_room_num: ${"meeting_room_num"},
-			        };
-
-			        // AJAX를 사용하여 서버에 JSON 데이터 전송
-			        $.ajax({
-			            type: "POST",
-			            url: "/joinMeetingRoom", // 요청을 처리하는 컨트롤러의 엔드포인트
-			            contentType: "application/json",
-			            data: JSON.stringify(jsonData), // JSON 데이터를 문자열로 변환하여 전송
-			            success: function(response) {
-			                console.log("Success: " + response);
-			                // 성공적으로 처리된 경우 실행할 코드
-			                location.reload(true);
-			            },
-			            error: function(xhr, status, error) {
-			                console.error("Error: " + error);
-			                // 오류 발생 시 실행할 코드
-			            }
-			        });
-			       
-			 
-        }
-        
-		async function listsearch() {
-            
-            const res = await fetch('http://localhost:80/get/meetinglist?memberID=test');
-			const resJson2 = await res.json();
-			
-            
-			console.log(resJson2);
-        }
-    </script>
-</body>
-=======
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -169,11 +27,6 @@
                         <img src="img\logozzoom.png" class="h-10" alt="ZZOM Logo" />
                         <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span>
                     </a>
-                    <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-                        <button type="button" class="text-white bg-purple-700 hover:bg-purple-400 
-                                                    focus:ring-10 focus:outline-none
-                                                     font-large rounded-lg text-md px-6 py-3 text-center mb-3">로그인</button>
-                    </div>   
                     <div id="navbar-sticky" class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 justify-end">
                         <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 
                                    rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
@@ -425,7 +278,7 @@
                         																		  block w-full p-2.5" placeholder="시작일" required="">
                     </div>
  					<input type="hidden" id="updateMeetingID" name="updateMeetingID">
- 					<input type="hidden" id="updateMemberID" name="updateMeetingID">
+ 					<input type="hidden" id="updateMemberID" name="updateMemberID">
  					<input type="hidden" id="updateMemberName" name="updateMemberName">
                 </div>
                 <div class="flex justify-end">
@@ -447,16 +300,28 @@
 
 
     <script>
-	 function characterCheck(obj){
+    
+    function characterCheck(obj){
 	 var regExp = /[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/gi; 
 	 if( regExp.test(obj.value) ){
 	 	alert("특수문자는 입력하실수 없습니다.");
 	 	obj.value = obj.value.substring( 0 , obj.value.length - 1 ); // 입력한 특수문자 한자리 지움
 	 	}
 	 }
+    let sessionMemberID = null;    
+    let sessionMemberName = null;    
 
-    
-       
+    async function get_userID(){
+        const res = await fetch("http://localhost:80/getUserID");
+        const resJson = await res.json();
+        sessionMemberID = resJson.member_id;
+        sessionMemberName = resJson.member_name;
+        console.log(sessionMemberName);
+    }
+
+    get_userID().then(function (){
+      console.log(sessionMemberID); //여기가 비정상
+    });
     async function openModal(){
     	var meeting_id = document.getElementById("meeting_id").value
         const res = await fetch(`http://localhost:80/get/meetingroom?code=${"${meeting_id}"}`);
@@ -475,11 +340,18 @@
 	
     async function openUpdateModal(value){
     	
+    	const uid = await fetch("http://localhost:80/getUserID");
+        const uidJson = await uid.json();
+        const sessionMemberID = uidJson.member_info.member_id;	
+        const sessionMemberName = uidJson.member_info.member_name;
+    	
+        console.log(sessionMemberID);
+        
     	const res = await fetch(`http://localhost:80/get/meetingroom?code=${"${value}"}`);
     	const resJson = await res.json();
 		document.getElementById("updateMeetingID").value = resJson.meeting_id;
-		document.getElementById("updateMemberID").value = resJson.member_id;
-		document.getElementById("updateMemberName").value = resJson.member_name;
+		document.getElementById("updateMemberID").value = sessionMemberID;
+		document.getElementById("updateMemberName").value = sessionMemberName;
 		document.getElementById("updateMeetingMemberNum").value = resJson.meeting_member_num;
 		document.getElementById("updateMeetingTopic").value = resJson.meeting_topic;
 		document.getElementById("updateMeetingPasswd").value = resJson.meeting_passwd;
@@ -489,7 +361,11 @@
     
     
 function updateMeeting() {
-    var passwd =document.getElementById("updateMeetingPasswd").value;
+	
+	var passwd = document.getElementById("updateMeetingPasswd").value;
+	var memNum = document.getElementById("updateMeetingMemberNum").value;
+	var startdate = document.getElementById("updateMeetingStartDate").value;
+	
 	if(passwd.length == 4){
 		if(memNum > 1){
 		  if(startdate > dateString){ 
@@ -497,7 +373,7 @@ function updateMeeting() {
             meeting_id: document.getElementById("updateMeetingID").value,
             member_id: document.getElementById("updateMemberID").value,
             member_name: document.getElementById("updateMemberName").value,
-            member_num: document.getElementById("updateMeetingMemberNum").value,
+            member_num: 6,
             meeting_topic: document.getElementById("updateMeetingTopic").value,
             meeting_passwd: document.getElementById("updateMeetingPasswd").value,
             meeting_start_date: document.getElementById("updateMeetingStartDate").value,
@@ -537,7 +413,7 @@ function updateMeeting() {
     		document.getElementById('deletePasswd-modal').click();
     	}
      
-    async function deleteMeeting(){
+    	async function deleteMeeting(){
     	
 					const res = await fetch(`http://localhost:80/get/meetingroom?code=${"${deleteCode}"}`);
 					const resJson = await res.json();
@@ -564,12 +440,16 @@ function updateMeeting() {
     console.log(dateString);
 	
               
-		function saveMeeting() {
+    async function saveMeeting() {
+	       	const uid = await fetch("http://localhost:80/getUserID");
+            const uidJson = await uid.json();
+            const sessionMemberID = uidJson.member_info.member_id;	
+            const sessionMemberName = uidJson.member_info.member_name;	
     	
 		var passwd =document.getElementById("meetingPasswd").value;
 		var memNum = document.getElementById("meetingMemberNum").value;
 		var startdate = document.getElementById("meetingStartDate").value;
-	
+		
 		if(passwd.length == 4){	
 		  if(memNum > 1){
 			if(startdate >= dateString){ 
@@ -583,12 +463,12 @@ function updateMeeting() {
         // 사용자가 입력한 데이터를 가져와서 JSON 객체 생성
 		        var jsonData = {
 		        	meeting_id: ${"uuidresult"},
-		            meeting_member_num: document.getElementById("meetingMemberNum").value,
+		            meeting_member_num: 6,
 		            meeting_topic: document.getElementById("meetingTopic").value,
 		            meeting_passwd: document.getElementById("meetingPasswd").value,
 		            meeting_start_date: document.getElementById("meetingStartDate").value,
-		            member_id: "test",
-		            member_name: "박승희",
+		            member_id: ${"sessionMemberID"},
+		            member_name: ${"sessionMemberName"},
 		            meeting_registration_date: ${"dateString"},
 		            meeting_join: 1,                                 	
 		        };
@@ -624,8 +504,7 @@ function updateMeeting() {
         
         
         async function search() {
-            var meeting_id = document.getElementById("meeting_id").value
-            const res = await fetch(`http://localhost:80/get/meetingroom?code=${"${meeting_id}"}`);
+            const res = await fetch(`http://localhost:80/get/meetingroom?code=${"${deleteCode}"}`);
 			const resJson = await res.json();
 			
 			var meeting_ID = resJson.meeting_id;
@@ -660,7 +539,7 @@ function updateMeeting() {
 				
 										        // AJAX를 사용하여 서버에 JSON 데이터 전송
 										        $.ajax({
-										            type: "GET",
+										            type: "POST",
 										            url: "http://localhost:80/joinMeetingRoom", // 요청을 처리하는 컨트롤러의 엔드포인트
 										            contentType: "application/json",
 										            data: JSON.stringify(jsonData), // JSON 데이터를 문자열로 변환하여 전송
@@ -673,7 +552,6 @@ function updateMeeting() {
 										                // 오류 발생 시 실행할 코드
 										            }
 										        });		
-					 				location.href="/zzoom/test4.jsp";
 					 		
 				 		      }else{
 				 			     alert("입장 가능한 시간이 아닙니다.")
@@ -691,7 +569,10 @@ function updateMeeting() {
 			
         
         async function listsearch() {
-            const res = await fetch('http://localhost:80/get/meetinglist?memberID=test');
+        	const uid = await fetch("http://localhost:80/getUserID");
+            const uidJson = await uid.json();
+            const sessionMemberID = uidJson.member_info.member_id;
+            const res = await fetch(`http://localhost:80/get/meetinglist?memberID=${"${sessionMemberID}"}`);
 			const meetingList = await res.json();
 			console.log(meetingList);
 			const keys = Object.keys(meetingList);
@@ -708,7 +589,7 @@ function updateMeeting() {
 			                  <div class="w-full h-auto">
 			                       <span class="text-2xl">미팅 시간</span>
 			                          <div class="">  		
-			                          	<span class="text-3xl font-bold">2024-05-02</span>
+			                          	<span class="text-3xl font-bold">${"${meetingDataList.meeting_start_date}"}</span>
 			                          </div>
 			                          <div>
 			                        	<span class="text-lg">입장코드</span>
@@ -743,5 +624,4 @@ function updateMeeting() {
        listsearch()
     </script>
 </body>
->>>>>>> 70e7a9e5dcc6880c6f44745c9997e91fd422cc27
 </html>

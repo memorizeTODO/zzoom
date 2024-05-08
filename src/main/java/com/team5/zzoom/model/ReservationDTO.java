@@ -1,6 +1,7 @@
 package com.team5.zzoom.model;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 import org.apache.ibatis.type.Alias;
 
@@ -50,10 +51,10 @@ public class ReservationDTO {
 	public void setmeeting_member_num(int meeting_member_num) {
 		this.meeting_member_num = meeting_member_num;
 	}
-	public Date getmeeting_start_date() {
+	public LocalDateTime getmeeting_start_date() {
 		return meeting_start_date;
 	}
-	public void setmeeting_start_date(Date meeting_start_date) {
+	public void setmeeting_start_date(LocalDateTime meeting_start_date) {
 		this.meeting_start_date = meeting_start_date;
 	}
 	public Date getmeeting_registration_date() {
@@ -80,7 +81,12 @@ public class ReservationDTO {
 	public void setmember_id(String member_id) {
 		this.member_id = member_id;
 	}
-
+	public int getmeeting_member_nownum() {
+		return meeting_member_nownum;
+	}
+	public void setmeeting_member_nownum(int meeting_member_nownum) {
+		this.meeting_member_nownum = meeting_member_nownum;
+	}
 	
 	
 	private String meeting_id;
@@ -89,9 +95,10 @@ public class ReservationDTO {
 	private String meeting_topic;
 	private String meeting_passwd;
 	private int meeting_member_num;
-	private Date meeting_start_date;
+	private LocalDateTime meeting_start_date;
 	private Date meeting_registration_date;
 	private int meeting_join;
 	private String member_name;
 	private String member_id;
+	private int meeting_member_nownum;
 }

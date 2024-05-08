@@ -1,8 +1,11 @@
 package com.team5.zzoom.controller;
 
+import java.util.HashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -61,22 +64,23 @@ public class MemberController {
 	// 로그인 폼으로 이동
 	@RequestMapping("login")
 	public String login() {
-		return "member/member_login";
+		return "/member/member_login";
 	}
 
 	// 로그인 기능
 	@RequestMapping(value = "member_login", method = RequestMethod.POST)
 	public String member_login(@ModelAttribute MemberDTO member, HttpSession session, Model model) {
 		System.out.println("Access Login function");
-		int result = 0;
+		int result = 0;	
 		MemberDTO mem = service.memberCheck(member);
 		System.out.println("로그인 mem:" + mem);
-
 		if (mem != null) {
 			result = 1;
-
-			session.setAttribute("member_id", member.getMember_id());
-			return "member/member_main";
+			HashMap<String, Object> userInfoMap = new HashMap<String,Object>();
+			userInfoMap.put("member_id", mem.getMember_id());
+			userInfoMap.put("member_name", mem.getMember_name());
+			session.setAttribute("member_info", userInfoMap);
+			return "/member/member_main";
 		} else {
 			result = -1;
 
@@ -84,7 +88,23 @@ public class MemberController {
 		}
 
 	}
+	
+	   @RequestMapping("meeting_reservation")
+	   public String gotoMainPage(HttpSession session){
+	      return "member/meeting_reservation";
+	   }
+	   
+	
 
+	@RequestMapping("/getUserID")
+	@ResponseBody
+	public HashMap<String, Object> getUserID(HttpSession session){
+		HashMap<String, Object> userInfoMap = new HashMap<String,Object>();
+		userInfoMap.put("member_info", session.getAttribute("member_info"));
+		
+		return userInfoMap;
+	}
+	
 	// 마이페이지 폼으로 이동
 	@RequestMapping("myPage")
 	public String myPageForm(HttpSession session, Model model) {

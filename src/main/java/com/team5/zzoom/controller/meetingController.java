@@ -17,10 +17,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.team5.zzoom.model.MemberDTO;
+import com.team5.zzoom.service.MemberDAOImpl;
+
 import com.team5.zzoom.model.ReservationDTO;
 import com.team5.zzoom.service.ReservationDAOImpl;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -34,11 +38,14 @@ import java.util.Map;
 
 
 @RestController
-public class PasswordController {
+public class meetingController {
 	
 	@Autowired
 	ReservationDAOImpl ReservationService;
 
+	@Autowired
+	private MemberDAOImpl service;
+	
 	@RequestMapping("get/meetingroom")
     public Map<String,Object> getReservationToView(@RequestParam Map<String,String> params){
     	
@@ -62,22 +69,12 @@ public class PasswordController {
 				e.printStackTrace();
 				
 			}
-    	System.out.println(ReservationMap);
     	return ReservationMap;
     }
 	
-	String passwd = "1234";
-	
-    @PostMapping("/check-password")
-    public String checkPassword(@RequestBody String password) {
-        // 여기에 비밀번호를 체크하는 로직을 구현합니다.
-        // 이 예제에서는 간단히 "password" 문자열이 입력되면 "success"를 반환합니다.
-        if (passwd.equals(password)) {
-            return "success";
-        } else {
-            return "failure";
-        }
-    }
+
+    
+  
     
     @RequestMapping("get/meetinglist")
 	public Map<String,Map<String,Object>> getReservaionListToView(@RequestParam Map<String,String> params){
@@ -119,17 +116,26 @@ public class PasswordController {
     @PostMapping("/update-meeting")
     	public ResponseEntity<String> updateMeeting(@RequestBody ReservationDTO dto){
     	
+    		
     		int result = ReservationService.updateReservation(dto);
     	
-    	
-    	
     		if (result == 1) {
+    			System.out.println(dto);
 		        return ResponseEntity.ok("Meeting updated successfully.");
+		        
 		    } else {
 		        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to updated meeting.");
 		    }
     	
     	}
+    
+    @RequestMapping("/delete-meeting")
+    public void deleteReservation(@RequestParam Map<String,String> params){
+    	
+    	String code = params.get("code");
+		ReservationService.deleteReservation(code);
+	
+    }
     
     	
     	@PostMapping("/create-meeting")
@@ -145,7 +151,14 @@ public class PasswordController {
     		    }
     		}
     	
-    	
+    	@PostMapping("/joinMeetingRoom")
+		public ResponseEntity<String> joinMeetingRoom(@RequestBody String parameter) {
+		    // DTO를 DAO에 전달하여 데이터베이스에 삽입
+		    System.out.println(parameter);
+		 
+		    return ResponseEntity.ok("Meeting created successfully.");
+
+		    }
 		}
 		
     	
