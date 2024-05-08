@@ -64,10 +64,10 @@
    <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
       <a href="/main"
          class="flex items-center space-x-3 rtl:space-x-reverse ml-2">
-      <img src="img\logozzoom.png" class="h-10" alt="C:\Users\qwzx0\git\zzoom\src\main\resources\static\img\logozzoom.png" />
+      <img src="image\logozzoom.png" class="h-10" alt="C:\Users\qwzx0\git\zzoom\src\main\resources\static\img\logozzoom.png" />
       <span class="self-center text-2xl font-semibold whitespace-nowrap mt-3 mb-3"></span>
       </a>
-      
+    
    <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
    
    <!-- 마이페이지 -->
