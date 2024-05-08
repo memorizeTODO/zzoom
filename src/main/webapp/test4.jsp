@@ -72,34 +72,7 @@
     
 
     
-       /* $(document).ready(function(){
-            $("#passwordForm").submit(function(event){
-                // 폼의 기본 동작을 막습니다.
-                event.preventDefault();
-
-                // 입력된 비밀번호를 가져옵니다.
-                var password = $("#password").val();
-
-                // AJAX 요청을 생성합니다.
-                $.ajax({
-                    type: "POST",
-                    contentType: "text/plain",
-                    url: "http://localhost:80/check-password",
-                    data: password,
-                    success: function(data){
-                        // 서버에서 받은 결과를 처리합니다.
-                        if(data === "success") {
-                            $("#result").text("비밀번호가 맞습니다.");
-                        } else {
-                            $("#result").text("비밀번호가 틀렸습니다.");
-                        }
-                    },
-                    error: function(e){
-                        console.log("Error:", e);
-                    }
-                });
-            });
-        });*/
+     
         
         
         async function search() {
@@ -113,12 +86,24 @@
         search();
         
 		async function listsearch() {
-            
             const res = await fetch('http://localhost:80/get/meetinglist?memberID=test');
-			const resJson2 = await res.json();
+			const meetingList = await res.json();
 			
-            
-			console.log(resJson2);
+			const keys = Object.keys(meetingList);
+			
+			const innerHtmlList = keys.map((key)=>{
+                const campdataList = campJson[key];
+                    const innerHTML = 
+			
+                    	
+                    	
+                    	
+                    	
+                    	;	
+                    	return innerHTML;
+            });
+			const campdataList = document.getElementById("camp-list");
+            campdataList.innerHTML = innerHtmlList.join('')
         }
         listsearch();
     </script>
