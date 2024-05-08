@@ -207,7 +207,7 @@
 	
 	<!-- *************************************************************************************************** -->	
 	
-	<div clas="flex justify-center mt-5">
+	<div class="flex justify-center mt-5">
 	<footer class="bg-gray-800 text-white py-8">
 		</footer><div class="container mx-auto px-4">
 			<div class="flex flex-wrap justify-between">
@@ -241,7 +241,6 @@
 	            </div>
 	        </div>
 	    </div>
-	</footer>
 	</div>
 	
 	
