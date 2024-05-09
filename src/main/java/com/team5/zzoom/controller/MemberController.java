@@ -76,11 +76,12 @@ public class MemberController {
 		System.out.println("로그인 mem:" + mem);
 		if (mem != null) {
 			result = 1;
+			session.setAttribute("member_id", mem.getMember_id());
 			HashMap<String, Object> userInfoMap = new HashMap<String,Object>();
 			userInfoMap.put("member_id", mem.getMember_id());
 			userInfoMap.put("member_name", mem.getMember_name());
 			session.setAttribute("member_info", userInfoMap);
-			return "/member/member_main";
+			return "member/member_main";
 		} else {
 			result = -1;
 
