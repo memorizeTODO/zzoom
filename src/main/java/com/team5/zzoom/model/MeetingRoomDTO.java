@@ -8,10 +8,9 @@ import lombok.Data;
 
 @Data
 @Alias("meetingRoomDTO")
-
 public class MeetingRoomDTO {
 	
-	private String meeting_room_num;
+	
 	private String meeting_id;
 	private String meeting_num;
 	private String meeting_topic;
@@ -23,4 +22,7 @@ public class MeetingRoomDTO {
 	private String member_name;
 	private String member_id;
 	private int meeting_member_nownum;
+
+	
+	
 }

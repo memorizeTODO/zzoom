@@ -37,4 +37,6 @@ public interface MeetingRoomDAO {
 
 	public List<MeetingRoomDTO> getAllMeetingRoom();
 
+	public int deleteMeetingRoom(String meeting_id);
+
 }

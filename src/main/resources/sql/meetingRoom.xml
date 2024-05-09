@@ -67,7 +67,12 @@
 		where member_id = #{member_id}
 	</select>
 	
-	<select id="getAllMeetingRoom" resultType="meetingRoomDTO">
+	<select id="getAllMeetingRoom" resultType = "meetingRoomDTO">
 		select * from meeting
 	</select>
+	
+	<delete id="deleteMeetingRoom" parameterType = "String">
+		delete from meeting
+		where meeting_id = #{meeting_id}
+	</delete>
 </mapper>

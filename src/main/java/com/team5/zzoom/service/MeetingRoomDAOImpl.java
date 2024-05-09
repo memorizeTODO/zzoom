@@ -179,5 +179,19 @@ public class MeetingRoomDAOImpl implements MeetingRoomDAO {
 		
 		return  meetingRoomList;
 	}
+	public int deleteMeetingRoom(String meeting_id) {
+		
+		int result = 0;
+		try {
+			result = dao.deleteMeetingRoom(meeting_id); 
+		} catch (SqlSessionException e) {
+		    // SqlSessionException 처리 코드
+			e.printStackTrace();
+		} catch (PersistenceException e) {
+		    // PersistenceException 처리 코드
+			e.printStackTrace();
+		}
+		return result;
+	}
 	
 }
