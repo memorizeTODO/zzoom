@@ -25,10 +25,11 @@ public class WebMvcConfig implements WebMvcConfigurer{
 		.addPathPatterns("/inquirydetail")
 		.addPathPatterns("/inquiryUpdate")
 		.addPathPatterns("/inquiryDelete")
-		.addPathPatterns("/inquirylist");
+		.addPathPatterns("/inquirylist")
+		.addPathPatterns("/admin/**");
 		
 		registry.addInterceptor(adminInterceptor)
-				.addPathPatterns("/admin/**");
+				.excludePathPatterns("/admin/**");
 
 		
 	}
