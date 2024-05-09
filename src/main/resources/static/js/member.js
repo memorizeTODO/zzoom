@@ -94,7 +94,6 @@ function id_check(){
 		$("#member_id").val("").focus();
 		return false;
 	};
-	
 
 	//아이디 중복확인
     $.ajax({
@@ -133,6 +132,7 @@ function validate_userid(memid){
   
   return pattern.test(memid);
 };
+
  
 /*function domain_list() {
 	var num=f.mail_list.selectedIndex;  //selectedIndex속성은 select객체하위의 속성으로서 해당리스트 목록번호를 반환
