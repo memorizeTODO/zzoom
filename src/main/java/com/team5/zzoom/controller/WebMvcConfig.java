@@ -15,10 +15,15 @@ public class WebMvcConfig implements WebMvcConfigurer{
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(interceptor)
-				.addPathPatterns("/myPage")
-				.addPathPatterns("/myPageEdit")
-				.addPathPatterns("/deleteForm")
-				.addPathPatterns("/delete")
-				.addPathPatterns("/member_logout");
+		.addPathPatterns("/myPage")
+		.addPathPatterns("/myPageEdit")
+		.addPathPatterns("/deleteForm")
+		.addPathPatterns("/delete")
+		.addPathPatterns("/member_logout")
+		.addPathPatterns("/inquiryform")
+		.addPathPatterns("/inquirydetail")
+		.addPathPatterns("/inquiryUpdate")
+		.addPathPatterns("/inquiryDelete")
+		.addPathPatterns("/inquirylist");
 	}
 }
