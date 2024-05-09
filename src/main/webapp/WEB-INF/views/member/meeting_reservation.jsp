@@ -312,7 +312,7 @@
     let sessionMemberName = null;    
 
     async function get_userID(){
-        const res = await fetch("http://localhost:80/getUserID");
+        const res = await fetch("/getUserID");
         const resJson = await res.json();
         sessionMemberID = resJson.member_id;
         sessionMemberName = resJson.member_name;
@@ -324,7 +324,7 @@
     });
     async function openModal(){
     	var meeting_id = document.getElementById("meeting_id").value
-        const res = await fetch(`http://localhost:80/get/meetingroom?code=${"${meeting_id}"}`);
+        const res = await fetch(`/get/meetingroom?code=${"${meeting_id}"}`);
 		const resJson = await res.json();
 		//값 받아오깆
 		
@@ -340,14 +340,14 @@
 	
     async function openUpdateModal(value){
     	
-    	const uid = await fetch("http://localhost:80/getUserID");
+    	const uid = await fetch("/getUserID");
         const uidJson = await uid.json();
         const sessionMemberID = uidJson.member_info.member_id;	
         const sessionMemberName = uidJson.member_info.member_name;
     	
         console.log(sessionMemberID);
         
-    	const res = await fetch(`http://localhost:80/get/meetingroom?code=${"${value}"}`);
+    	const res = await fetch(`/get/meetingroom?code=${"${value}"}`);
     	const resJson = await res.json();
 		document.getElementById("updateMeetingID").value = resJson.meeting_id;
 		document.getElementById("updateMemberID").value = sessionMemberID;
@@ -382,7 +382,7 @@ function updateMeeting() {
         // AJAX를 사용하여 서버에 JSON 데이터 전송
         $.ajax({
             type: "POST",
-            url: "http://localhost:80/update-meeting", // 요청을 처리하는 컨트롤러의 엔드포인트
+            url: "/update-meeting", // 요청을 처리하는 컨트롤러의 엔드포인트
             contentType: "application/json",
             data: JSON.stringify(jsonData2), // JSON 데이터를 문자열로 변환하여 전송
             success: function(response) {
@@ -415,13 +415,13 @@ function updateMeeting() {
      
     	async function deleteMeeting(){
     	
-					const res = await fetch(`http://localhost:80/get/meetingroom?code=${"${deleteCode}"}`);
+					const res = await fetch(`/get/meetingroom?code=${"${deleteCode}"}`);
 					const resJson = await res.json();
 					var deletePassword = resJson.meeting_passwd
 					var inputpasswd = document.getElementById("deletePasswd").value
 					
 					if(deletePassword == inputpasswd){
-						await fetch(`http://localhost:80/delete-meeting?code=${"${deleteCode}"}`);
+						await fetch(`/delete-meeting?code=${"${deleteCode}"}`);
 						location.reload(true);
 					}else{
 						alert("비밀번호가 일치하지 않습니다");
@@ -441,7 +441,7 @@ function updateMeeting() {
 	
               
     async function saveMeeting() {
-	       	const uid = await fetch("http://localhost:80/getUserID");
+	       	const uid = await fetch("/getUserID");
             const uidJson = await uid.json();
             const sessionMemberID = uidJson.member_info.member_id;	
             const sessionMemberName = uidJson.member_info.member_name;	
@@ -476,7 +476,7 @@ function updateMeeting() {
 		        // AJAX를 사용하여 서버에 JSON 데이터 전송
 		        $.ajax({
 		            type: "POST",
-		            url: "http://localhost:80/create-meeting", // 요청을 처리하는 컨트롤러의 엔드포인트
+		            url: "/create-meeting", // 요청을 처리하는 컨트롤러의 엔드포인트
 		            contentType: "application/json",
 		            data: JSON.stringify(jsonData), // JSON 데이터를 문자열로 변환하여 전송
 		            success: function(response) {
@@ -491,10 +491,10 @@ function updateMeeting() {
 		        });
 		        
 		     }else{
-		    	 alert("지난 날짜는 선택 할 수 없습니다")
+		    	 alert("지난 날짜는 선택 할 수 없습니다");
 		     }   
 		  }else{
-			 alert("2명이상의 인원을 설정 해주세요") 
+			 alert("2명이상의 인원을 설정 해주세요"); 
 		  }
         }else{
        	 	alert("비밀번호 4자리로 설정해주세요.");  
@@ -504,7 +504,7 @@ function updateMeeting() {
         
         
         async function search() {
-            const res = await fetch(`http://localhost:80/get/meetingroom?code=`+document.getElementById("meeting_id").value);
+            const res = await fetch(`/get/meetingroom?code=`+document.getElementById("meeting_id").value);
 			const resJson = await res.json();
 			
 			var meeting_ID = resJson.meeting_id;
@@ -542,7 +542,7 @@ function updateMeeting() {
 										        // AJAX를 사용하여 서버에 JSON 데이터 전송
 										        $.ajax({
 										            type: "POST",
-										            url: "http://localhost:80/joinMeetingRoom", // 요청을 처리하는 컨트롤러의 엔드포인트
+										            url: "/joinMeetingRoom", // 요청을 처리하는 컨트롤러의 엔드포인트
 										            contentType: "application/json",
 										            data: JSON.stringify(jsonData), // JSON 데이터를 문자열로 변환하여 전송
 										            success: function(response) {
@@ -571,10 +571,10 @@ function updateMeeting() {
 			
         
         async function listsearch() {
-        	const uid = await fetch("http://localhost:80/getUserID");
+        	const uid = await fetch("/getUserID");
             const uidJson = await uid.json();
             const sessionMemberID = uidJson.member_info.member_id;
-            const res = await fetch(`http://localhost:80/get/meetinglist?memberID=${"${sessionMemberID}"}`);
+            const res = await fetch(`/get/meetinglist?memberID=${"${sessionMemberID}"}`);
 			const meetingList = await res.json();
 			console.log(meetingList);
 			const keys = Object.keys(meetingList);
