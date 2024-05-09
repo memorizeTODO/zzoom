@@ -9,7 +9,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfig implements WebMvcConfigurer{
 	
 	@Autowired
-	private SessionCheckIntercepter interceptor;
+	private SessionCheckInterceptor interceptor;
+	private AdminSessionCheckInterceptor adminInterceptor;
 	
 	//인터셉터가 동작할 url 설정--> 추후 다른 곳도 추가 할수 있음
 	@Override
@@ -25,5 +26,10 @@ public class WebMvcConfig implements WebMvcConfigurer{
 		.addPathPatterns("/inquiryUpdate")
 		.addPathPatterns("/inquiryDelete")
 		.addPathPatterns("/inquirylist");
+		
+		registry.addInterceptor(adminInterceptor)
+				.addPathPatterns("/admin/**");
+
+		
 	}
 }
