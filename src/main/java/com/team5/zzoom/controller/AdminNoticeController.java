@@ -56,10 +56,8 @@ public class AdminNoticeController {
 	@RequestMapping("noticedetail")
 	public String noticedetail(@RequestParam("notice_id") int notice_id, @RequestParam("page") int page, Model model) {
 		AdminNotice notice = service.getNotice(notice_id); // 상세정보 구하기
-//		String notice_content = notice.getNotice_content().replace("\n", "<br>");
 
 		model.addAttribute("notice", notice);
-//		model.addAttribute("notice_content", notice_content);
 		model.addAttribute("page", page);
 
 		return "notice/noticedetail";
@@ -111,6 +109,7 @@ public class AdminNoticeController {
 			System.out.println("공지사항 글수정 성공");
 
 		model.addAttribute("result", result);
+		model.addAttribute("notice_id", notice.getNotice_id());
 		model.addAttribute("page", page);
 
 		return "notice/updateresult";

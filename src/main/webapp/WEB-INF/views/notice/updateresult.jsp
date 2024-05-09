@@ -12,7 +12,7 @@
 <c:if test="${result == 1 }">
 	<script>
 		alert("글수정 성공");
-		location.href="noticelist?page="+${page};
+		location.href="noticedetail?page="+${page}+"&notice_id="+${notice_id};
 	</script>
 </c:if>
 	

@@ -12,6 +12,11 @@
 	<select id="getInquirylist" parameterType="int"  resultType="inquiry">
 		select * from inquiry order by inquiry_id desc limit  #{start}, 10
 	</select>
+	
+	<!-- 문의 상세페이지 -->
+	<select id="getInquiry" parameterType="int" resultType="inquiry">
+		select * from inquiry where inquiry_id=#{inquiry_id}
+	</select>
 
 
 </mapper>

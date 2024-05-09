@@ -29,6 +29,7 @@
 </nav>
 </header> 
 
+<br><br><br>
 
 <div class = "mt-9 ml-44">
       
@@ -38,23 +39,28 @@
       	<input type="hidden" name="member_id"  value="${member_id}">
       	<input type="hidden" name="inquiry_id"  value="${inquiry_id}">
       	<input type="hidden" name="manager_name"  value="관리자">
+      	<input type="hidden" name="page"  value="${page}">
       
-      	<table align=center width=600>
-      		<caption><h1>문의 글작성</h1></caption>
-      		<tr>
-      			<td>내용</td>
-      		<td><textarea rows="5" cols="50" name="reply_content" required="required" autofocus="autofocus"></textarea></td>
-      		</tr>
-      		<tr>
-      	</table>
-      	<table align=center width=600>
-      			<td colsapn="2" align="right">
-      				<input type="submit" value="답변">
-      				<input type ="reset" value="취소">
-      			</td>
-      		</tr>
-      	</table>
-      </form>
+<center>
+		<div class="max-w-lg bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+			<div class="mb-6">
+				<label for="inquiry_content"
+					class="block mb-2 text-sm font-large text-gray-900 dark:text-white">
+					문의 답변</label>
+				<td>
+				<textarea id="inquiry_content" name="inquiry_content" rows="20" class="block p-5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+				</textarea>
+				</td>
+			</div>
+		</div>
+</center>
+
+ <center>
+ 	<button type="submit"
+			class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">답변
+	</button>
+</center>
+  </form>
 
 <!-- 사이드바 -->
 <aside id="logo-sidebar" class="fixed top-0 left-0 z-200 w-200 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">

@@ -12,7 +12,7 @@
 <c:if test="${result == 1 }">
 	<script>
 		alert("답변 글작성 성공");
-		location.href="inquirylist";
+		location.href="inquirylist?page=${page}";
 	</script>
 </c:if>
 	

@@ -11,7 +11,7 @@
 </head>
 <body>
   
-  <!-- 상단바 -->
+ <!-- 상단바 -->
 <header> 
 <nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
@@ -29,40 +29,46 @@
 </nav>
 </header> 
 
+<br><br><br>
+
 
 <div class = "mt-9 ml-44">
       
-      <!-- 공지사항 수정  -->
-      <form method="post" action="noticeupdate">
-        <input type="hidden" name="notice_id"  value="${notice.notice_id}">
-        <input type="hidden" name="page" value="${page}">
-      	<table align=center width=600> 
-      		<caption><h1>공지사항 수정</h1></caption>
-      		
-      		
-      		<tr>
-      			<td>제목</td>
-      			<td><input type=text name="notice_subject" required="required" autofocus="autofocus" value="${notice.notice_subject }" ></td>
-      		</tr>
-      	
-      		<tr>
-      			<td>내용</td>
-      			<td>
-				<textarea id="message" rows="35" class="block p-5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">${notice.notice_content }
+      
+<!-- 공지사항 상세 정보 표시 -->
+<form method="post" action="noticeupdate">
+	<input type="hidden" name="notice_id"  value="${notice.notice_id}">
+ 	<input type="hidden" name="page" value="${page}">
+<center>
+		<div class="max-w-lg bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+			<div class="mb-6">
+				<label for="notice_subject"
+					class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+					공지 제목 </label>
+				<td>
+				<textarea id="notice_subject" name="notice_subject" rows="2" required="required" autofocus="autofocus" class="block p-5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">${notice.notice_subject }
 				</textarea>
-      		</tr>
-      	
-      	</table>
-      	<table align=center width=600>
-      			<tr>
-      			<td colsapn="2" align="right">
-      				<input type="submit" value="글수정">
-      			<input type ="reset" value="취소">
-      			</td>
-      		</tr>
-      	</table>
-      </form>
+				</td>
+			</div>
+			
+			<div class="mb-6">
+				<label for="notice_content"
+					class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+					공지 내용</label>
+				<td>
+				<textarea id="notice_content" name="notice_content" rows="30" class="block p-5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">${notice.notice_content }
+				</textarea>
+				</td>
+			</div>
+		</div>
+</center>
 
+ <center>
+ 	<button type="submit"
+			class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">글수정
+	</button>
+</center>
+</form>
 <!-- 사이드바 -->
 <aside id="logo-sidebar" class="fixed top-0 left-0 z-200 w-200 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
     <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">

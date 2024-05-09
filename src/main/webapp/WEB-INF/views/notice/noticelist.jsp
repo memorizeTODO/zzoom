@@ -46,8 +46,8 @@
 <div class = "mt-16 ml-44">
 <!-- 회원관리 상단바  -->
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
             <tr class="pl-10 ">  
              <th scope="col" class="px-8 py-3">
                 <span class="w-full flex">번 호</span>  
@@ -75,7 +75,6 @@
               			${m.notice_subject }
               		</a>
               </td>
-             <%--  <td>${m.notice_content  }</td> --%>
               <td>${m.notice_date  }</td>
           </tr>
       </c:forEach>    
@@ -118,13 +117,10 @@
 </center>	
 
 <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse" style="float:right">
-            <!-- <button type="button"   onClick="location.href='noticeform' "
-            		class="text-white bg-blue-800 hover:bg-blue-300 focus:ring-10 focus:outline-none font-large rounded-lg text-md px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-               글작성
-            </button> -->
             <button type="button" onClick="location.href='noticeform' "
-					class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">공지 작성
-			  </button>
+					class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
+					공지 작성
+			</button>
 </div>
 
  <!-- 사이드바 -->

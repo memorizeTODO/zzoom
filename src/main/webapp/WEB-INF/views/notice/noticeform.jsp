@@ -33,7 +33,7 @@
 <div class = "mt-20 ml-44">
 
       
-      <!-- 공지사항 작성  -->
+      <!-- 공지사항 작성  
       <form method="post" action="noticewrite">
       	<table align=center width=600>
       		<caption><h1>공지사항 글작성</h1></caption>
@@ -49,7 +49,7 @@
       		<td>
       			<!-- <textarea 
       				rows="5" cols="50" name="notice_content" required="required">
-      			</textarea> -->
+      			</textarea> 
       			
       			<textarea 
       				id="message" rows="28" name="notice_content" class="block p-5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 
@@ -69,7 +69,41 @@
       			</td>
       		</tr>
       	</table>
-      </form>
+      </form>-->
+      
+<!-- 공지사항 작성 -->
+<form method="post" action="noticewrite">
+
+<center>
+		<div class="max-w-lg bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+			<div class="mb-6">
+				<label for="notice_subject"
+					class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+					공지 제목 </label>
+				<td>
+				<textarea id="notice_subject" name="notice_subject" rows="2" required="required" autofocus="autofocus" class="block p-5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+				</textarea>
+				</td>
+			</div>
+			
+			<div class="mb-6">
+				<label for="notice_content"
+					class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+					공지 내용</label>
+				<td>
+				<textarea id="notice_content" name="notice_content" rows="30" class="block p-5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+				</textarea>
+				</td>
+			</div>
+		</div>
+</center>
+
+ <center>
+ 	<button type="submit"
+			class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">글작성
+	</button>
+</center>
+</form>
 
 <!-- 사이드바 -->
 <aside id="logo-sidebar" class="fixed top-0 left-0 z-200 w-200 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">

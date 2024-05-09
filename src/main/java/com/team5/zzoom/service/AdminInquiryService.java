@@ -21,4 +21,8 @@ public class AdminInquiryService implements AdminInquiryDAO {
 	public List<AdminInquiry> getInquirylist(int start) {
 		return dao.getInquirylist(start);
 	}
+
+	public AdminInquiry getInquiry(int inquiry_id) {
+		return dao.getInquiry(inquiry_id);
+	}
 }

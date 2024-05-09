@@ -34,7 +34,7 @@
 <br>
 
 <div class = "mt-9 ml-44">
-<!-- 회원관리 상단바  -->
+<!-- 회원관리 상단바  
 <div class="relative  sm:rounded-lg ">
   <table class="w-full text-sm text-center rtl:text-right text-gray-500  table-auto	">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">
@@ -67,7 +67,31 @@
 </div>
 <div class="">
 	${notice.notice_content  }
-</div>
+</div>-->
+
+<br><br><br>
+
+<!-- 공지사항 상세 정보 표시 -->
+<center>
+		<div class="max-w-lg bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+			<div class="mb-6">
+				<label for="notice_subject"
+					class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+					공지 제목 </label>
+				<p id="notice_subject" class="block p-5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+				${notice.notice_subject}</p>
+			</div>
+			
+			<div class="mb-6">
+				<label for="notice_content"
+					class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">공지
+					공지 내용</label>
+				<p id="notice_content" class="block p-5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+					${notice.notice_content}</p>
+			</div>
+		</div>
+</center>
+
 <center>
 	<button type="button"  onClick="location.href='updateform?notice_id=${notice.notice_id}&page=${page }' "
 			class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">수정</button>

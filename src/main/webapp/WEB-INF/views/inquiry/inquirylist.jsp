@@ -41,14 +41,14 @@
 <br>
 
  <div class = "mt-10 ml-44">
-<!-- 회원관리 상단바  -->
+
+<!-- 문의관리 상단바  -->
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
             <tr class="pl-10 "> 
-             <th scope="col" class="px-30 py-3">
-                <span class="w-full flex">
-                  번호</span> 
+             <th scope="col" class="px-10 py-3">
+                  번 호 
               </th>
               <th scope="col" class="px-10 py-3">
                   제목
@@ -61,9 +61,6 @@
               </th>
               <th scope="col" class="px-10 py-3">
                   작성일
-              </th>
-              <th scope="col" class="px-10 py-3">
-                  조회수
               </th>
 			  <th scope="col" class="px-10 py-3">
                   답변여부
@@ -78,11 +75,15 @@
       	<c:forEach var="m" items="${inquirylist }">
           <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-center">
            <td class="w-4 py-7">${num} <c:set var="num" value="${num-1}"/> </td>
-              <td>${m.inquiry_subject }</td>
+           	  <td>
+              	<a href="inquirydetail?inquiry_id=${m.inquiry_id}&member_id=${m.member_id}&page=${page}">
+              		${m.inquiry_subject }
+              	</a>
+              </td>
+              <%-- <td>${m.inquiry_subject }</td> --%>
               <td>${m.member_id }</td>
               <td>${m.member_name }</td>
               <td>${m.inquiry_date }</td>
-              <td>${m.inquiry_count }</td>
  			  <td>
  			  		<c:if test="${m.inquiry_completed == '1' }">
  			  			미답변
@@ -90,18 +91,7 @@
  			  		<c:if test="${m.inquiry_completed == '2' }">
  			  			답변완료
  			  		</c:if>
- 			  		
  			  </td>	
-              <%-- <td><input type="button"  value="답변하기" onClick="reply1('${m.inquiry_id}','${m.member_id}')"></td> --%>
-              <td>
-              	<button type="button" onClick="reply1('${m.inquiry_id}','${m.member_id}')"
-					  class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">답변하기
-			  	</button>
-              </td>
-              
-              
-              
-
           </tr>
       </c:forEach>    
       </tbody>
