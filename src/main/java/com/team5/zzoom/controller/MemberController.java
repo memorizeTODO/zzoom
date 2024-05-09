@@ -1,5 +1,7 @@
 package com.team5.zzoom.controller;
 
+import java.util.HashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -68,14 +70,16 @@ public class MemberController {
 	@RequestMapping(value = "member_login", method = RequestMethod.POST)
 	public String member_login(@ModelAttribute MemberDTO member, HttpSession session, Model model) {
 		System.out.println("Access Login function");
-		int result = 0;
+		int result = 0;	
 		MemberDTO mem = service.memberCheck(member);
 		System.out.println("로그인 mem:" + mem);
-
 		if (mem != null) {
 			result = 1;
-
-			session.setAttribute("member_id", member.getMember_id());
+			session.setAttribute("member_id", mem.getMember_id());
+			HashMap<String, Object> userInfoMap = new HashMap<String,Object>();
+			userInfoMap.put("member_id", mem.getMember_id());
+			userInfoMap.put("member_name", mem.getMember_name());
+			session.setAttribute("member_info", userInfoMap);
 			return "member/member_main";
 		} else {
 			result = -1;

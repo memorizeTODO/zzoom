@@ -10,6 +10,7 @@ import lombok.Data;
 @Alias("meetingRoomDTO")
 public class MeetingRoomDTO {
 	
+	
 	private String meeting_id;
 	private String meeting_num;
 	private String meeting_topic;

@@ -20,10 +20,8 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
 
-<script type="text/javascript" src="/js/janus.js"></script>
-<script type="text/javascript" src="/js/meetingroom.js"></script>
-
-
+<script type="text/javascript" src="js/janus.js"></script>
+<script type="text/javascript" src="js/meetingroom.js"></script>
 
 <script>
     var roomVariable= {
@@ -71,10 +69,10 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
 	setInterval(() => asyncTasks(), 2000); // 방에 있는동안 계속 작동할 비동기 작업들 모음(1초 간격으로 작동)
 
 	// Initialize the library (all console debuggers enabled)
-	Janus.init({debug: "all", callback: function() {
+    Janus.init({debug: "all", callback: function() {
 		// Use a button to start the demo
-		 
-		generateJanus();
+		$("#video-publish-btn").one('click',function(){generateJanus();}) 
+
 		
 	}});
 
@@ -91,8 +89,11 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
 	});
 
 	myroom = 50000 + Number(roomVariable.nowroom_num);
-    alert(myroom);
+
+    
+   
 });
+   
 
     function asyncTasks(){ 
         getMyInfo(true);
@@ -102,6 +103,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
             alert("can't find this roomInfo");
             history.back();
         }
+        changeGridLayout();
         
     }
 
@@ -219,6 +221,9 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
                                     console.log("getNowRoomInfo success: topic = "+roomVariable.topic);
                                     $("#topic").html(roomVariable.topic);
                                     $("#drawer-navigation-label").html("Participants "+ roomVariable.participants_now_num +" / "+roomVariable.participants_max_num);
+                                }else{
+                                    alert("방 정보 조회 불가능");
+                                    history.back();
                                 }
                                 
                                 
@@ -331,7 +336,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
                                 // 오류 발생 시 실행할 코드
                                 //history.back(); // 
                                 alert("응답 오류");
-                                //history.back();
+                                history.back();
                             }
         });
        
@@ -340,7 +345,87 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
     }
 
  
+function changeGridLayout(){
 
+    var cnt = 0;
+    for(var i = 1; i<6 ; i++){
+        if ($.trim($("#remote"+i).html()) !== ""){
+            cnt++;
+        }
+    }
+
+    console.log("cnt: "+cnt);
+
+    var listParticipantsNum= 1+cnt; 
+        
+    var $root=$(":root");
+    var cssVariables = getComputedStyle($root[0]);
+    var $gridContainer=$("#meetingroom-main-container");
+
+    var meetingroomGridContainerW = cssVariables.getPropertyValue("--meetingroom-grid-container-w").trim();
+    var meetingroomGridContainerH = cssVariables.getPropertyValue("--meetingroom-grid-container-h").trim();
+    var gridGapX = cssVariables.getPropertyValue("--grid-gap-x").trim();
+    var gridGapY = cssVariables.getPropertyValue("--grid-gap-y").trim();
+    var nameBoxY =cssVariables.getPropertyValue("--name-box-y").trim()
+
+
+    if(listParticipantsNum<=1){
+        var gridColumnsSize = 1;
+        var gridRowsSize = 1;
+
+        
+        
+    }else if(listParticipantsNum==2){
+        var gridColumnsSize = 2;
+        var gridRowsSize = 1;
+        
+
+    }else if(listParticipantsNum<=4){
+        var gridColumnsSize = 2;
+        var gridRowsSize = 2;
+
+       
+    }else{
+        var gridColumnsSize = 3;
+        var gridRowsSize = 2;
+
+
+    }
+
+    var gridTemplateWidth = "calc(" + meetingroomGridContainerW + " / " + gridColumnsSize + " - " + gridGapX + ")";
+        var gridTemplateHeight = "calc(" + meetingroomGridContainerH + " / " + gridRowsSize + " - " + gridGapY + ")";
+
+        $gridContainer.css("grid-template-columns", "repeat(" + gridColumnsSize + ", " + gridTemplateWidth + ")");
+        $gridContainer.css("grid-template-rows", "repeat(" + gridRowsSize + ", " + gridTemplateHeight + ")");
+
+    $("video-layout1").css("max-width", gridTemplateWidth);
+    $("video-layout1").css("max-height",gridTemplateHeight);
+    $("video-box").css("max-height", gridTemplateHeight-nameBoxY);
+    $("video-box").css("max-height", gridTemplateWidth);
+    
+    $("video-layout-inner").css("max-height", gridTemplateHeight-nameBoxY);
+
+
+    var $parent = $("#meetingroom-main-container");
+
+    // 바로 아래 자식 요소들을 불러옵니다.
+    var $children = $parent.children();
+
+// 자식 요소들을 콘솔에 출력합니다.
+    console.log($children);
+
+    
+
+    for(var i=1; i<listParticipantsNum; i++ ){
+       $children.eq(i).show();
+
+    }
+    for(var j=listParticipantsNum; j<6; j++ ){
+        $children.eq(j).hide();
+    }
+
+
+}
     
 
    /*  window.addEventListener("beforeunload", function (e) {
@@ -376,11 +461,11 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
         /*width가 384px 미만일 때 사용*/
         --meetingroom-flex-container-h : 100%;
         --meetingroom-flex-container-w : 100%;
-        --grid-rows-size: 2;
-        --grid-columns-size: 3;
+        --grid-rows-size: 1;
+        --grid-columns-size: 1;
         --grid-gap-x:0.25rem;
         --grid-gap-y:0.25rem;
-        --grid-template-width : calc(var(--meetingroom-grid-container-w) / var(--grid-columns-size) - var(--grid-gap-x)) ;
+        --grid-template-width : calc(var(--meetingroom-grid-container-w) / var(--grid-columns-size) - var(--grid-gap-x) ) ;
         --grid-template-height :  calc(var(--meetingroom-grid-container-h) / var(--grid-rows-size) - var(--grid-gap-y)) ;
         
         
@@ -435,8 +520,8 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
         place-items: center;
         place-content:center;
 
-        width: var(--grid-template-width);
-        height: var(--grid-template-height);
+        max-width: var(--grid-template-width);
+        max-height: var(--grid-template-height);
         
         }
 
@@ -449,9 +534,6 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
         max-height: calc(var(--grid-template-height) - var(--name-box-y));
         background: black;
 
-        width: 100%;
-        height: 100%;
-        
         }
     }
     @media (max-width: 480px) {
@@ -506,6 +588,9 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
         object-fit: scale-down;
         width: auto;
         height: 100%;
+
+        max-height: calc(var(--grid-template-height) - var(--name-box-y));
+        
         
     }
     .bottom-bar-layout{
@@ -578,7 +663,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
     </div> -->
     <div class="main" id="meetingroom">
         <div >
-            <div class="meetingroom-container gap-1" >
+            <div class="meetingroom-container gap-1" id = "meetingroom-main-container" >
 
                 <div class="video-layout1">
                     <div class = "name-box" id = "myname-box"></div>
