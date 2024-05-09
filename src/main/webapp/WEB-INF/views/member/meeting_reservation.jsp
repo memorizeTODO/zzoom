@@ -504,15 +504,15 @@ function updateMeeting() {
         
         
         async function search() {
-            const res = await fetch(`http://localhost:80/get/meetingroom?code=${"${deleteCode}"}`);
+            const res = await fetch(`http://localhost:80/get/meetingroom?code=`+document.getElementById("meeting_id").value);
 			const resJson = await res.json();
 			
 			var meeting_ID = resJson.meeting_id;
 				
 			var room_num = resJson.meeting_room_num;
-			var meeting_room_num = 50000+Number(room_num);
+			var meeting_room_num = Number(room_num);
 			
-			var today = new Date()
+			var today = new Date();
 			
 			var year = today.getFullYear();
 			var month = ('0' + (today.getMonth() + 1)).slice(-2);
@@ -526,12 +526,14 @@ function updateMeeting() {
 			
 			var startdt = resJson.meeting_start_date;
 			var startdatearr = startdt.split("T");
+			
 			var startdate = startdatearr[0];
 			
+			
 		
-				 	if(resJson.meeting_join == '1'){
-				 			if(resJson.meeting_passwd = document.getElementById("enter-passwd").value){
-					 			if(dateString >= resJson.meeting_start_date){		
+				 	if(resJson.meeting_join == 1){
+				 			if(resJson.meeting_passwd === document.getElementById("enter-passwd").value){
+					 			if(  dateString >= startdate){		
 								 			var jsonData = {
 										            meeting_id: ${"meeting_ID"},
 										            meeting_room_num: ${"meeting_room_num"},
