@@ -49,7 +49,7 @@ public class MemberController {
 		System.out.println("memid:" + memid);
 		int result = 0;
 //		model.addAttribute("result", result);
-		if(service.memberCheckId(memid)==null) {
+		if(service.memberCheckId(memid)==null && !memid.equals("admin")) {
 			result = -1;
 		} else {
 			result = 1;
