@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.team5.zzoom.model.AdminInquiry;
+import com.team5.zzoom.model.AdminNotice;
 import com.team5.zzoom.service.AdminInquiryService;
 
 @Controller
@@ -51,6 +52,20 @@ public class AdminInquiryController {
 		/* List<E> inquirylist = service.getInquirylist(); */
 
 		return "inquiry/inquirylist";
+	}
+	
+	// 문의사항 상세페이지
+	@RequestMapping("inquirydetail")
+	public String inquirydetail(@RequestParam("inquiry_id") int inquiry_id, 
+								@RequestParam("member_id") String member_id, 
+			                    @RequestParam("page") int page, Model model) {
+		AdminInquiry inquiry = service.getInquiry(inquiry_id); // 상세정보 구하기
+
+		model.addAttribute("inquiry", inquiry);
+		model.addAttribute("member_id", member_id);
+		model.addAttribute("page", page);
+
+		return "inquiry/inquirydetail";
 	}
 
 	

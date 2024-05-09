@@ -13,4 +13,6 @@ public interface AdminInquiryDAO {
 
 	public List<AdminInquiry> getInquirylist(int start);
 
+	public AdminInquiry getInquiry(int inquiry_id);
+
 }

@@ -1,4 +1,4 @@
-
+   
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -48,9 +48,9 @@
 <div class = "mt-16 ml-44">
 <!-- 회의관리 상단바  -->
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr class="pl-10 "> 
+    <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr class="pl-10 ">
              <th scope="col" class="px-8 py-3">
                 <span class="w-full flex">
                   번 호
@@ -75,7 +75,10 @@
                   회의 비밀번호
               </th>
               <th scope="col" class="px-6 py-3">
-                  회의 수정/삭제
+                  회의 수정
+              </th>
+              <th scope="col" class="px-6 py-3">
+                  회의 삭제
               </th>
           </tr>
       </thead>
@@ -94,14 +97,12 @@
               <td>${m.meeting_start_date}</td>
               <td>${m.meeting_passwd}</td>
 
-             <%--  <td><input type="button"  value="수정" onClick="update1('${m.meeting_room_num}','${m.meeting_id}', '${page}')"></td> --%>
               <td>
               	<button type="button" onClick="update1('${m.meeting_room_num}','${m.meeting_id}', '${page}')"
 					  class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">수정
 			  	</button>
               </td>
              
-             <%--  <td><input type="button"  value="삭제" onClick="delete1('${m.meeting_id}')"></td> --%>
              <td>
               	<button type="button" onClick="delete1('${m.meeting_id}')"
 					  class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">삭제

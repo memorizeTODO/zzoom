@@ -8,18 +8,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>회원목록</title>
-    <script>
-    function update1(member_id){
-    	
-    	location.href="memberupdate?member_id="+member_id;    	
-    }
-    
-    function delete1(member_id){
-    	
-    	location.href="memberdelete?member_id="+member_id;    	
-    }
-    </script>
+    <title>문의사항 상세페이지</title>
+
 </head>
 <body>
   
@@ -32,132 +22,53 @@
             <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span>
         </a>
         <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-  			 <button type="button"   onClick="location.href='adminlogout' "
-            	     class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-md px-4 py-2.5 text-center mt-2 mb-2">
-                     로그아웃
+   			<button type="button"   onClick="location.href='adminlogout' "
+            	    class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-md px-4 py-2.5 text-center mt-2 mb-2">
+                    로그아웃
             </button>
         </div>
- 
     </div>
 </nav>
 </header> 
 
+<br>
 
-<div class = "mt-16 ml-44">
-<!-- 회원관리 상단바  -->
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-            <tr class="pl-10 "> 
-             <th scope="col" class="px-8 py-3">
-             	번 호
-              </th>
-              <th scope="col" class="px-6 py-3">
-                  회원명
-              </th>
-              <th scope="col" class="px-6 py-3">
-                  회원 아이디
-              </th>
-              <th scope="col" class="px-6 py-3">
-                  회원 이메일
-              </th>
-              <th scope="col" class="px-6 py-3">
-                  회원 비밀번호
-              </th>
-              <th scope="col" class="px-6 py-3">
-                  회원 전화번호
-              </th>
-			  <th scope="col" class="px-6 py-3">
-                  회원 상태
-              </th>
-              <th scope="col" class="px-6 py-3">
-                  회원 복구
-              </th>
-               <th scope="col" class="px-6 py-3">
-                  회원 탈퇴
-              </th>
-          </tr>
-      </thead>
-      <tbody>
-      
-      	<!-- 화면 출력 번호 -->
-		<c:set var="num" value="${listcount-(page-1)*10 }"/>
-      
-      	<c:forEach var="m" items="${memberlist }">
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-center">
-           <td class="w-4 py-7">${num} <c:set var="num" value="${num-1}"/> </td>
-              <td>${m.member_name }</td>
-              <td>${m.member_id }</td>
-              <td>${m.member_email }</td>
-              <td>${m.member_passwd }</td>
-              <td>${m.member_phone }</td>
- 			  <td>
- 			  		<%-- <input type="button"  value="수정" onClick="location.href='updateform?member_id=${m.member_id }' "> --%>
- 			  		<c:if test="${m.member_state == 0 }">
- 			  			정상회원
- 			  		</c:if>
- 			  		<c:if test="${m.member_state == 2 }">
- 			  			탈퇴회원
- 			  		</c:if>
- 			  		
- 			  </td>	
-              <td>
-              	<button type="button"  onClick="update1('${m.member_id}')"
-					  class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">복구
-			  	</button>
-              </td>
-              <td>
-              	<button type="button" onClick="delete1('${m.member_id}')"
-					  class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">탈퇴
-			  	</button>
-              </td>
-              
-              
-              
-          </tr>
-      </c:forEach>    
-      </tbody>
-  </table>
-</div>
+<div class = "mt-9 ml-44">
 
-<!-- 페이지 처리 -->
+
+<br><br><br>
+
+<!-- 공지사항 상세 정보 표시 -->
 <center>
-<c:if test="${listcount > 0 }">
+		<div class="max-w-lg bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+			<div class="mb-6">
+				<label for="inquiry_subject"
+					class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+					문의 제목 </label>
+				<p id="inquiry_subject" class="block p-5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+				${inquiry.inquiry_subject}</p>
+			</div>
+			
+			<div class="mb-6">
+				<label for="inquiry_content"
+					class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">공지
+					문의 내용</label>
+				<p id="inquiry_content" class="block p-5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+					${inquiry.inquiry_content}</p>
+			</div>
+		</div>
+</center>
 
-<!-- 1page로 이동 -->
-<a href="memberlist?page=1" style="text-decoration:none"> < </a>
-
-<!-- 이전 블럭으로 이동 -->
-<c:if test="${startPage > 10 }">
-	<a href="memberlist?page=${startPage-10}">[이전]</a>
-</c:if>
-
-<!-- 각 블럭에 10개의 페이지 출력 -->
-<c:forEach var="i" begin="${startPage}" end="${endPage}">
-	<c:if test="${i == page }">   <!-- 현재 페이지 -->
-		[${i}]
-	</c:if>
-	<c:if test="${i != page }">   <!-- 현재 페이지가 아닌 경우 -->
-		<a href="memberlist?page=${i}">[${i}]</a>
-	</c:if>
-</c:forEach>
-
-<!-- 다음 블럭으로 이동 -->
-<c:if test="${endPage < pageCount }">
-	<a href="memberlist?page=${startPage+10}">[다음]</a>
-</c:if>
-
-<!-- 마지막 페이지로 이동 -->
-<a href="memberlist?page=${pageCount}" style="text-decoration:none"> > </a>
-
-</c:if>
-</center>		
-		
-
+<center>
+	<button type="button"  onClick="location.href='replyform?inquiry_id=${inquiry.inquiry_id}&member_id=${member_id }&page=${page }' "
+			class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">답변</button>
+	<button type="button"  onClick="location.href='inquirylist' "
+			class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">목록으로 돌아가기</button>
+</center>
 
 <!-- 사이드바 -->
-<aside id="logo-sidebar" class="fixed top-0 left-0 z-200 w-200 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
-    <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
+<aside id="logo-sidebar" class="fixed top-0 left-0 z-200 w-200 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 " aria-label="Sidebar">
+    <div class="h-full px-3 pb-4 overflow-y-auto bg-white ">
         <ul class="space-y-2 font-medium">
             <li>
                 <a href="meetinglist" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">

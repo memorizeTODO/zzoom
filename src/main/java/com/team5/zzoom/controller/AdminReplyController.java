@@ -16,22 +16,26 @@ public class AdminReplyController {
 	@Autowired
 	private AdminReplyService service;
 	
+	//답변
 	@RequestMapping("replyform")
 	public String replyform(@RequestParam(value="inquiry_id", required=false) String inquiry_id,
-						    @RequestParam(value="member_id", required=false) String member_id, Model model)  {
+						    @RequestParam(value="member_id", required=false) String member_id, 
+						    @RequestParam("page") int page, 
+						    Model model)  {
 		
 		System.out.println("inquiry_id:"+ inquiry_id);
 		System.out.println("member_id:"+ member_id);
 		
 		model.addAttribute("inquiry_id", inquiry_id);
 		model.addAttribute("member_id", member_id);
+		model.addAttribute("page", page);
 		
 		return "reply/replyform";
 	}
 	
 	
 	@RequestMapping("reply")
-	public String reply(@ModelAttribute AdminReply reply, Model model) {
+	public String reply(@ModelAttribute AdminReply reply,  @RequestParam("page") int page, Model model) {
 		
 		int result = service.insert(reply);    // 답변글 작성
 		if(result==1) {
@@ -42,7 +46,8 @@ public class AdminReplyController {
 			System.out.println("문의 게시판의 상태값을 2로 수정 성공");
 		}
 		
-		model.addAttribute("result", result);		
+		model.addAttribute("result", result);	
+		model.addAttribute("page", page);
 		
 		return "reply/writeresult";
 	}
