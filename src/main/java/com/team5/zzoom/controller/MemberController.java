@@ -148,20 +148,25 @@ public class MemberController {
 	}
 	
 	// 회원 탈퇴 기능
-	@RequestMapping(value = "delete")
+	@RequestMapping(value = "delete", method = RequestMethod.POST )
 	public String delete(HttpSession session, @RequestParam("member_id") String member_id,
-			@RequestParam("member_passwd") String member_passwd, Model model) {
-		String id = (String) session.getAttribute("member_id");
+											  @RequestParam("member_passwd") String member_passwd, Model model) {
+		System.out.println("delete controller");
+//		String id = (String) session.getAttribute("member_id");
 		MemberDTO member = service.myPage(member_id);
-		model.addAttribute("member_id", member_id);
+//		model.addAttribute("member_id", member_id);
+		System.out.println("member_passwd:"+ member_passwd);
+		System.out.println("db_password:"+ member.getMember_passwd());
 
-		if (!member.getMember_passwd().equals(member_passwd)) {
+		if (!(member.getMember_passwd().equals(member_passwd))) {
 			return "member/member_deleteForm";
 		} else {
-			MemberDTO db = new MemberDTO();
-			db.setMember_id(member_id);
-			System.out.println("db:" + db);
-			service.memberDelete(db);
+//			MemberDTO db = new MemberDTO();
+//			db.setMember_id(member_id);
+//			System.out.println("db:" + db);
+			
+			int result = service.memberDelete(member_id);
+			if(result == 1)
 			session.invalidate();
 			return "member/member_deleteForm";
 

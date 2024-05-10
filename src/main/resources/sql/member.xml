@@ -44,11 +44,11 @@
 <!-- 회원정보 수정 페이지에 기존정보 표출 -->
 	<select id="myPage" parameterType="String"
 		resultType="member">
-		select member_id, member_phone, member_name, member_email, member_zipcode, member_address, member_address_detail from member where member_id = #{member_id}
+		select member_id, member_passwd, member_phone, member_name, member_email, member_zipcode, member_address, member_address_detail from member where member_id = #{member_id}
 	</select>
 
 	<!-- 회원탈퇴 -->
-	<update id="memberDelete" parameterType="member">
+	<update id="memberDelete" parameterType="String">
 		update member set
 		member_state = 2 where member_id= #{member_id}
 	</update>

@@ -20,7 +20,7 @@ public interface MemberDAO {
 	public void memberUpdate(MemberDTO member);
 	
 	//회원삭제
-	public void memberDelete(MemberDTO member);
+	public int memberDelete(String member_id);
 	
 	//비밀번호 찾기
 	public MemberDTO passwdFind(MemberDTO member);

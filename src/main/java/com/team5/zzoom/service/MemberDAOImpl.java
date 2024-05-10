@@ -55,8 +55,8 @@ public class MemberDAOImpl implements MemberDAO {
 	}
 
 	// 회원탈퇴
-	public void memberDelete(MemberDTO member) {
+	public int memberDelete(String member_id) {
 		System.out.println("Access memberDelete service");
-		dao.memberDelete(member);
+		return dao.memberDelete(member_id);
 	}
 }
