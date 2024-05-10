@@ -71,7 +71,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
 	// Initialize the library (all console debuggers enabled)
     Janus.init({debug: "all", callback: function() {
 		// Use a button to start the demo
-		$("#video-publish-btn").one('click',function(){generateJanus();}) 
+		generateJanus(); 
 
 		
 	}});
@@ -103,7 +103,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
             alert("can't find this roomInfo");
             location.href="meeting_reservation";
         }
-        changeGridLayout();
+       
         
     }
 
@@ -345,87 +345,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
     }
 
  
-function changeGridLayout(){
 
-    var cnt = 0;
-    for(var i = 1; i<6 ; i++){
-        if ($.trim($("#remote"+i).html()) !== ""){
-            cnt++;
-        }
-    }
-
-    console.log("cnt: "+cnt);
-
-    var listParticipantsNum= 1+cnt; 
-        
-    var $root=$(":root");
-    var cssVariables = getComputedStyle($root[0]);
-    var $gridContainer=$("#meetingroom-main-container");
-
-    var meetingroomGridContainerW = cssVariables.getPropertyValue("--meetingroom-grid-container-w").trim();
-    var meetingroomGridContainerH = cssVariables.getPropertyValue("--meetingroom-grid-container-h").trim();
-    var gridGapX = cssVariables.getPropertyValue("--grid-gap-x").trim();
-    var gridGapY = cssVariables.getPropertyValue("--grid-gap-y").trim();
-    var nameBoxY =cssVariables.getPropertyValue("--name-box-y").trim()
-
-
-    if(listParticipantsNum<=1){
-        var gridColumnsSize = 1;
-        var gridRowsSize = 1;
-
-        
-        
-    }else if(listParticipantsNum==2){
-        var gridColumnsSize = 2;
-        var gridRowsSize = 1;
-        
-
-    }else if(listParticipantsNum<=4){
-        var gridColumnsSize = 2;
-        var gridRowsSize = 2;
-
-       
-    }else{
-        var gridColumnsSize = 3;
-        var gridRowsSize = 2;
-
-
-    }
-
-    var gridTemplateWidth = "calc(" + meetingroomGridContainerW + " / " + gridColumnsSize + " - " + gridGapX + ")";
-        var gridTemplateHeight = "calc(" + meetingroomGridContainerH + " / " + gridRowsSize + " - " + gridGapY + ")";
-
-        $gridContainer.css("grid-template-columns", "repeat(" + gridColumnsSize + ", " + gridTemplateWidth + ")");
-        $gridContainer.css("grid-template-rows", "repeat(" + gridRowsSize + ", " + gridTemplateHeight + ")");
-
-    $("video-layout1").css("max-width", gridTemplateWidth);
-    $("video-layout1").css("max-height",gridTemplateHeight);
-    $("video-box").css("max-height", gridTemplateHeight-nameBoxY);
-    $("video-box").css("max-height", gridTemplateWidth);
-    
-    $("video-layout-inner").css("max-height", gridTemplateHeight-nameBoxY);
-
-
-    var $parent = $("#meetingroom-main-container");
-
-    // 바로 아래 자식 요소들을 불러옵니다.
-    var $children = $parent.children();
-
-// 자식 요소들을 콘솔에 출력합니다.
-    console.log($children);
-
-    
-
-    for(var i=1; i<listParticipantsNum; i++ ){
-       $children.eq(i).show();
-
-    }
-    for(var j=listParticipantsNum; j<6; j++ ){
-        $children.eq(j).hide();
-    }
-
-
-}
     
 
    /*  window.addEventListener("beforeunload", function (e) {
