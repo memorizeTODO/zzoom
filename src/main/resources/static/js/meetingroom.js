@@ -1,3 +1,7 @@
+/**
+ * 
+ */
+
 
 var version = 1.2;
 var server = null;
