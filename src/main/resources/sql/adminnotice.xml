@@ -9,29 +9,29 @@
 	</select>
 
 	<!-- 공지사항 목록 -->
-	<select id="getNoticelist" parameterType="int"  resultType="notice">
+	<select id="getNoticelist" parameterType="int"  resultType="adminNotice">
 		select * from notice order by notice_id desc limit  #{start}, 10
 	</select>
 	
 	<!-- 공지사항 상세페이지 -->
-	<select id="getNotice" parameterType="int"  resultType="notice">
+	<select id="getNotice" parameterType="int"  resultType="adminNotice">
 		select * from notice where notice_id=#{notice_id}
 	</select>
 	
 	<!-- 공지사항 글작성 -->
-	<insert id="insert" parameterType="notice">
+	<insert id="insert" parameterType="adminNotice">
 		insert into notice(notice_subject, notice_content, notice_date, notice_count)
 		values(#{notice_subject}, #{notice_content}, now(), 0)
 	</insert>
 	
 	<!-- 공지사항 글수정 -->
-	<update id="update" parameterType="notice">
+	<update id="update" parameterType="adminNotice">
 		update notice set notice_subject=#{notice_subject}, notice_content=#{notice_content}
 		where notice_id=#{notice_id}
 	</update>
 
 	<!-- 공지사항 글삭제 -->
-	<delete id="delete" parameterType="notice">
+	<delete id="delete" parameterType="adminNotice">
 		delete from notice where notice_id=#{notice_id}
 	</delete>
 

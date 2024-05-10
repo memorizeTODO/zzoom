@@ -5,7 +5,7 @@
 
 	
 	<!-- 관리자 로그인 -->
-	<select id="getManager" parameterType="manager" resultType="manager">
+	<select id="getManager" parameterType="adminManager" resultType="adminManager">
 	    select * from manager where manager_id=#{manager_id} and manager_passwd=#{manager_passwd}
 	</select>
 

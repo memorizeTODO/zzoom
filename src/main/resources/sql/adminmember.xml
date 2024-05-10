@@ -9,7 +9,7 @@
 	</select>
 
 	<!-- 회원목록 -->
-	<select id="getMemberlist" parameterType="int"  resultType="member">
+	<select id="getMemberlist" parameterType="int"  resultType="adminMember">
 		select * from member order by member_id asc limit  #{start}, 10
 	</select>
 

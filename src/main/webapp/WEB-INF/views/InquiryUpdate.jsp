@@ -15,6 +15,14 @@
 	
 	<!-- jQuery 라이브러리 추가 -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script>
+	var inquiry_member_id = '${inquiry_member_id}';
+	var session_member_id = '${sessionScope.member_id}';
+	if(inquiry_member_id != session_member_id){
+		alert("작성자만 수정 하실 수 있습니다.");
+		location.href='inquirydetail?inquiry_id=${inquiry.inquiry_id}&page=${page}';
+	}
+	</script>
 </head>
 
 <!-- 상단 고정바 -->
@@ -28,12 +36,21 @@
 		<span class="self-center text-2xl font-semibold whitespace-nowrap mt-3 mb-3"></span>
 		</a>
 	
+	
 	<!-- 로그인버튼 -->
 	<div class="flex flex-row-reverse md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-		<button type="button"
-			class="text-white font-bold bg-purple-700 hover:bg-purple-500 focus:ring-2 focus:outline-none font-large rounded-lg text-md px-4 py-2.5 text-center mt-3 mb-3 mr-5">
-			로그인
-		</button>
+		<c:if test="${sessionScope.member_id == null}">
+			<button type="button" onClick="location='login'"
+				class="text-white font-bold bg-purple-700 hover:bg-purple-500 focus:ring-2 focus:outline-none font-large rounded-lg text-md px-4 py-2.5 text-center mt-3 mb-3 mr-5">
+				로그인
+			</button>
+		</c:if>
+		<c:if test="${sessionScope.member_id != null}">
+			<button type="button" onClick="location='member_logout'"
+				class="text-white font-bold bg-purple-700 hover:bg-purple-500 focus:ring-2 focus:outline-none font-large rounded-lg text-md px-4 py-2.5 text-center mt-3 mb-3 mr-5">
+				로그아웃
+			</button>
+		</c:if>
 	</div>
 	
 	<!-- 목록 -->

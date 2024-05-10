@@ -10,6 +10,7 @@ public class WebMvcConfig implements WebMvcConfigurer{
 	
 	@Autowired
 	private SessionCheckInterceptor interceptor;
+	@Autowired
 	private AdminSessionCheckInterceptor adminInterceptor;
 	
 	//인터셉터가 동작할 url 설정--> 추후 다른 곳도 추가 할수 있음

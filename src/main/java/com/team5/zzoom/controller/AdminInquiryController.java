@@ -19,7 +19,7 @@ public class AdminInquiryController {
 	private AdminInquiryService service;
 	
 	// 문의사항 목록
-	@RequestMapping("inquirylist")
+	@RequestMapping("admin/inquirylist")
 	public String inquirylist(@RequestParam(value="page",defaultValue = "1") int page,  Model model) {
 		
 		int limit = 10;
@@ -51,11 +51,11 @@ public class AdminInquiryController {
 		
 		/* List<E> inquirylist = service.getInquirylist(); */
 
-		return "inquiry/inquirylist";
+		return "admin/inquiry/inquirylist";
 	}
 	
 	// 문의사항 상세페이지
-	@RequestMapping("inquirydetail")
+	@RequestMapping("admin/inquirydetail")
 	public String inquirydetail(@RequestParam("inquiry_id") int inquiry_id, 
 								@RequestParam("member_id") String member_id, 
 			                    @RequestParam("page") int page, Model model) {
@@ -65,7 +65,7 @@ public class AdminInquiryController {
 		model.addAttribute("member_id", member_id);
 		model.addAttribute("page", page);
 
-		return "inquiry/inquirydetail";
+		return "admin/inquiry/inquirydetail";
 	}
 
 	

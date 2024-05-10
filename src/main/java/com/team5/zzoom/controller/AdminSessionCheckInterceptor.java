@@ -16,6 +16,9 @@ public class AdminSessionCheckInterceptor implements HandlerInterceptor {
 			throws Exception {
 		HttpSession session = request.getSession();
 		String member_id = (String) session.getAttribute("member_id");
+		if (member_id ==null) {
+			return true;
+		}
 		if (member_id.equals("admin")) {
 			
 			System.out.println("입장 허용");

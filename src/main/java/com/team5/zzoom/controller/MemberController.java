@@ -92,6 +92,12 @@ public class MemberController {
 	
 	   @RequestMapping("meeting_reservation")
 	   public String gotoMainPage(HttpSession session){
+		  String member_id=(String)session.getAttribute("member_id");
+		  
+		  if(member_id==null) {
+			  return "/member/member_login";
+		  }
+		  
 	      return "member/meeting_reservation";
 	   }
 	   

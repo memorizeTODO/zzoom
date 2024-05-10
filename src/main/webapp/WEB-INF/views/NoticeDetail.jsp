@@ -44,10 +44,18 @@
 	
 	<!-- 로그인버튼 -->
 	<div class="flex flex-row-reverse md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-		<button type="button"
-			class="text-white font-bold bg-purple-700 hover:bg-purple-500 focus:ring-2 focus:outline-none font-large rounded-lg text-md px-4 py-2.5 text-center mt-3 mb-3 mr-5">
-			로그인
-		</button>
+		<c:if test="${sessionScope.member_id == null}">
+			<button type="button" onClick="location='login'"
+				class="text-white font-bold bg-purple-700 hover:bg-purple-500 focus:ring-2 focus:outline-none font-large rounded-lg text-md px-4 py-2.5 text-center mt-3 mb-3 mr-5">
+				로그인
+			</button>
+		</c:if>
+		<c:if test="${sessionScope.member_id != null}">
+			<button type="button" onClick="location='member_logout'"
+				class="text-white font-bold bg-purple-700 hover:bg-purple-500 focus:ring-2 focus:outline-none font-large rounded-lg text-md px-4 py-2.5 text-center mt-3 mb-3 mr-5">
+				로그아웃
+			</button>
+		</c:if>
 	</div>
 	
 	<!-- 목록 -->

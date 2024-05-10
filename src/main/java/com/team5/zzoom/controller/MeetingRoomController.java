@@ -226,13 +226,18 @@ public class MeetingRoomController {
 	
 	
 	@PostMapping("joinMeetingRoom")
-	public String joinMeetingRoom(@RequestBody Map<String,Object> parameter, HttpSession session, Model model ) {
+	public String joinMeetingRoom(@RequestParam("meeting_room_num") String meeting_room_num, HttpSession session, Model model ) {
+		System.out.println(meeting_room_num);
+		
+		
 	    // DTO를 DAO에 전달하여 데이터베이스에 삽입
-		String roomNum= Integer.toString((int)parameter.get("meeting_room_num"));
-		String roomID = (String)parameter.get("meeting_ID");
+		int roomNum = Integer.parseInt(meeting_room_num);
+		
 		
 		String myID = (String) session.getAttribute("member_id");
-		model.addAttribute("nowroom_num",Integer.parseInt(roomNum));
+		model.addAttribute("nowroom_num",roomNum);
+		
+		
 	 
 	    return "meetingroom";
 

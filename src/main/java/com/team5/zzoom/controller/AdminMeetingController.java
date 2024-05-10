@@ -20,7 +20,7 @@ public class AdminMeetingController {
 	private AdminMeetingService service;
 	
 	// 회의목록
-		@RequestMapping("meetinglist")
+		@RequestMapping("admin/meetinglist")
 		public String memberlist(@RequestParam(value="page",defaultValue = "1") int page,  Model model) {
 			
 			int limit = 10;
@@ -54,7 +54,7 @@ public class AdminMeetingController {
 		}
 		
 		//회의 수정폼
-		@RequestMapping("meetingupdateform")
+		@RequestMapping("admin/meetingupdateform")
 		public String memberupdate(@RequestParam("meeting_room_num") String meeting_room_num, 
 								   @RequestParam("meeting_id") String meeting_id, 
 								   @RequestParam("page") int page, Model model) {
@@ -69,11 +69,11 @@ public class AdminMeetingController {
 			model.addAttribute("meeting", meeting);
 			model.addAttribute("page", page);
 			
-			return "meeting/updateform";
+			return "admin/meeting/updateform";
 		}
 		
 		//회의정보 수정
-		@RequestMapping("meetingupdate")
+		@RequestMapping("admin/meetingupdate")
 		public String noticeupdate(@ModelAttribute AdminMeeting meeting, @RequestParam("page") int page, Model model) {
 			System.out.println("controller in");
 			System.out.println("meeting_start_date:"+ meeting.getMeeting_start_date());
@@ -87,11 +87,11 @@ public class AdminMeetingController {
 			model.addAttribute("result", result);
 			model.addAttribute("page", page);
 
-			return "meeting/updateresult";
+			return "admin/meeting/updateresult";
 		}
 
 		// 회의 삭제
-		@RequestMapping("meetingdelete")
+		@RequestMapping("admin/meetingdelete")
 		public String delete(@RequestParam("meeting_id") String meeting_id, Model model) {
 			System.out.println("meeting_id:"+ meeting_id);
 			
@@ -100,6 +100,6 @@ public class AdminMeetingController {
 			
 			model.addAttribute("result", result);
 			
-			return "meeting/deleteresult";
+			return "admin/meeting/deleteresult";
 		}
 }

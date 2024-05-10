@@ -9,6 +9,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="">
+
     </head>
     <body>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
@@ -112,8 +113,66 @@
                                 <span class="sr-only">Close modal</span>
                             </button>
                         </div>
+                        
+                        <script>
+ //                       async function search1() {
+                        async function search1() {
+                            alert("in");
+                            const res = await fetch(`/get/meetingroom?code=`+document.getElementById("meeting_id").value);   
+                			const resJson = await res.json();
+                			
+                			var meeting_ID = resJson.meeting_id;
+                				
+                			var room_num = resJson.meeting_room_num;
+                			var meeting_room_num = Number(room_num);
+                			
+                			var today = new Date();
+                			
+                			var year = today.getFullYear();
+                			var month = ('0' + (today.getMonth() + 1)).slice(-2);
+                			var day = ('0' + today.getDate()).slice(-2);
+                			var hours = ('0' + today.getHours()).slice(-2); 
+                			var minutes = ('0' + today.getMinutes()).slice(-2);
+
+                			var timeString = hours + ':' + minutes;
+                			var dateString = year + '-' + month  + '-' + day;
+                			
+                			
+                			var startdt = resJson.meeting_start_date;
+                			var startdatearr = startdt.split("T");
+                			
+                			var startdate = startdatearr[0];
+                			
+                			
+                		
+                				 	if(resJson.meeting_join == 1){
+                				 			if(resJson.meeting_passwd === document.getElementById("enter-passwd").value){
+                					 			if(  dateString >= startdate){		
+                								 			
+                										$("#meeting_room_num").val(meeting_room_num);
+                										  
+                					 		
+                				 		      }else{
+                				 			     alert("입장 가능한 시간이 아닙니다.")
+                				 		      }
+                				 			}else{
+                							 	alert("비밀번호가 맞지 않습니다.");	
+                					 		}
+                						}else{
+                						 	alert("입장 불가능한 방입니다.");					 			
+                						}
+                						
+                	        		}        
+                        
+                        </script>
+                       
+                        
+                        
+                        
+                        
                         <!-- Modal body -->
-                            <form class="max-w-sm mx-auto my-5" id = "passwdform">
+                            <form class="max-w-sm mx-auto my-5" method="POST" id = "passwdform"  action="joinMeetingRoom"  onSubmit="return search1()">
+                               <input type="hidden" id="meeting_room_num" name="meeting_room_num" value=""/>
                                 <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
                                 <div class="relative">
                                     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">         
@@ -124,7 +183,7 @@
 
                                 </div>
                                 <div class="flex justify-end">
-                                <button type="button" onclick="search()" class="text-white inline-flex flex justify-self-center bg-blue-700 hover:bg-blue-800 
+                                <button type="submit"  class="text-white inline-flex flex justify-self-center bg-blue-700 hover:bg-blue-800 
                                                             focus:ring-4 focus:outline-none focus:ring-blue-300 my-5
                                                             font-medium rounded-lg  text-sm px-5 py-2.5 text-center">            
                                 <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>

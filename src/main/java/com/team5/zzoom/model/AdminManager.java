@@ -1,11 +1,10 @@
 package com.team5.zzoom.model;
 
 import org.apache.ibatis.type.Alias;
-
 import lombok.Data;
-
 @Data
-@Alias("manager")
+@Alias("adminManager")
+
 public class AdminManager {
 
 	private String manager_id;

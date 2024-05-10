@@ -46,7 +46,7 @@ public class meetingController {
 	@Autowired
 	private MemberDAOImpl service;
 	
-	@RequestMapping("get/meetingroom")
+	@RequestMapping("/get/meetingroom")
     public Map<String,Object> getReservationToView(@RequestParam Map<String,String> params){
     	
     	String code = params.get("code");
@@ -151,15 +151,7 @@ public class meetingController {
     		    }
     		}
     	
-    	@PostMapping("/joinMeetingRoom")
-		public ResponseEntity<String> joinMeetingRoom(@RequestBody String parameter) {
-		    // DTO를 DAO에 전달하여 데이터베이스에 삽입
-		    System.out.println(parameter);
-		 
-		    return ResponseEntity.ok("Meeting created successfully.");
-
-		    }
-		}
+}
 		
     	
     	
