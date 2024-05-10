@@ -1,7 +1,3 @@
-/**
- * 
- */
-
 
 var version = 1.2;
 var server = null;
@@ -36,7 +32,6 @@ function generateJanus(){
 
 	 //$('#video-publish-btn').attr('disabled', true).off('click');
 	 // Make sure the browser supports WebRTC
-	 
 	 if(!Janus.isWebrtcSupported()) {
 		 bootbox.alert("No WebRTC support... ");
 		 return;
@@ -365,9 +360,8 @@ function checkEnter(field, event) {
 // [jsflux] 화상회의방 생성 및 조인
 function registerUsername() {
 
-	
-    myroom = 50000 + Number(roomVariable.nowroom_num);  
-	alert("room id:" + myroom);
+        //alert("room id:" + roomname);
+    myroom = 50000 + Number(roomVariable.nowroom_num)  
 	 
 
 	var createRoom = {
@@ -634,8 +628,6 @@ function newRemoteFeed(id, display, audio, video) {
 				if($('#remotevideo'+remoteFeed.rfindex).length === 0) {
 					addButtons = true;
 					// No remote video yet
-					
-
 					$('#videoremote'+remoteFeed.rfindex).append('<video class="rounded centered" id="waitingvideo' + remoteFeed.rfindex + '" width="100%" height="100%" />');
 					$('#videoremote'+remoteFeed.rfindex).append('<video class="video-layout-inner" id="remotevideo' + remoteFeed.rfindex + '" autoplay controls playsinline/>');
 					
