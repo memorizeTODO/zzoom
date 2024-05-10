@@ -42,17 +42,17 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
 	if ((roomVariable.session_myID == 'null' || roomVariable.session_myID == null)&&(roomVariable.nowroom_num == 'null'|| roomVariable.nowroom_num == null) ){
 		console.error("session_myID = "+roomVariable.session_myID + ", nowroom_num = "+roomVariable.nowroom_num );
 		alert("session error");
-		history.back();
+		location.href="meeting_reservation";
 	}
 	
 	
 	if(isMeetingRoomFull() == -1){ // 해당 회의룸이 꽉찼는지 체크(동기)
 		alert("isRoomFull error");
-		history.back();
+		location.href="meeting_reservation";
 	}
 
 	if(isWatchingAnotherRoom() == true){ //다른방에 입장하고있거나 현재 방에 이미 입장한 상태인지 체크(동기)
-		history.back();
+		location.href="meeting_reservation";
 	}
 
 	while(true){
@@ -84,7 +84,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
 		janus.destroy();
 
 		updateMyNowRoomState('left');
-		history.back(2); //회의룸으로 이동하게끔
+		location.href="meeting_reservation"; 
 										
 	});
 
@@ -95,13 +95,13 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
 });
    
 
-    function asyncTasks(){ 
+    function asyncTasks(){ //반복 수행할 비동기 요청 작업들 
         getMyInfo(true);
         getParticipants(); //참가자 리스트 불러오기/갱신 + 뷰쪽에 UI생성
         updateKeepAlive(); //강제종료, 새로고침으로 인한 방 이탈 체크를 위해 db로 클라이언트의 keepalive를 갱신(일정시간 동안 갱신 안될 시 나간것으로 간주)
         if (getNowRoomInfo() == false){ // 현재 방의 정보 갱신(주제, 현재인원, 최대인원, 대표자(개설자)등 )
             alert("can't find this roomInfo");
-            history.back();
+            location.href="meeting_reservation";
         }
         changeGridLayout();
         
@@ -125,7 +125,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
 			            error: function(xhr, status, error) {
 			                console.error("status: "+status+ "error :" + xhr.responseText);
                             alert("status: "+status +" error: " + xhr.responseText);
-                            history.back();
+                            location.href="meeting_reservation";
 			                // 오류 발생 시 실행할 코드
                             
 			            }
@@ -153,7 +153,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
 			            error: function(xhr, status, error) {
 			                console.error("status: "+status+ "error :" + xhr.responseText);
                             alert("status: "+status +" error: " + xhr.responseText);
-                            history.back();
+                            location.href="meeting_reservation";
 			                // 오류 발생 시 실행할 코드
                             
 			            }
@@ -223,7 +223,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
                                     $("#drawer-navigation-label").html("Participants "+ roomVariable.participants_now_num +" / "+roomVariable.participants_max_num);
                                 }else{
                                     alert("방 정보 조회 불가능");
-                                    history.back();
+                                    location.href="meeting_reservation";
                                 }
                                 
                                 
@@ -233,7 +233,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
                                 alert("status: "+status +" error: " + xhr.responseText);
                                 
                                 // 오류 발생 시 실행할 코드
-                                //history.back(); //
+                                //location.href="meeting_reservation"; //
                             }
         });
         return returnVal;
@@ -257,7 +257,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
 			            error: function(xhr, status, error) {
                             console.error("status: "+status+ "error :" + xhr.responseText);
                             alert("status: "+status +" error: " + xhr.responseText);
-                            history.back();
+                            location.href="meeting_reservation";
 			                // 오류 발생 시 실행할 코드
                             
 			            }
@@ -303,7 +303,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
                             error: function(xhr, status, error) {
                                 console.error("Error: " + error);
                                 // 오류 발생 시 실행할 코드
-                                //history.back(); // 
+                                //location.href="meeting_reservation"; // 
                             }
             });
         
@@ -326,7 +326,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
                                 isSuccess = true;
                                 if ( isFull == -1 ){
                                     alert("방이 가득 찼습니다");
-                                    //history.back();
+                                    //location.href="meeting_reservation";
                                 }else if(isFull == 1){
                                     alert("방에 입장합니다");
                                 }
@@ -334,9 +334,9 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
                             error: function(xhr, status, error) {
                                 console.error("Error: " + error);
                                 // 오류 발생 시 실행할 코드
-                                //history.back(); // 
+                                //location.href="meeting_reservation"; // 
                                 alert("응답 오류");
-                                history.back();
+                                location.href="meeting_reservation";
                             }
         });
        
