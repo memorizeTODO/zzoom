@@ -24,7 +24,7 @@
 
         <nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-black-200 " ></nav>            
                 <div class="px-5 w-full flex flex-wrap items-center justify-between mx-auto  border-b-2">
-                    <a href="https://www.naver.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
+                    <a href="/main" class="flex items-center space-x-3 rtl:space-x-reverse">
                         <img src="img\logozzoom.png" class="h-10" alt="ZZOM Logo" />
                         <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span>
                     </a>

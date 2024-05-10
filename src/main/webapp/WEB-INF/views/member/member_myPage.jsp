@@ -64,7 +64,7 @@
    <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
       <a href="/main"
          class="flex items-center space-x-3 rtl:space-x-reverse ml-2">
-      <img src="image\logozzoom.png" class="h-10" alt="C:\Users\qwzx0\git\zzoom\src\main\resources\static\img\logozzoom.png" />
+      <img src="img\logozzoom.png" class="h-10" alt="C:\Users\qwzx0\git\zzoom\src\main\resources\static\img\logozzoom.png" />
       <span class="self-center text-2xl font-semibold whitespace-nowrap mt-3 mb-3"></span>
       </a>
     
@@ -164,12 +164,11 @@
 <!--         </div> -->
     </div>
     <div class="flex flex-col items-center pb-10">
-        <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="/image/default_image.png" alt="default_image"/>
+        <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="/img/default_image.png" alt="default_image"/>
         <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">${member.member_id} </h5>
         <span class="text-sm text-gray-500 dark:text-gray-400">일반회원</span>
         <div class="flex mt-4 md:mt-6">
-            <a href="#" class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-purple-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">아무거나 추가하자</a>
-            <a href="#" class="py-2 px-4 ms-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-400 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">아무거나 추가하자</a>
+            
         </div>
     </div>
 </div>
