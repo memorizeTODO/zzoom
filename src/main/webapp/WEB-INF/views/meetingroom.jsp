@@ -381,8 +381,8 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
         /*width가 384px 미만일 때 사용*/
         --meetingroom-flex-container-h : 100%;
         --meetingroom-flex-container-w : 100%;
-        --grid-rows-size: 1;
-        --grid-columns-size: 1;
+        --grid-rows-size: 2;
+        --grid-columns-size: 3;
         --grid-gap-x:0.25rem;
         --grid-gap-y:0.25rem;
         --grid-template-width : calc(var(--meetingroom-grid-container-w) / var(--grid-columns-size) - var(--grid-gap-x) ) ;
