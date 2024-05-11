@@ -20,7 +20,7 @@ public class SchedulerConfiguration implements SchedulingConfigurer {
 	    public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
 	        ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
 	        threadPoolTaskScheduler.setPoolSize(POOL_SIZE);
-	        threadPoolTaskScheduler.setThreadNamePrefix("campscore-scheduled-task-pool-");
+	        threadPoolTaskScheduler.setThreadNamePrefix("zzoom-scheduled-task-pool-");
 	        threadPoolTaskScheduler.initialize();
 	        scheduledTaskRegistrar.setTaskScheduler(threadPoolTaskScheduler);
 	    }

@@ -20,10 +20,8 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
 
-<script type="text/javascript" src="/js/janus.js"></script>
-<script type="text/javascript" src="/js/meetingroom.js"></script>
-
-
+<script type="text/javascript" src="js/janus.js"></script>
+<script type="text/javascript" src="js/meetingroom.js"></script>
 
 <script>
     var roomVariable= {
@@ -38,23 +36,27 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
     };
 
     $(document).ready(function() {
+    
+        for(var i = 0; i<6 ; i++){
+        $("#template"+i).hide();
+    }
 
 	roomVariable.session_myID = '${sessionScope.member_id}';
 	roomVariable.nowroom_num = '${nowroom_num}';
 	if ((roomVariable.session_myID == 'null' || roomVariable.session_myID == null)&&(roomVariable.nowroom_num == 'null'|| roomVariable.nowroom_num == null) ){
 		console.error("session_myID = "+roomVariable.session_myID + ", nowroom_num = "+roomVariable.nowroom_num );
 		alert("session error");
-		history.back();
+		location.href="meeting_reservation";
 	}
 	
 	
 	if(isMeetingRoomFull() == -1){ // 해당 회의룸이 꽉찼는지 체크(동기)
 		alert("isRoomFull error");
-		history.back();
+		location.href="meeting_reservation";
 	}
 
 	if(isWatchingAnotherRoom() == true){ //다른방에 입장하고있거나 현재 방에 이미 입장한 상태인지 체크(동기)
-		history.back();
+		location.href="meeting_reservation";
 	}
 
 	while(true){
@@ -71,10 +73,10 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
 	setInterval(() => asyncTasks(), 2000); // 방에 있는동안 계속 작동할 비동기 작업들 모음(1초 간격으로 작동)
 
 	// Initialize the library (all console debuggers enabled)
-	Janus.init({debug: "all", callback: function() {
+    Janus.init({debug: "all", callback: function() {
 		// Use a button to start the demo
-		 
 		generateJanus();
+
 		
 	}});
 
@@ -86,22 +88,26 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
 		janus.destroy();
 
 		updateMyNowRoomState('left');
-		history.back(2); //회의룸으로 이동하게끔
+		location.href="meeting_reservation"; 
 										
 	});
 
 	myroom = 50000 + Number(roomVariable.nowroom_num);
-    alert(myroom);
-});
 
-    function asyncTasks(){ 
+
+   
+});
+   
+
+    function asyncTasks(){ //반복 수행할 비동기 요청 작업들 
         getMyInfo(true);
         getParticipants(); //참가자 리스트 불러오기/갱신 + 뷰쪽에 UI생성
         updateKeepAlive(); //강제종료, 새로고침으로 인한 방 이탈 체크를 위해 db로 클라이언트의 keepalive를 갱신(일정시간 동안 갱신 안될 시 나간것으로 간주)
         if (getNowRoomInfo() == false){ // 현재 방의 정보 갱신(주제, 현재인원, 최대인원, 대표자(개설자)등 )
             alert("can't find this roomInfo");
-            history.back();
+            location.href="meeting_reservation";
         }
+        changeGridLayout();
         
     }
 
@@ -123,7 +129,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
 			            error: function(xhr, status, error) {
 			                console.error("status: "+status+ "error :" + xhr.responseText);
                             alert("status: "+status +" error: " + xhr.responseText);
-                            history.back();
+                            location.href="meeting_reservation";
 			                // 오류 발생 시 실행할 코드
                             
 			            }
@@ -151,7 +157,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
 			            error: function(xhr, status, error) {
 			                console.error("status: "+status+ "error :" + xhr.responseText);
                             alert("status: "+status +" error: " + xhr.responseText);
-                            history.back();
+                            location.href="meeting_reservation";
 			                // 오류 발생 시 실행할 코드
                             
 			            }
@@ -219,6 +225,9 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
                                     console.log("getNowRoomInfo success: topic = "+roomVariable.topic);
                                     $("#topic").html(roomVariable.topic);
                                     $("#drawer-navigation-label").html("Participants "+ roomVariable.participants_now_num +" / "+roomVariable.participants_max_num);
+                                }else{
+                                    alert("방 정보 조회 불가능");
+                                    location.href="meeting_reservation";
                                 }
                                 
                                 
@@ -228,7 +237,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
                                 alert("status: "+status +" error: " + xhr.responseText);
                                 
                                 // 오류 발생 시 실행할 코드
-                                //history.back(); //
+                                //location.href="meeting_reservation"; //
                             }
         });
         return returnVal;
@@ -252,7 +261,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
 			            error: function(xhr, status, error) {
                             console.error("status: "+status+ "error :" + xhr.responseText);
                             alert("status: "+status +" error: " + xhr.responseText);
-                            history.back();
+                            location.href="meeting_reservation";
 			                // 오류 발생 시 실행할 코드
                             
 			            }
@@ -298,7 +307,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
                             error: function(xhr, status, error) {
                                 console.error("Error: " + error);
                                 // 오류 발생 시 실행할 코드
-                                //history.back(); // 
+                                //location.href="meeting_reservation"; // 
                             }
             });
         
@@ -321,7 +330,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
                                 isSuccess = true;
                                 if ( isFull == -1 ){
                                     alert("방이 가득 찼습니다");
-                                    //history.back();
+                                    //location.href="meeting_reservation";
                                 }else if(isFull == 1){
                                     alert("방에 입장합니다");
                                 }
@@ -329,9 +338,9 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
                             error: function(xhr, status, error) {
                                 console.error("Error: " + error);
                                 // 오류 발생 시 실행할 코드
-                                //history.back(); // 
+                                //location.href="meeting_reservation"; // 
                                 alert("응답 오류");
-                                //history.back();
+                                location.href="meeting_reservation";
                             }
         });
        
@@ -340,7 +349,96 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
     }
 
  
+function changeGridLayout(){
 
+    var cnt = 0;
+    for(var i = 0; i<6 ; i++){
+        if($("#template"+i).is(':visible') == true){
+            cnt++;
+        }
+    }
+
+    console.log("cnt: "+cnt);
+
+    var listParticipantsNum= cnt; 
+        
+    var $root=$(":root");
+    var cssVariables = getComputedStyle($root[0]);
+    var $gridContainer=$("#meetingroom-main-container");
+
+    //--meetingroom-grid-container-h : calc(var(--vh) * 1vh - var(--bottom-bar-h));
+    //--meetingroom-grid-container-w : calc(var(--vw) * 1vw);
+    
+    vw=cssVariables.getPropertyValue("--vw").trim();
+    vh=cssVariables.getPropertyValue("--vh").trim();
+    bottomBarH=cssVariables.getPropertyValue("--bottom-bar-h");
+
+    //var meetingroomGridContainerW = "calc(" + vw + " * " + '1vw' + ")";
+    //var meetingroomGridContainerH = "calc(" + vh + " * " + '1vw' + " - " + bottomBarH +")";
+
+
+    var meetingroomGridContainerW = cssVariables.getPropertyValue("--meetingroom-grid-container-w").trim();
+    var meetingroomGridContainerH = cssVariables.getPropertyValue("--meetingroom-grid-container-h").trim();
+    var gridGapX = cssVariables.getPropertyValue("--grid-gap-x").trim();
+    var gridGapY = cssVariables.getPropertyValue("--grid-gap-y").trim();
+    var nameBoxY =cssVariables.getPropertyValue("--name-box-y").trim()
+
+    if(listParticipantsNum==0){
+        var gridColumnsSize = 0;
+        var gridRowsSize = 0;
+    }
+    else if(listParticipantsNum==1){
+        var gridColumnsSize = 1;
+        var gridRowsSize = 1;
+
+        
+        
+    }else if(listParticipantsNum==2){
+        var gridColumnsSize = 2;
+        var gridRowsSize = 1;
+        
+
+    }else if(listParticipantsNum<=4){
+        var gridColumnsSize = 2;
+        var gridRowsSize = 2;
+
+       
+    }else{
+        var gridColumnsSize = 3;
+        var gridRowsSize = 2;
+
+
+    }
+
+    
+
+    var gridTemplateWidth = "calc(" + meetingroomGridContainerW + " / " + gridColumnsSize + " - " + gridGapX + ")";
+    var gridTemplateHeight = "calc(" + meetingroomGridContainerH + " / " + gridRowsSize + " - " + gridGapY + ")";
+
+    $gridContainer.css("grid-template-columns", "repeat(" + gridColumnsSize + ", " + gridTemplateWidth + ")");
+    $gridContainer.css("grid-template-rows", "repeat(" + gridRowsSize + ", " + gridTemplateHeight + ")");
+
+    $(".video-layout1").css("max-width", gridTemplateWidth);
+    $(".video-layout1").css("max-height",gridTemplateHeight);
+    
+    $(".video-box").css("max-width", gridTemplateWidth);
+    $(".video-box").css("max-height", "calc("+gridTemplateHeight+" - "+nameBoxY+")");
+    
+    $(".video-layout-inner").css("height", "calc("+gridTemplateHeight+" - "+nameBoxY+")");
+    $(".video-layout-inner").css("max-height", "calc("+gridTemplateHeight+" - "+nameBoxY+")");
+
+
+    var $parent = $("#meetingroom-main-container");
+
+    // 바로 아래 자식 요소들을 불러옵니다.
+    var $children = $parent.children();
+
+// 자식 요소들을 콘솔에 출력합니다.
+    console.log($children);
+
+
+
+}
     
 
    /*  window.addEventListener("beforeunload", function (e) {
@@ -376,11 +474,11 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
         /*width가 384px 미만일 때 사용*/
         --meetingroom-flex-container-h : 100%;
         --meetingroom-flex-container-w : 100%;
-        --grid-rows-size: 2;
-        --grid-columns-size: 3;
+        --grid-rows-size: 1;
+        --grid-columns-size: 1;
         --grid-gap-x:0.25rem;
         --grid-gap-y:0.25rem;
-        --grid-template-width : calc(var(--meetingroom-grid-container-w) / var(--grid-columns-size) - var(--grid-gap-x)) ;
+        --grid-template-width : calc(var(--meetingroom-grid-container-w) / var(--grid-columns-size) - var(--grid-gap-x) ) ;
         --grid-template-height :  calc(var(--meetingroom-grid-container-h) / var(--grid-rows-size) - var(--grid-gap-y)) ;
         
         
@@ -409,12 +507,15 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
         place-self: center;
         place-content: center;
     }
+    .main{
+        background: #2E2E2E;
+    }
 
     @media (min-width: 481px) {
         .meetingroom-container {
             width: var(--meetingroom-grid-container-w);
             height: var(--meetingroom-grid-container-h);
-            background: #2E2E2E;
+            background: transparent;
             padding: 0;
             margin: 0;
             display: grid;
@@ -434,9 +535,13 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
         word-break:break-all;
         place-items: center;
         place-content:center;
+        width: auto;
+        height: auto;
+        width: 100%;
+        height: 100%;
 
-        width: var(--grid-template-width);
-        height: var(--grid-template-height);
+        max-width: var(--grid-template-width);
+        max-height: var(--grid-template-height);
         
         }
 
@@ -444,14 +549,14 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
         display: flex;
         place-items: center;
         place-content:center;
+        
+        width: auto;
+        height: auto;
 
         max-width: var(--grid-template-width);
         max-height: calc(var(--grid-template-height) - var(--name-box-y));
         background: black;
 
-        width: 100%;
-        height: 100%;
-        
         }
     }
     @media (max-width: 480px) {
@@ -478,6 +583,8 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
             
         width: var(--meetingroom-flex-container-w);
         height: var(--meetingroom-flex-container-h);
+            
+
         }
 
         .video-box{
@@ -503,9 +610,12 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
     .video-layout-inner{
 
         display: block;
-        object-fit: scale-down;
+        object-fit: contain;
         width: auto;
-        height: 100%;
+        height: calc(var(--grid-template-height) - var(--name-box-y));
+
+        max-height: calc(var(--grid-template-height) - var(--name-box-y));
+        
         
     }
     .bottom-bar-layout{
@@ -578,31 +688,31 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
     </div> -->
     <div class="main" id="meetingroom">
         <div >
-            <div class="meetingroom-container gap-1" >
+            <div class="meetingroom-container gap-1" id = "meetingroom-main-container" >
 
-                <div class="video-layout1">
+                <div class="video-layout1" id = "template0">
                     <div class = "name-box" id = "myname-box"></div>
                     <div class= "video-box rounded-lg" id = "videolocal"></div>
                 </div>
-                <div class="video-layout1">
+                <div class="video-layout1" id = "template1"> 
                     <div class = "name-box" id = "remote1"></div>
                     <div class = "video-box rounded-lg" id = "videoremote1"></div>
                 </div>
-                <div class="video-layout1">
+                <div class="video-layout1" id = "template2">
                     <div class = "name-box" id = "remote2"></div>
                     <div class = "video-box rounded-lg" id = "videoremote2"></div>
                 </div>
-                <div class="video-layout1">
+                <div class="video-layout1" id = "template3">
                     <div class = "name-box" id = "remote3"></div>
                     <div class = "video-box rounded-lg" id = "videoremote3"></div>
                 </div>
-                <div class="video-layout1">
+                <div class="video-layout1" id = "template4">
                     <div class = "name-box" id = "remote4"></div>
-                    <div class = "video-box rounded-lg" id = "videoremote3"></div>
+                    <div class = "video-box rounded-lg" id = "videoremote4"></div>
                 </div>
-                <div class="video-layout1">
+                <div class="video-layout1" id = "template5">
                     <div class = "name-box" id = "remote5"></div>
-                    <div class = "video-box rounded-lg" id = "videoremote3"></div>
+                    <div class = "video-box rounded-lg" id = "videoremote5"></div>
                 </div>
 
                 

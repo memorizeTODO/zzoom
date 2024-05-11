@@ -36,6 +36,7 @@ function generateJanus(){
 
 	 //$('#video-publish-btn').attr('disabled', true).off('click');
 	 // Make sure the browser supports WebRTC
+	 
 	 if(!Janus.isWebrtcSupported()) {
 		 bootbox.alert("No WebRTC support... ");
 		 return;
@@ -126,6 +127,7 @@ function generateJanus(){
 							var event = msg["videoroom"];
 							Janus.debug("Event: " + event);
 							if(event) {
+								
 								if(event === "joined") {
 									// Publisher/manager created, negotiate WebRTC and attach to existing feeds, if any
 									myid = msg["id"];
@@ -135,7 +137,7 @@ function generateJanus(){
 										$('#videojoin').hide();
 										$('#videos').removeClass('hide').show();
 									} else {
-										publishOwnFeed(true);
+										$("#video-publish-btn").on('click',function(){publishOwnFeed()}); 
 									}
 									// Any new feed to attach to?
 									if(msg["publishers"]) {
@@ -156,6 +158,8 @@ function generateJanus(){
 									bootbox.alert("The room has been destroyed", function() {
 										window.location.reload();
 									});
+											unpublishOwnFeed(); // 송출 중단 요청
+											$("#video-publish-btn").off('click').one('click',function(){generateJanus()}); //야누스 객체 생성 이벤트 추가
 								} else if(event === "event") {
 									// Any new feed to attach to?
 									if(msg["publishers"]) {
@@ -184,6 +188,7 @@ function generateJanus(){
 											Janus.debug("Feed " + remoteFeed.rfid + " (" + remoteFeed.rfdisplay + ") has left the room, detaching");
 											$('#remote'+remoteFeed.rfindex).empty();
 											$('#videoremote'+remoteFeed.rfindex).empty();
+											$('#template'+remoteFeed.rfindex).hide();
 											feeds[remoteFeed.rfindex] = null;
 											remoteFeed.detach();
 										}
@@ -207,6 +212,7 @@ function generateJanus(){
 											Janus.debug("Feed " + remoteFeed.rfid + " (" + remoteFeed.rfdisplay + ") has left the room, detaching");
 											$('#remote'+remoteFeed.rfindex).empty();
 											$('#videoremote'+remoteFeed.rfindex).empty();
+											$('#template'+remoteFeed.rfindex).hide();
 											feeds[remoteFeed.rfindex] = null;
 											remoteFeed.detach();
 										}
@@ -219,11 +225,18 @@ function generateJanus(){
 												"configuration file? If not, make sure you copy the details of room <code>" + myroom + "</code> " +
 												"from that sample in your current configuration file, then restart Janus and try again."
 											);
+											unpublishOwnFeed(); // 송출 중단 요청
+											$("#video-publish-btn").off('click').one('click',function(){generateJanus()}); //야누스 객체 생성 이벤트 추가
+											
 										} else {
 											bootbox.alert(msg["error"]);
+											unpublishOwnFeed(); // 송출 중단 요청
+											$("#video-publish-btn").off('click').one('click',function(){generateJanus()}); //야누스 객체 생성 이벤트 추가
+
 										}
 									}
 								}
+								changeGridLayout(); //janus쪽에서 이벤트 감지시 레이아웃 변경
 							}
 							if(jsep) {
 								Janus.debug("Handling SDP as well...", jsep);
@@ -254,10 +267,14 @@ function generateJanus(){
 							mystream = stream;
 							$('#videojoin').hide();
 							//$('#meetingroom').removeClass('hide').show();
+							
+							$("#template0").show();
+							changeGridLayout();
 									if($('#myname').length === 0){
 										$('#myname-box').html('<span class="text-white text-xs font-bold" id="myname">'+ myusername+'</span>');
 									}
 									if($('#myvideo').length===0){
+										$("#me").show();
 										$('#videolocal').remove('#myvideo-unpublished');
 										$('#videolocal').html('<video class="video-layout-inner" id="myvideo" controls autoplay playsinline muted="muted"/>');
 										if($('#video-publish-btn').length){	
@@ -323,9 +340,14 @@ function generateJanus(){
 							 Janus.log(" ::: Got a cleanup notification: we are unpublished now :::");
 							 mystream = null;
 							 if($("myvideo-unpublished").length===0){
-								 $('#videolocal').remove('#myvideo');
-								 $('#videolocal').html('<img class="video-layout-inner" id="myvideo-unpublished" src="/img/no-video.png" >'); // 수정이 필요한 부분, 타인 화상화면의 출력을 제어할때는 원본을 참고할것
+								 //$('#videolocal').remove('#myvideo');
+								 //$('myname-box').hide()
+								 //$('#videolocal').html('<img class="video-layout-inner" id="myvideo-unpublished" src="/img/no-video.png" >'); // 수정이 필요한 부분, 타인 화상화면의 출력을 제어할때는 원본을 참고할것
+								 //$('#videolocal').parent().hide();
+								 	
 							 }
+							 $('myname').empty();
+							 $("#template0").hide();
 							 $('#video-publish-btn').click(function() { publishOwnFeed(true); });//publish-btn으로 변경 예정
 							 $("#videolocal").parent().parent().unblock();
 							 $('#bitrate').parent().parent().addClass('hide');
@@ -364,8 +386,9 @@ function checkEnter(field, event) {
 // [jsflux] 화상회의방 생성 및 조인
 function registerUsername() {
 
-        //alert("room id:" + roomname);
-    myroom = 50000 + Number(roomVariable.nowroom_num)  
+	
+    myroom = 50000 + Number(roomVariable.nowroom_num);  
+	alert("room id:" + myroom);
 	 
 
 	var createRoom = {
@@ -456,6 +479,7 @@ function publishOwnFeed(useAudio) {
 				}else{
 					sfutest.unmuteAudio();
 				}
+				$('template0').show();
 				$('#mute').html(is_mute ? '<img class="bottom-bar-button-icon-layout" src="/img/now-mute.png"/>' : '<img class="bottom-bar-button-icon-layout" src="/img/now-unmute.png"/>');
 				$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/img/now-cam-on.png"/>').off("click").on('click',function() { unpublishOwnFeed(); });
 			},
@@ -469,7 +493,9 @@ function publishOwnFeed(useAudio) {
 					$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/img/now-cam-off.png"/>').off('click').on('click',function() { publishOwnFeed(true); });
 				}
 			}
+			
 		});
+		
 }
 
 // [jsflux] 음소거
@@ -501,7 +527,8 @@ function unpublishOwnFeed() {
 	var unpublish = { request: "unpublish" };
 	sfutest.send({ message: unpublish });
 	$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/img/now-cam-off.png"/>').off('click').on('click',function(){publishOwnFeed(true);});
-}
+	$('template0').hide();
+}	changeGridLayout();
 /* function publishOwnFeed() {
 	$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/img/now-cam-on.png"/>').off("click").on('click',function() { unpublishOwnFeed(); });
 	var publish = { request: "publish" };
@@ -573,7 +600,8 @@ function newRemoteFeed(id, display, audio, video) {
 							remoteFeed.spinner.spin();
 						}
 						Janus.log("Successfully attached to feed " + remoteFeed.rfid + " (" + remoteFeed.rfdisplay + ") in room " + msg["room"]);
-						$('#remote'+remoteFeed.rfindex).removeClass('hide').html('<span class="text-white text-xs font-bold" id="participants'+remoteFeed.rfindex+'-name">'+ remoteFeed.rfdisplay +'</span>').show();//다른 참여자의 이름 송출
+						$('template'+remoteFeed.rfindex).show();
+						$('#remote'+remoteFeed.rfindex).html('<span class="text-white text-xs font-bold" id="participants'+remoteFeed.rfindex+'-name">'+ remoteFeed.rfdisplay +'</span>').show();//다른 참여자의 이름 송출
 					} else if(event === "event") {
 						// Check if we got a simulcast-related event from this publisher
 						var substream = msg["substream"];
@@ -624,7 +652,7 @@ function newRemoteFeed(id, display, audio, video) {
 			onremotestream: function(stream) {
 				Janus.debug("Remote feed #" + remoteFeed.rfindex + ", stream:", stream);
 				var addButtons = false;
-
+				$("#template"+remoteFeed.rfindex).show();
 				if($('#remotevideo' + remoteFeed.rfindex).length !==0){ // unpublish 버튼을 눌러 송출불가 이미지가 떠있을시 
 					$('#videoremote'+remoteFeed.rfindex).empty();
 				}	
@@ -632,6 +660,8 @@ function newRemoteFeed(id, display, audio, video) {
 				if($('#remotevideo'+remoteFeed.rfindex).length === 0) {
 					addButtons = true;
 					// No remote video yet
+					
+
 					$('#videoremote'+remoteFeed.rfindex).append('<video class="rounded centered" id="waitingvideo' + remoteFeed.rfindex + '" width="100%" height="100%" />');
 					$('#videoremote'+remoteFeed.rfindex).append('<video class="video-layout-inner" id="remotevideo' + remoteFeed.rfindex + '" autoplay controls playsinline/>');
 					
