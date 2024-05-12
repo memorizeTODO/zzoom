@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.team5.zzoom.model.ReservationDTO;
-import com.team5.zzoom.model.ReservationDTOExt;
+
 	
 	@Mapper
 	public interface ReservationDAO {
