@@ -69,7 +69,7 @@ public class AdminMeetingController {
 			model.addAttribute("meeting", meeting);
 			model.addAttribute("page", page);
 			
-			return "admin/meeting/updateform";
+			return "meeting/updateform";
 		}
 		
 		//회의정보 수정
@@ -87,7 +87,7 @@ public class AdminMeetingController {
 			model.addAttribute("result", result);
 			model.addAttribute("page", page);
 
-			return "admin/meeting/updateresult";
+			return "meeting/updateresult";
 		}
 
 		// 회의 삭제
@@ -100,6 +100,6 @@ public class AdminMeetingController {
 			
 			model.addAttribute("result", result);
 			
-			return "admin/meeting/deleteresult";
+			return "meeting/deleteresult";
 		}
 }
