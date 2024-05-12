@@ -56,6 +56,7 @@ public class meetingController {
     	
     		try {
 				BeanUtils.populate(ReservationMap, BeanUtils.describe(wDTO));
+				System.out.println(ReservationMap.get("meeting_id"));
 			} catch (IllegalAccessException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

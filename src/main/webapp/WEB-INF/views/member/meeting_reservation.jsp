@@ -9,6 +9,379 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="">
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+        
+        <script>
+        let sessionMemberID = null;    
+        let sessionMemberName = null;  
+        
+        $("document").ready(function(){
+        	sessionMemberID = '${member_id}'
+        	sessionMemberName = '${member_name}'
+        });
+    
+    function characterCheck(obj){
+	 var regExp = /[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/gi; 
+	 if( regExp.test(obj.value) ){
+	 	alert("특수문자는 입력하실수 없습니다.");
+	 	obj.value = obj.value.substring( 0 , obj.value.length - 1 ); // 입력한 특수문자 한자리 지움
+	 	}
+	 }
+  
+    
+    function openModal(){
+    	
+    	
+    	
+    	var meeting_id = document.getElementById("meeting_id").value
+        //const res = fetch(`/get/meetingroom?code=${"${meeting_id}"}`);
+    	var resJson = null;
+    	 $.ajax({
+	            type: "GET",
+	            url: "/get/meetingroom?code="+meeting_id, // 요청을 처리하는 컨트롤러의 엔드포인트
+	            data: {}, // JSON 데이터를 문자열로 변환하여 전송
+	            async : false,
+	            success: function(res) {
+					resJson=res;
+	                // 성공적으로 처리된 경우 실행할 코드
+	            },
+	            error: function(xhr, status, error) {
+	                console.error("Error: " + error);
+	                // 오류 발생 시 실행할 코드
+	                return
+	            }
+	        });		
+    	
+		
+		//값 받아오깆
+		
+		var meeting_ID = resJson.meeting_id;
+			
+		if(meeting_ID != null ){
+			
+    	document.getElementById('passwd-modal').click();
+		}else{
+			alert("방을 찾을 수 없습니다");
+		}
+    }
+	
+    function openUpdateModal(value){
+    	
+    	
+        console.log(sessionMemberID);
+        
+    	const res = fetch(`/get/meetingroom?code=${"${value}"}`);
+    	const resJson = res.json();
+		document.getElementById("updateMeetingID").value = resJson.meeting_id;
+		document.getElementById("updateMemberID").value = sessionMemberID;
+		document.getElementById("updateMemberName").value = sessionMemberName;
+		document.getElementById("updateMeetingMemberNum").value = resJson.meeting_member_num;
+		document.getElementById("updateMeetingTopic").value = resJson.meeting_topic;
+		document.getElementById("updateMeetingPasswd").value = resJson.meeting_passwd;
+		document.getElementById("updateMeetingStartDate").value = resJson.meeting_start_date;
+    	document.getElementById('update-modal').click();
+    	}
+    
+    
+function updateMeeting() {
+	
+	var passwd = document.getElementById("updateMeetingPasswd").value;
+	var memNum = document.getElementById("updateMeetingMemberNum").value;
+	var startdate = document.getElementById("updateMeetingStartDate").value;
+	
+	if(passwd.length == 4){
+		if(memNum > 1){
+		  if(startdate > dateString){ 
+        var jsonData2 = {
+            meeting_id: document.getElementById("updateMeetingID").value,
+            member_id: document.getElementById("updateMemberID").value,
+            member_name: document.getElementById("updateMemberName").value,
+            member_num: 6,
+            meeting_topic: document.getElementById("updateMeetingTopic").value,
+            meeting_passwd: document.getElementById("updateMeetingPasswd").value,
+            meeting_start_date: document.getElementById("updateMeetingStartDate").value,
+        };
+
+        // AJAX를 사용하여 서버에 JSON 데이터 전송
+        $.ajax({
+            type: "POST",
+            url: "/update-meeting", // 요청을 처리하는 컨트롤러의 엔드포인트
+            contentType: "application/json",
+            async: false,
+            data: JSON.stringify(jsonData2), // JSON 데이터를 문자열로 변환하여 전송
+            success: function(response) {
+                console.log("Success: " + response);
+                location.reload(true);
+                // 성공적으로 처리된 경우 실행할 코드
+            },
+            error: function(xhr, status, error) {
+                console.error("Error: " + error);
+                // 오류 발생 시 실행할 코드
+            }
+        });
+		  }else{
+		    	 alert("지난 날짜는 선택 할 수 없습니다")
+		     }   
+		  }else{
+			 alert("2명이상의 인원을 설정 해주세요") 
+		  }
+       }else{
+    	 alert("비밀번호 4자리로 설정해주세요.");  
+       }
+    }
+    
+     let deleteCode = null;
+    
+     function openDeleteModal(value){
+    	 	deleteCode = value;
+    		document.getElementById('deletePasswd-modal').click();
+    	}
+     
+    	function deleteMeeting(){
+    		var resJson = null
+   		 $.ajax({
+	            type: "GET",
+	            url: "/get/meetingroom?code="+deleteCode, // 요청을 처리하는 컨트롤러의 엔드포인트
+	            data: {}, // JSON 데이터를 문자열로 변환하여 전송
+	            async : false,
+	            success: function(res) {
+	            	resJson=res;
+	                // 성공적으로 처리된 경우 실행할 코드
+	            },
+	            error: function(xhr, status, error) {
+	                console.error("Error: " + error);
+	                // 오류 발생 시 실행할 코드
+	                return
+	            }
+	        });		
+					//const res = fetch(`/get/meetingroom?code=${"${deleteCode}"}`);
+					//const resJson = res.
+					var deletePassword = resJson.meeting_passwd
+					var inputpasswd = document.getElementById("deletePasswd").value
+					
+					if(deletePassword == inputpasswd){
+						fetch(`/delete-meeting?code=${"${deleteCode}"}`);
+						location.reload(true);
+					}else{
+						alert("비밀번호가 일치하지 않습니다");
+						console.log(`${deleteCode}`)
+					}
+				
+				}
+	 var today = new Date();
+
+    var year = today.getFullYear();
+    var month = ('0' + (today.getMonth() + 1)).slice(-2);
+    var day = ('0' + today.getDate()).slice(-2);
+
+    var dateString = year + '-' + month  + '-' + day;
+
+    console.log(dateString);
+	
+              
+    function saveMeeting() {
+    	var uidJson = null
+  		 $.ajax({
+	            type: "GET",
+	            url: "/getUserID", // 요청을 처리하는 컨트롤러의 엔드포인트
+	            data: {}, // JSON 데이터를 문자열로 변환하여 전송
+	            async : false,
+	            success: function(uid) {
+	            	uidJson = uid;
+	                // 성공적으로 처리된 경우 실행할 코드
+	            },
+	            error: function(xhr, status, error) {
+	                console.error("Error: " + error);
+	                // 오류 발생 시 실행할 코드
+	                return
+	            }
+	        });		
+    	
+	       	//const uid = fetch("/getUserID");
+            //const uidJson = uid.json();
+            const sessionMemberID = uidJson.member_info.member_id;	
+            const sessionMemberName = uidJson.member_info.member_name;	
+    	
+		var passwd =document.getElementById("meetingPasswd").value;
+		var memNum = document.getElementById("meetingMemberNum").value;
+		var startdate = document.getElementById("meetingStartDate").value;
+		
+		if(passwd.length == 4){	
+		  if(memNum > 1){
+			if(startdate >= dateString){ 
+    	function uuidv4() {
+    	  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+    	    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    	  );
+    	}
+    	var uuid = uuidv4();
+		var uuidresult = uuid.substring(0, 8); 
+        // 사용자가 입력한 데이터를 가져와서 JSON 객체 생성
+		        var jsonData = {
+		        	meeting_id: ${"uuidresult"},
+		            meeting_member_num: 6,
+		            meeting_topic: document.getElementById("meetingTopic").value,
+		            meeting_passwd: document.getElementById("meetingPasswd").value,
+		            meeting_start_date: document.getElementById("meetingStartDate").value,
+		            member_id: ${"sessionMemberID"},
+		            member_name: ${"sessionMemberName"},
+		            meeting_registration_date: ${"dateString"},
+		            meeting_join: 1,                                 	
+		        };
+		
+		        // AJAX를 사용하여 서버에 JSON 데이터 전송
+		        $.ajax({
+		            type: "POST",
+		            url: "/create-meeting", // 요청을 처리하는 컨트롤러의 엔드포인트
+		            contentType: "application/json",
+		            data: JSON.stringify(jsonData), // JSON 데이터를 문자열로 변환하여 전송
+		            async: false,
+		            success: function(response) {
+		                console.log("Success: " + response);
+		                location.reload(true);
+		                // 성공적으로 처리된 경우 실행할 코드
+		            },
+		            error: function(xhr, status, error) {
+		                console.error("Error: " + error);
+		                // 오류 발생 시 실행할 코드
+		            }
+		        });
+		        
+		     }else{
+		    	 alert("지난 날짜는 선택 할 수 없습니다");
+		     }   
+		  }else{
+			 alert("2명이상의 인원을 설정 해주세요"); 
+		  }
+        }else{
+       	 	alert("비밀번호 4자리로 설정해주세요.");  
+        }
+    }
+        
+        
+        
+        async function search() {
+            const res = await fetch(`/get/meetingroom?code=`+document.getElementById("meeting_id").value);
+			const resJson = await res.json();
+			
+			var meeting_ID = resJson.meeting_id;
+				
+			var room_num = resJson.meeting_room_num;
+			var meeting_room_num = Number(room_num);
+			
+			var today = new Date();
+			
+			var year = today.getFullYear();
+			var month = ('0' + (today.getMonth() + 1)).slice(-2);
+			var day = ('0' + today.getDate()).slice(-2);
+			var hours = ('0' + today.getHours()).slice(-2); 
+			var minutes = ('0' + today.getMinutes()).slice(-2);
+
+			var timeString = hours + ':' + minutes;
+			var dateString = year + '-' + month  + '-' + day;
+			
+			
+			var startdt = resJson.meeting_start_date;
+			var startdatearr = startdt.split("T");
+			
+			var startdate = startdatearr[0];
+			
+			
+		
+				 	if(resJson.meeting_join == 1){
+				 			if(resJson.meeting_passwd === document.getElementById("enter-passwd").value){
+					 			if(  dateString >= startdate){		
+								 			var jsonData = {
+										            meeting_id: ${"meeting_ID"},
+										            meeting_room_num: ${"meeting_room_num"},
+										        };
+				
+										        // AJAX를 사용하여 서버에 JSON 데이터 전송
+										        $.ajax({
+										            type: "POST",
+										            url: "/joinMeetingRoom", // 요청을 처리하는 컨트롤러의 엔드포인트
+										            contentType: "application/json",
+										            data: JSON.stringify(jsonData), // JSON 데이터를 문자열로 변환하여 전송
+										            success: function(response) {
+										                console.log("Success: " + response);
+										                // 성공적으로 처리된 경우 실행할 코드
+										            },
+										            error: function(xhr, status, error) {
+										                console.error("Error: " + error);
+										                // 오류 발생 시 실행할 코드
+										            }
+										        });		
+					 		
+				 		      }else{
+				 			     alert("입장 가능한 시간이 아닙니다.")
+				 		      }
+				 			}else{
+							 	alert("비밀번호가 맞지 않습니다.");	
+					 		}
+						}else{
+						 	alert("입장 불가능한 방입니다.");					 			
+						}
+						
+	        		}
+			
+			
+			
+        
+        async function listsearch() {
+        	const uid = await fetch("/getUserID");
+            const uidJson = await uid.json();
+            const sessionMemberID = uidJson.member_info.member_id;
+            const res = await fetch(`/get/meetinglist?memberID=${"${sessionMemberID}"}`);
+			const meetingList = await res.json();
+			console.log(meetingList);
+			const keys = Object.keys(meetingList);
+			const len = keys.length;
+			     
+			const innerHtmlList = keys.map((key, idx)=>{
+			  const meetingDataList = meetingList[`item${"${idx}"}`];
+			console.log(meetingDataList);
+                    const innerHTML =` 
+                    
+           <div class="flex flex-col">			
+               <div class="flex flex-row">  	
+		                 <div class="shadow shadow-indigo-500/50 p-3 flex flex-col my-5 mb-5 h-auto w-64 z-30 rounded-lg bg-[#ffffff] border-2 border-black-100 mb-5 p-3">
+			                  <div class="w-full h-auto">
+			                       <span class="text-2xl">미팅 시간</span>
+			                          <div class="">  		
+			                          	<span class="text-3xl font-bold">${"${meetingDataList.meeting_start_date}"}</span>
+			                          </div>
+			                          <div>
+			                        	<span class="text-lg">입장코드</span>
+			                        </div>
+			                         <div class="flex flex-row">
+			                            <span class="text-2xl inline-block align-middle font-bold">${"${meetingDataList.meeting_id}"}</span>
+			                          </div>
+					             </div>
+				            </div>	
+					   	   <div class="shadow shadow-indigo-500/50 flex flex-rows my-5 h-auto w-full z-30 rounded-lg bg-[#ffffff] border-2 border-black-100 mx-5 mb-5 p-2">
+						   	   <div class="mx-2 flex flex-col pb-5 pr-20">
+					           <span class="text-xl font-bold mb-3">미팅 토픽/이름</span>
+					           <div class="ml-3 flex flex-row text-5xl font-extrabold mb-2">
+					           ${"${meetingDataList.meeting_topic}"} </div>
+			                </div> 
+			              </div>  
+					<div class="flex justify-items-end my-5 flex-col">  	
+					    <button type="button" onclick="openUpdateModal(this.value)" value="${"${meetingDataList.meeting_id}"}" class="bg-purple-700 hover:bg-[#dddddd]w-32 h-16 rounded-lg text-[#ffff] text-4xl font-extrabold place-self-center p-3 mb-6 focus:outline-none">EDIT</button>
+					    <button type="button" onclick="openDeleteModal(this.value)" value="${"${meetingDataList.meeting_id}"}"  class=" bg-red-500 hover:bg-[#fb7185] w-32 h-16 rounded-lg text-[#ffff] text-3xl font-extrabold place-self-center p-3 focus:outline-none">DELETE</button>
+				    </div> 
+				</div>
+         	 </div>       	
+                    	
+                    	
+                    	
+                    	`;	
+                    	return innerHTML;
+            });
+			const meetingDataList = document.getElementById("meetingList");
+			meetingDataList.innerHTML = innerHtmlList.join('')
+        }
+       listsearch()
+    </script>
 
     </head>
     <body>
@@ -55,7 +428,7 @@
                 <form class="flex items-center  justify-center border-gray-300" id="insertForm">   
                     <div class="relative w-full">
                         <div class="absolute inset-y-0 start-0 flex ps-3 pointer-events-none"></div>
-                        <input type="text" id="meeting_id"  name="meeting_id"
+                        <input type="text" id="meeting_id"  name="meeting_id" value=""
                                class="bg-gray-50 border border-gray-300 text-gray-900 text-4xl rounded-lg 
                                			focus:ring-blue-500 focus:border-blue-500 w-full ps-10 p-2.5 text-center" 
                                placeholder="방 입장 코드를 입력해주세요" required />                                                                            
@@ -118,8 +491,25 @@
  //                       async function search1() {
                         async function search1() {
                             alert("in");
-                            const res = await fetch(`/get/meetingroom?code=`+document.getElementById("meeting_id").value);   
-                			const resJson = await res.json();
+                           
+                			
+                			  var resJson = null;
+                              $.ajax({
+                  	            type: "GET",
+                  	            url: "/get/meetingroom?code="+document.getElementById("meeting_id").value, // 요청을 처리하는 컨트롤러의 엔드포인트
+                  	            data: {}, // JSON 데이터를 문자열로 변환하여 전송
+                  	            async : false,
+                  	            success: function(res) {
+                  					resJson=res;
+                  	                // 성공적으로 처리된 경우 실행할 코드
+                  	            },
+                  	            error: function(xhr, status, error) {
+                  	                console.error("Error: " + error);
+                  	                // 오류 발생 시 실행할 코드
+                  	                
+                  	            }
+                  	        });		
+                			
                 			
                 			var meeting_ID = resJson.meeting_id;
                 				
@@ -358,331 +748,6 @@
         
 
 
-    <script>
-    
-    function characterCheck(obj){
-	 var regExp = /[ \{\}\[\]\/?.,;:|\)*~`!^\-_+┼<>@\#$%&\'\"\\\(\=]/gi; 
-	 if( regExp.test(obj.value) ){
-	 	alert("특수문자는 입력하실수 없습니다.");
-	 	obj.value = obj.value.substring( 0 , obj.value.length - 1 ); // 입력한 특수문자 한자리 지움
-	 	}
-	 }
-    let sessionMemberID = null;    
-    let sessionMemberName = null;    
 
-    async function get_userID(){
-        const res = await fetch("/getUserID");
-        const resJson = await res.json();
-        sessionMemberID = resJson.member_id;
-        sessionMemberName = resJson.member_name;
-        console.log(sessionMemberName);
-    }
-
-    get_userID().then(function (){
-      console.log(sessionMemberID); //여기가 비정상
-    });
-    async function openModal(){
-    	var meeting_id = document.getElementById("meeting_id").value
-        const res = await fetch(`/get/meetingroom?code=${"${meeting_id}"}`);
-		const resJson = await res.json();
-		//값 받아오깆
-		
-		var meeting_ID = resJson.meeting_id;
-			
-		if(meeting_ID != null ){
-			
-    	document.getElementById('passwd-modal').click();
-		}else{
-			alert("방을 찾을 수 없습니다");
-		}
-    }
-	
-    async function openUpdateModal(value){
-    	
-    	const uid = await fetch("/getUserID");
-        const uidJson = await uid.json();
-        const sessionMemberID = uidJson.member_info.member_id;	
-        const sessionMemberName = uidJson.member_info.member_name;
-    	
-        console.log(sessionMemberID);
-        
-    	const res = await fetch(`/get/meetingroom?code=${"${value}"}`);
-    	const resJson = await res.json();
-		document.getElementById("updateMeetingID").value = resJson.meeting_id;
-		document.getElementById("updateMemberID").value = sessionMemberID;
-		document.getElementById("updateMemberName").value = sessionMemberName;
-		document.getElementById("updateMeetingMemberNum").value = resJson.meeting_member_num;
-		document.getElementById("updateMeetingTopic").value = resJson.meeting_topic;
-		document.getElementById("updateMeetingPasswd").value = resJson.meeting_passwd;
-		document.getElementById("updateMeetingStartDate").value = resJson.meeting_start_date;
-    	document.getElementById('update-modal').click();
-    	}
-    
-    
-function updateMeeting() {
-	
-	var passwd = document.getElementById("updateMeetingPasswd").value;
-	var memNum = document.getElementById("updateMeetingMemberNum").value;
-	var startdate = document.getElementById("updateMeetingStartDate").value;
-	
-	if(passwd.length == 4){
-		if(memNum > 1){
-		  if(startdate > dateString){ 
-        var jsonData2 = {
-            meeting_id: document.getElementById("updateMeetingID").value,
-            member_id: document.getElementById("updateMemberID").value,
-            member_name: document.getElementById("updateMemberName").value,
-            member_num: 6,
-            meeting_topic: document.getElementById("updateMeetingTopic").value,
-            meeting_passwd: document.getElementById("updateMeetingPasswd").value,
-            meeting_start_date: document.getElementById("updateMeetingStartDate").value,
-        };
-
-        // AJAX를 사용하여 서버에 JSON 데이터 전송
-        $.ajax({
-            type: "POST",
-            url: "/update-meeting", // 요청을 처리하는 컨트롤러의 엔드포인트
-            contentType: "application/json",
-            data: JSON.stringify(jsonData2), // JSON 데이터를 문자열로 변환하여 전송
-            success: function(response) {
-                console.log("Success: " + response);
-                location.reload(true);
-                // 성공적으로 처리된 경우 실행할 코드
-            },
-            error: function(xhr, status, error) {
-                console.error("Error: " + error);
-                // 오류 발생 시 실행할 코드
-            }
-        });
-		  }else{
-		    	 alert("지난 날짜는 선택 할 수 없습니다")
-		     }   
-		  }else{
-			 alert("2명이상의 인원을 설정 해주세요") 
-		  }
-       }else{
-    	 alert("비밀번호 4자리로 설정해주세요.");  
-       }
-    }
-    
-     let deleteCode = null;
-    
-     function openDeleteModal(value){
-    	 	deleteCode = value;
-    		document.getElementById('deletePasswd-modal').click();
-    	}
-     
-    	async function deleteMeeting(){
-    	
-					const res = await fetch(`/get/meetingroom?code=${"${deleteCode}"}`);
-					const resJson = await res.json();
-					var deletePassword = resJson.meeting_passwd
-					var inputpasswd = document.getElementById("deletePasswd").value
-					
-					if(deletePassword == inputpasswd){
-						await fetch(`/delete-meeting?code=${"${deleteCode}"}`);
-						location.reload(true);
-					}else{
-						alert("비밀번호가 일치하지 않습니다");
-						console.log(`${deleteCode}`)
-					}
-				
-				}
-	 var today = new Date();
-
-    var year = today.getFullYear();
-    var month = ('0' + (today.getMonth() + 1)).slice(-2);
-    var day = ('0' + today.getDate()).slice(-2);
-
-    var dateString = year + '-' + month  + '-' + day;
-
-    console.log(dateString);
-	
-              
-    async function saveMeeting() {
-	       	const uid = await fetch("/getUserID");
-            const uidJson = await uid.json();
-            const sessionMemberID = uidJson.member_info.member_id;	
-            const sessionMemberName = uidJson.member_info.member_name;	
-    	
-		var passwd =document.getElementById("meetingPasswd").value;
-		var memNum = document.getElementById("meetingMemberNum").value;
-		var startdate = document.getElementById("meetingStartDate").value;
-		
-		if(passwd.length == 4){	
-		  if(memNum > 1){
-			if(startdate >= dateString){ 
-    	function uuidv4() {
-    	  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-    	    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-    	  );
-    	}
-    	var uuid = uuidv4();
-		var uuidresult = uuid.substring(0, 8); 
-        // 사용자가 입력한 데이터를 가져와서 JSON 객체 생성
-		        var jsonData = {
-		        	meeting_id: ${"uuidresult"},
-		            meeting_member_num: 6,
-		            meeting_topic: document.getElementById("meetingTopic").value,
-		            meeting_passwd: document.getElementById("meetingPasswd").value,
-		            meeting_start_date: document.getElementById("meetingStartDate").value,
-		            member_id: ${"sessionMemberID"},
-		            member_name: ${"sessionMemberName"},
-		            meeting_registration_date: ${"dateString"},
-		            meeting_join: 1,                                 	
-		        };
-		
-		        // AJAX를 사용하여 서버에 JSON 데이터 전송
-		        $.ajax({
-		            type: "POST",
-		            url: "/create-meeting", // 요청을 처리하는 컨트롤러의 엔드포인트
-		            contentType: "application/json",
-		            data: JSON.stringify(jsonData), // JSON 데이터를 문자열로 변환하여 전송
-		            success: function(response) {
-		                console.log("Success: " + response);
-		                location.reload(true);
-		                // 성공적으로 처리된 경우 실행할 코드
-		            },
-		            error: function(xhr, status, error) {
-		                console.error("Error: " + error);
-		                // 오류 발생 시 실행할 코드
-		            }
-		        });
-		        
-		     }else{
-		    	 alert("지난 날짜는 선택 할 수 없습니다");
-		     }   
-		  }else{
-			 alert("2명이상의 인원을 설정 해주세요"); 
-		  }
-        }else{
-       	 	alert("비밀번호 4자리로 설정해주세요.");  
-        }
-    }
-        
-        
-        
-        async function search() {
-            const res = await fetch(`/get/meetingroom?code=`+document.getElementById("meeting_id").value);
-			const resJson = await res.json();
-			
-			var meeting_ID = resJson.meeting_id;
-				
-			var room_num = resJson.meeting_room_num;
-			var meeting_room_num = Number(room_num);
-			
-			var today = new Date();
-			
-			var year = today.getFullYear();
-			var month = ('0' + (today.getMonth() + 1)).slice(-2);
-			var day = ('0' + today.getDate()).slice(-2);
-			var hours = ('0' + today.getHours()).slice(-2); 
-			var minutes = ('0' + today.getMinutes()).slice(-2);
-
-			var timeString = hours + ':' + minutes;
-			var dateString = year + '-' + month  + '-' + day;
-			
-			
-			var startdt = resJson.meeting_start_date;
-			var startdatearr = startdt.split("T");
-			
-			var startdate = startdatearr[0];
-			
-			
-		
-				 	if(resJson.meeting_join == 1){
-				 			if(resJson.meeting_passwd === document.getElementById("enter-passwd").value){
-					 			if(  dateString >= startdate){		
-								 			var jsonData = {
-										            meeting_id: ${"meeting_ID"},
-										            meeting_room_num: ${"meeting_room_num"},
-										        };
-				
-										        // AJAX를 사용하여 서버에 JSON 데이터 전송
-										        $.ajax({
-										            type: "POST",
-										            url: "/joinMeetingRoom", // 요청을 처리하는 컨트롤러의 엔드포인트
-										            contentType: "application/json",
-										            data: JSON.stringify(jsonData), // JSON 데이터를 문자열로 변환하여 전송
-										            success: function(response) {
-										                console.log("Success: " + response);
-										                // 성공적으로 처리된 경우 실행할 코드
-										            },
-										            error: function(xhr, status, error) {
-										                console.error("Error: " + error);
-										                // 오류 발생 시 실행할 코드
-										            }
-										        });		
-					 		
-				 		      }else{
-				 			     alert("입장 가능한 시간이 아닙니다.")
-				 		      }
-				 			}else{
-							 	alert("비밀번호가 맞지 않습니다.");	
-					 		}
-						}else{
-						 	alert("입장 불가능한 방입니다.");					 			
-						}
-						
-	        		}
-			
-			
-			
-        
-        async function listsearch() {
-        	const uid = await fetch("/getUserID");
-            const uidJson = await uid.json();
-            const sessionMemberID = uidJson.member_info.member_id;
-            const res = await fetch(`/get/meetinglist?memberID=${"${sessionMemberID}"}`);
-			const meetingList = await res.json();
-			console.log(meetingList);
-			const keys = Object.keys(meetingList);
-			const len = keys.length;
-			     
-			const innerHtmlList = keys.map((key, idx)=>{
-			  const meetingDataList = meetingList[`item${"${idx}"}`];
-			console.log(meetingDataList);
-                    const innerHTML =` 
-                    
-           <div class="flex flex-col">			
-               <div class="flex flex-row">  	
-		                 <div class="shadow shadow-indigo-500/50 p-3 flex flex-col my-5 mb-5 h-auto w-64 z-30 rounded-lg bg-[#ffffff] border-2 border-black-100 mb-5 p-3">
-			                  <div class="w-full h-auto">
-			                       <span class="text-2xl">미팅 시간</span>
-			                          <div class="">  		
-			                          	<span class="text-3xl font-bold">${"${meetingDataList.meeting_start_date}"}</span>
-			                          </div>
-			                          <div>
-			                        	<span class="text-lg">입장코드</span>
-			                        </div>
-			                         <div class="flex flex-row">
-			                            <span class="text-2xl inline-block align-middle font-bold">${"${meetingDataList.meeting_id}"}</span>
-			                          </div>
-					             </div>
-				            </div>	
-					   	   <div class="shadow shadow-indigo-500/50 flex flex-rows my-5 h-auto w-full z-30 rounded-lg bg-[#ffffff] border-2 border-black-100 mx-5 mb-5 p-2">
-						   	   <div class="mx-2 flex flex-col pb-5 pr-20">
-					           <span class="text-xl font-bold mb-3">미팅 토픽/이름</span>
-					           <div class="ml-3 flex flex-row text-5xl font-extrabold mb-2">
-					           ${"${meetingDataList.meeting_topic}"} </div>
-			                </div> 
-			              </div>  
-					<div class="flex justify-items-end my-5 flex-col">  	
-					    <button type="button" onclick="openUpdateModal(this.value)" value="${"${meetingDataList.meeting_id}"}" class="bg-purple-700 hover:bg-[#dddddd]w-32 h-16 rounded-lg text-[#ffff] text-4xl font-extrabold place-self-center p-3 mb-6 focus:outline-none">EDIT</button>
-					    <button type="button" onclick="openDeleteModal(this.value)" value="${"${meetingDataList.meeting_id}"}"  class=" bg-red-500 hover:bg-[#fb7185] w-32 h-16 rounded-lg text-[#ffff] text-3xl font-extrabold place-self-center p-3 focus:outline-none">DELETE</button>
-				    </div> 
-				</div>
-         	 </div>       	
-                    	
-                    	
-                    	
-                    	`;	
-                    	return innerHTML;
-            });
-			const meetingDataList = document.getElementById("meetingList");
-			meetingDataList.innerHTML = innerHtmlList.join('')
-        }
-       listsearch()
-    </script>
 </body>
 </html>

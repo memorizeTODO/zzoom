@@ -167,13 +167,5 @@ uri="http://java.sun.com/jsp/jstl/core"%>
 	</c:if>
 	</center>
 	</div>
-	
-	<!-- 공지사항 생성 버튼   -->
-	<div class="flex flex justify-center w-full">
-		<button type="button"
-			class="text-white bg-purple-700 hover:bg-purple-500 focus:ring-2 focus:outline-none focus:ring-purple-700 font-medium rounded-lg text-sm px-3 py-2 text-center mt-1 mb-1"
-			onClick="location.href='noticeform?notice_id=${notice.notice.id}&page=${page}' ">공지생성
-		</button>
-	</div>
 </body>
 </html>
