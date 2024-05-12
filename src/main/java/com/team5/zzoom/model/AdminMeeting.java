@@ -1,6 +1,7 @@
 package com.team5.zzoom.model;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 import org.apache.ibatis.type.Alias;
 
@@ -16,7 +17,7 @@ public class AdminMeeting {
 	private String meeting_topic;
 	private String meeting_passwd;
 	private int meeting_member_num;
-	private Date meeting_start_date;
+	private LocalDateTime meeting_start_date;
 	private Date meeting_registration_date;
 	private String member_name;
 	private int meeting_join;			//회의 입장 여부
