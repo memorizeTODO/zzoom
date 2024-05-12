@@ -30,7 +30,7 @@ dependencies {
    implementation 'org.springframework.boot:spring-boot-starter-web'
    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
    
-   providedRuntime 'javax.servlet:jstl:1.2' //외장톰캣에서 jstl을 쓰기 위해 필요한 코드
+  
    
    compileOnly 'org.projectlombok:lombok'
    runtimeOnly 'com.mysql:mysql-connector-j'
