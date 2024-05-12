@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.team5.zzoom.model.ReservationDTO;
+import com.team5.zzoom.model.ReservationDTOExt;
 	
 	@Mapper
 	public interface ReservationDAO {
@@ -15,5 +16,6 @@ import com.team5.zzoom.model.ReservationDTO;
 		public int updateReservation(ReservationDTO dto);
 		public ReservationDTO getReservation(String ID); 
 		public List<ReservationDTO> getReservationList(String ID);
+		
 	}
 	

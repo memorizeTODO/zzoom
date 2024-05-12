@@ -25,9 +25,11 @@
 		select * from meeting where meeting_ID = #{code}
 	</select>
 	
+	
+	
 	<update id="updateReservation" parameterType="Reservation">
 		update meeting 
-	set
+		set
 	    meeting_member_num = #{meeting_member_num},
 	    meeting_topic = #{meeting_topic},
 	    meeting_passwd = #{meeting_passwd},

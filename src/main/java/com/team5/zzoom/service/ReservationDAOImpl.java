@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import com.team5.zzoom.dao.ReservationDAO;
 import com.team5.zzoom.model.ReservationDTO;
+import com.team5.zzoom.model.ReservationDTOExt;
 
 	@Service
 	public class ReservationDAOImpl implements ReservationDAO {
@@ -55,17 +56,20 @@ import com.team5.zzoom.model.ReservationDTO;
 		
 		
 		public int updateReservation(ReservationDTO dto) {
+			int result = 0;
 	    	try {
 		        // insert 쿼리 실행
-	    		dao.updateReservation(dto);                                                                                 
+	    		result=dao.updateReservation(dto);                                                                                 
 		        
 		    } catch (PersistenceException e) {
 		        // MyBatis의 PersistenceException 처리
-		        return 0;
+		        
 		    }
 	    	
-	    	return 1;
+	    	return result;
 		}
+
+		
 
 
 

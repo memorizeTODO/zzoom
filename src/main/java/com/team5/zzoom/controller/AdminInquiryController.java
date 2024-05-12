@@ -51,7 +51,7 @@ public class AdminInquiryController {
 		
 		/* List<E> inquirylist = service.getInquirylist(); */
 
-		return "admin/inquiry/inquirylist";
+		return "inquiry/inquirylist";
 	}
 	
 	// 문의사항 상세페이지
@@ -65,7 +65,7 @@ public class AdminInquiryController {
 		model.addAttribute("member_id", member_id);
 		model.addAttribute("page", page);
 
-		return "admin/inquiry/inquirydetail";
+		return "inquiry/inquirydetail";
 	}
 
 	

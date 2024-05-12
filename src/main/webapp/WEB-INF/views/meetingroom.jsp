@@ -38,8 +38,8 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
     $(document).ready(function() {
     
         for(var i = 0; i<6 ; i++){
-        $("#template"+i).hide();
-    }
+            $("#template"+i).hide();
+        }
 
 	roomVariable.session_myID = '${sessionScope.member_id}';
 	roomVariable.nowroom_num = '${nowroom_num}';
@@ -80,15 +80,10 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
 		
 	}});
 
-	$('#exit').on('click',function() {
+	$('#exit').one('click',function() {
        
-
-		$(this).attr('disabled', true);
-		if (janus!=null)
-		janus.destroy();
-
 		updateMyNowRoomState('left');
-		location.href="meeting_reservation"; 
+        location.href="/meeting_reservation";
 										
 	});
 
@@ -157,6 +152,7 @@ src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap
 			            error: function(xhr, status, error) {
 			                console.error("status: "+status+ "error :" + xhr.responseText);
                             alert("status: "+status +" error: " + xhr.responseText);
+
                             location.href="meeting_reservation";
 			                // 오류 발생 시 실행할 코드
                             

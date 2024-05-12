@@ -155,11 +155,12 @@ function generateJanus(){
 								} else if(event === "destroyed") {
 									// The room has been destroyed
 									Janus.warn("The room has been destroyed!");
+									unpublishOwnFeed(); // 송출 중단 요청
+									$("#video-publish-btn").off('click').one('click',function(){generateJanus()}); //야누스 객체 생성 이벤트 추가
 									bootbox.alert("The room has been destroyed", function() {
-										window.location.reload();
+										window.location.href="/meeting_reservation";
 									});
-											unpublishOwnFeed(); // 송출 중단 요청
-											$("#video-publish-btn").off('click').one('click',function(){generateJanus()}); //야누스 객체 생성 이벤트 추가
+											
 								} else if(event === "event") {
 									// Any new feed to attach to?
 									if(msg["publishers"]) {
@@ -360,11 +361,11 @@ function generateJanus(){
 			 error: function(error) {
 				 Janus.error(error);
 				 bootbox.alert(error, function() {
-					 window.location.reload();
+					 window.location.href="/meeting_reservation"
 				 });
 			 },
 			 destroyed: function() {
-				 window.location.reload();
+				 window.location.href="/meeting_reservation";
 			 }
 		 });
 
@@ -528,7 +529,8 @@ function unpublishOwnFeed() {
 	sfutest.send({ message: unpublish });
 	$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/img/now-cam-off.png"/>').off('click').on('click',function(){publishOwnFeed(true);});
 	$('template0').hide();
-}	changeGridLayout();
+	changeGridLayout();
+}
 /* function publishOwnFeed() {
 	$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/img/now-cam-on.png"/>').off("click").on('click',function() { unpublishOwnFeed(); });
 	var publish = { request: "publish" };

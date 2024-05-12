@@ -49,7 +49,7 @@ public class AdminNoticeController {
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
 
-		return "admin/notice/noticelist";
+		return "notice/noticelist";
 	}
 
 	// 공지사항 상세페이지
@@ -60,13 +60,13 @@ public class AdminNoticeController {
 		model.addAttribute("notice", notice);
 		model.addAttribute("page", page);
 
-		return "admin/notice/noticedetail";
+		return "notice/noticedetail";
 	}
 
 	// 공지사항 작성폼
 	@RequestMapping("admin/noticeform")
 	public String noticeform() {
-		return "admin/notice/noticeform";
+		return "notice/noticeform";
 	}
 
 	// 공지사항 글작성
@@ -79,7 +79,7 @@ public class AdminNoticeController {
 
 		model.addAttribute("result", result);
 
-		return "admin/notice/writeresult";
+		return "notice/writeresult";
 	}
 
 	// 공지사항 수정폼
@@ -91,7 +91,7 @@ public class AdminNoticeController {
 		model.addAttribute("notice", notice);
 		model.addAttribute("page", page);
 
-		return "admin/notice/updateform";
+		return "notice/updateform";
 	}
 
 	// 공지사항 글수정
@@ -112,7 +112,7 @@ public class AdminNoticeController {
 		model.addAttribute("notice_id", notice.getNotice_id());
 		model.addAttribute("page", page);
 
-		return "admin/notice/updateresult";
+		return "notice/updateresult";
 	}
 	
 	// 공지사항 삭제
@@ -124,6 +124,6 @@ public class AdminNoticeController {
 			model.addAttribute("result", result);
 			model.addAttribute("page", page);
 
-			return "admin/notice/deleteresult";
+			return "notice/deleteresult";
 		}
 }

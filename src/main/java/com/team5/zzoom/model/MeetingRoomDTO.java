@@ -1,6 +1,8 @@
 package com.team5.zzoom.model;
 
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import org.apache.ibatis.type.Alias;
 
@@ -16,7 +18,7 @@ public class MeetingRoomDTO {
 	private String meeting_topic;
 	private String meeting_passwd;
 	private int meeting_member_num;
-	private Date meeting_start_date;
+	private LocalDateTime meeting_start_date;
 	private Date meeting_registration_date;
 	private int meeting_join;
 	private String member_name;

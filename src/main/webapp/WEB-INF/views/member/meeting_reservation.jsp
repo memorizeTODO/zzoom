@@ -12,12 +12,16 @@
         <script src="http://code.jquery.com/jquery-latest.js"></script>
         
         <script>
-        let sessionMemberID = null;    
-        let sessionMemberName = null;  
+        var sessionMemberID = null;    
+        var sessionMemberName = null;  
         
-        $("document").ready(function(){
-        	sessionMemberID = '${member_id}'
-        	sessionMemberName = '${member_name}'
+        $(document).ready(function(){
+        	sessionMemberID = '${member_id}';
+        	sessionMemberName = '${member_name}';
+        	
+        	
+        	
+        	listsearch(true)
         });
     
     function characterCheck(obj){
@@ -67,36 +71,69 @@
 	
     function openUpdateModal(value){
     	
-    	
+    	var resJson = null;
         console.log(sessionMemberID);
         
-    	const res = fetch(`/get/meetingroom?code=${"${value}"}`);
-    	const resJson = res.json();
+        $.ajax({
+            type: "GET",
+            url: "/get/meetingroom?code="+value, // 요청을 처리하는 컨트롤러의 엔드포인트
+            data: {}, // JSON 데이터를 문자열로 변환하여 전송
+            async : false,
+            success: function(res) {
+				resJson=res;
+                // 성공적으로 처리된 경우 실행할 코드
+            },
+            error: function(xhr, status, error) {
+                console.error("Error: " + error);
+                // 오류 발생 시 실행할 코드
+                return
+            }
+        });		
+        
+    	//const res = fetch(`/get/meetingroom?code=${"${value}"}`);
+    	//const resJson = res.json();
 		document.getElementById("updateMeetingID").value = resJson.meeting_id;
 		document.getElementById("updateMemberID").value = sessionMemberID;
 		document.getElementById("updateMemberName").value = sessionMemberName;
 		document.getElementById("updateMeetingMemberNum").value = resJson.meeting_member_num;
 		document.getElementById("updateMeetingTopic").value = resJson.meeting_topic;
-		document.getElementById("updateMeetingPasswd").value = resJson.meeting_passwd;
+		
 		document.getElementById("updateMeetingStartDate").value = resJson.meeting_start_date;
     	document.getElementById('update-modal').click();
     	}
     
     
 function updateMeeting() {
+	var memNum = 6; // 의논결과 회의룸 정원 제한은 6명 고정값을 주기로 했습니다.
+	var passwd = document.getElementById("updateMeetingPasswd").value
 	
-	var passwd = document.getElementById("updateMeetingPasswd").value;
-	var memNum = document.getElementById("updateMeetingMemberNum").value;
-	var startdate = document.getElementById("updateMeetingStartDate").value;
 	
-	if(passwd.length == 4){
+	var today = new Date();
+	
+	var year = today.getFullYear();
+	var month = ('0' + (today.getMonth() + 1)).slice(-2);
+	var day = ('0' + today.getDate()).slice(-2);
+	var hours = ('0' + today.getHours()).slice(-2); 
+	var minutes = ('0' + today.getMinutes()).slice(-2);
+
+	var timeString = hours + ':' + minutes;
+	var dateString = year + '-' + month  + '-' + day+" "+timeString;
+	
+	
+	var startdt = document.getElementById("updateMeetingStartDate").value;
+	var startdatearr = startdt.split("T");
+	
+	var startdate = startdatearr[0]+" "+startdatearr[1];
+	
+	 
+	if(passwd.length == 4 && (existingPasswd.length == 4 || existingPasswd.length == 0  )){
 		if(memNum > 1){
 		  if(startdate > dateString){ 
         var jsonData2 = {
             meeting_id: document.getElementById("updateMeetingID").value,
             member_id: document.getElementById("updateMemberID").value,
             member_name: document.getElementById("updateMemberName").value,
-            member_num: 6,
+            member_num: 6,//회의룸 정원 제한 6명 고정
             meeting_topic: document.getElementById("updateMeetingTopic").value,
             meeting_passwd: document.getElementById("updateMeetingPasswd").value,
             meeting_start_date: document.getElementById("updateMeetingStartDate").value,
@@ -110,12 +147,13 @@ function updateMeeting() {
             async: false,
             data: JSON.stringify(jsonData2), // JSON 데이터를 문자열로 변환하여 전송
             success: function(response) {
-                console.log("Success: " + response);
+                alert("회의 정보를 수정하였습니다.");
                 location.reload(true);
                 // 성공적으로 처리된 경우 실행할 코드
             },
             error: function(xhr, status, error) {
                 console.error("Error: " + error);
+                alert("status: "+status +" error: " + xhr.responseText);
                 // 오류 발생 시 실행할 코드
             }
         });
@@ -126,13 +164,14 @@ function updateMeeting() {
 			 alert("2명이상의 인원을 설정 해주세요") 
 		  }
        }else{
-    	 alert("비밀번호 4자리로 설정해주세요.");  
+    	 alert("변경할 비밀번호와 현재 비밀번호는 4자리로 입력해주세요.");  
        }
     }
     
-     let deleteCode = null;
+	let deleteCode = null;
     
      function openDeleteModal(value){
+    	 
     	 	deleteCode = value;
     		document.getElementById('deletePasswd-modal').click();
     	}
@@ -258,129 +297,77 @@ function updateMeeting() {
         }
     }
         
+        	
         
+        function listsearch(useAsync) {
+        	
         
-        async function search() {
-            const res = await fetch(`/get/meetingroom?code=`+document.getElementById("meeting_id").value);
-			const resJson = await res.json();
-			
-			var meeting_ID = resJson.meeting_id;
-				
-			var room_num = resJson.meeting_room_num;
-			var meeting_room_num = Number(room_num);
-			
-			var today = new Date();
-			
-			var year = today.getFullYear();
-			var month = ('0' + (today.getMonth() + 1)).slice(-2);
-			var day = ('0' + today.getDate()).slice(-2);
-			var hours = ('0' + today.getHours()).slice(-2); 
-			var minutes = ('0' + today.getMinutes()).slice(-2);
+		                $.ajax({
+				            type: "GET",
+				            url: "/get/meetinglist?memberID="+sessionMemberID, // 요청을 처리하는 컨트롤러의 엔드포인트
+				            async: useAsync,
+				            success: function(res) {
+				                console.log("Success: " + res);
+				                const meetingList = res;
+				                
+				                console.log(meetingList);
+				     			const keys = Object.keys(meetingList);
+				     			const len = keys.length;
+				     			     
+				     			const innerHtmlList = keys.map((key, idx)=>{
+				     				  const meetingDataList = meetingList[`item${"${idx}"}`];
+				     				console.log(meetingDataList);
+				     	                    const innerHTML =` 
+				     	                    
+				     	           <div class="flex flex-col">			
+				     	               <div class="flex flex-row">  	
+				     			                 <div class="shadow shadow-indigo-500/50 p-3 flex flex-col my-5 mb-5 h-auto w-64 z-30 rounded-lg bg-[#ffffff] border-2 border-black-100 mb-5 p-3">
+				     				                  <div class="w-full h-auto">
+				     				                       <span class="text-2xl">미팅 시간</span>
+				     				                          <div class="">  		
+				     				                          	<span class="text-3xl font-bold">${"${meetingDataList.meeting_start_date}"}</span>
+				     				                          </div>
+				     				                          <div>
+				     				                        	<span class="text-lg">입장코드</span>
+				     				                        </div>
+				     				                         <div class="flex flex-row">
+				     				                            <span class="text-2xl inline-block align-middle font-bold">${"${meetingDataList.meeting_id}"}</span>
+				     				                          </div>
+				     						             </div>
+				     					            </div>	
+				     						   	   <div class="shadow shadow-indigo-500/50 flex flex-rows my-5 h-auto w-full z-30 rounded-lg bg-[#ffffff] border-2 border-black-100 mx-5 mb-5 p-2">
+				     							   	   <div class="mx-2 flex flex-col pb-5 pr-20">
+				     						           <span class="text-xl font-bold mb-3">미팅 토픽/이름</span>
+				     						           <div class="ml-3 flex flex-row text-5xl font-extrabold mb-2">
+				     						           ${"${meetingDataList.meeting_topic}"} </div>
+				     				                </div> 
+				     				              </div>  
+				     						<div class="flex justify-items-end my-5 flex-col">  	
+				     						    <button type="button" onclick="openUpdateModal(this.value)" value="${"${meetingDataList.meeting_id}"}" class="bg-purple-700 hover:bg-[#dddddd]w-32 h-16 rounded-lg text-[#ffff] text-4xl font-extrabold place-self-center p-3 mb-6 focus:outline-none">EDIT</button>
+				     						    <button type="button" onclick="openDeleteModal(this.value)" value="${"${meetingDataList.meeting_id}"}"  class=" bg-red-500 hover:bg-[#fb7185] w-32 h-16 rounded-lg text-[#ffff] text-3xl font-extrabold place-self-center p-3 focus:outline-none">DELETE</button>
+				     					    </div> 
+				     					</div>
+				     	         	 </div>       	
+				     	                    	
+				     	                    	
+				     	                    	
+				     	                    	`;	
+				     	                    	return innerHTML;
+				     	            });
+				     			const meetingDataList = document.getElementById("meetingList");
+				    			meetingDataList.innerHTML = innerHtmlList.join('');
+				                         
+				     		            },
+				     		            error: function(xhr, status, error) {
+				     		                console.error("Error: " + error);
+				     		                // 오류 발생 시 실행할 코드
+				     		            }
+		            
+				        });
 
-			var timeString = hours + ':' + minutes;
-			var dateString = year + '-' + month  + '-' + day;
-			
-			
-			var startdt = resJson.meeting_start_date;
-			var startdatearr = startdt.split("T");
-			
-			var startdate = startdatearr[0];
-			
-			
-		
-				 	if(resJson.meeting_join == 1){
-				 			if(resJson.meeting_passwd === document.getElementById("enter-passwd").value){
-					 			if(  dateString >= startdate){		
-								 			var jsonData = {
-										            meeting_id: ${"meeting_ID"},
-										            meeting_room_num: ${"meeting_room_num"},
-										        };
-				
-										        // AJAX를 사용하여 서버에 JSON 데이터 전송
-										        $.ajax({
-										            type: "POST",
-										            url: "/joinMeetingRoom", // 요청을 처리하는 컨트롤러의 엔드포인트
-										            contentType: "application/json",
-										            data: JSON.stringify(jsonData), // JSON 데이터를 문자열로 변환하여 전송
-										            success: function(response) {
-										                console.log("Success: " + response);
-										                // 성공적으로 처리된 경우 실행할 코드
-										            },
-										            error: function(xhr, status, error) {
-										                console.error("Error: " + error);
-										                // 오류 발생 시 실행할 코드
-										            }
-										        });		
-					 		
-				 		      }else{
-				 			     alert("입장 가능한 시간이 아닙니다.")
-				 		      }
-				 			}else{
-							 	alert("비밀번호가 맞지 않습니다.");	
-					 		}
-						}else{
-						 	alert("입장 불가능한 방입니다.");					 			
-						}
-						
-	        		}
-			
-			
-			
-        
-        async function listsearch() {
-        	const uid = await fetch("/getUserID");
-            const uidJson = await uid.json();
-            const sessionMemberID = uidJson.member_info.member_id;
-            const res = await fetch(`/get/meetinglist?memberID=${"${sessionMemberID}"}`);
-			const meetingList = await res.json();
-			console.log(meetingList);
-			const keys = Object.keys(meetingList);
-			const len = keys.length;
-			     
-			const innerHtmlList = keys.map((key, idx)=>{
-			  const meetingDataList = meetingList[`item${"${idx}"}`];
-			console.log(meetingDataList);
-                    const innerHTML =` 
-                    
-           <div class="flex flex-col">			
-               <div class="flex flex-row">  	
-		                 <div class="shadow shadow-indigo-500/50 p-3 flex flex-col my-5 mb-5 h-auto w-64 z-30 rounded-lg bg-[#ffffff] border-2 border-black-100 mb-5 p-3">
-			                  <div class="w-full h-auto">
-			                       <span class="text-2xl">미팅 시간</span>
-			                          <div class="">  		
-			                          	<span class="text-3xl font-bold">${"${meetingDataList.meeting_start_date}"}</span>
-			                          </div>
-			                          <div>
-			                        	<span class="text-lg">입장코드</span>
-			                        </div>
-			                         <div class="flex flex-row">
-			                            <span class="text-2xl inline-block align-middle font-bold">${"${meetingDataList.meeting_id}"}</span>
-			                          </div>
-					             </div>
-				            </div>	
-					   	   <div class="shadow shadow-indigo-500/50 flex flex-rows my-5 h-auto w-full z-30 rounded-lg bg-[#ffffff] border-2 border-black-100 mx-5 mb-5 p-2">
-						   	   <div class="mx-2 flex flex-col pb-5 pr-20">
-					           <span class="text-xl font-bold mb-3">미팅 토픽/이름</span>
-					           <div class="ml-3 flex flex-row text-5xl font-extrabold mb-2">
-					           ${"${meetingDataList.meeting_topic}"} </div>
-			                </div> 
-			              </div>  
-					<div class="flex justify-items-end my-5 flex-col">  	
-					    <button type="button" onclick="openUpdateModal(this.value)" value="${"${meetingDataList.meeting_id}"}" class="bg-purple-700 hover:bg-[#dddddd]w-32 h-16 rounded-lg text-[#ffff] text-4xl font-extrabold place-self-center p-3 mb-6 focus:outline-none">EDIT</button>
-					    <button type="button" onclick="openDeleteModal(this.value)" value="${"${meetingDataList.meeting_id}"}"  class=" bg-red-500 hover:bg-[#fb7185] w-32 h-16 rounded-lg text-[#ffff] text-3xl font-extrabold place-self-center p-3 focus:outline-none">DELETE</button>
-				    </div> 
-				</div>
-         	 </div>       	
-                    	
-                    	
-                    	
-                    	`;	
-                    	return innerHTML;
-            });
-			const meetingDataList = document.getElementById("meetingList");
-			meetingDataList.innerHTML = innerHtmlList.join('')
+
         }
-       listsearch()
+       
     </script>
 
     </head>
@@ -489,7 +476,7 @@ function updateMeeting() {
                         
                         <script>
  //                       async function search1() {
-                        async function search1() {
+                        function search1() {
                             alert("in");
                            
                 			
@@ -540,16 +527,20 @@ function updateMeeting() {
                 					 			if(  dateString >= startdate){		
                 								 			
                 										$("#meeting_room_num").val(meeting_room_num);
+                										return true;
                 										  
                 					 		
                 				 		      }else{
                 				 			     alert("입장 가능한 시간이 아닙니다.")
+                				 			    return false;
                 				 		      }
                 				 			}else{
                 							 	alert("비밀번호가 맞지 않습니다.");	
+                							 	return false;
                 					 		}
                 						}else{
-                						 	alert("입장 불가능한 방입니다.");					 			
+                						 	alert("입장 불가능한 방입니다.");	
+                						 	return false;
                 						}
                 						
                 	        		}        
@@ -710,10 +701,14 @@ function updateMeeting() {
                         <label for="updateMeetingTopic" class="block mb-2 text-sm font-medium text-gray-900">회의 이름</label>
                         <input type="text" name="updateMeetingTopic" id="updateMeetingTopic" maxlength="10" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="회의 이름/토픽" required="">
                     </div>
+                    
                     <div class="col-span-2">
-                        <label for="updateMeetingPasswd"  class="block mb-2 text-sm font-medium text-gray-900">회의 비밀번호</label>
+                        <label for="updateMeetingPasswd"  class="block mb-2 text-sm font-medium text-gray-900">변경할 회의 비밀번호(공란으로 비워둘 시 변경 안함)</label>
                         <input type="number" name="updateMeetingPasswd"  id="updateMeetingPasswd" onkeyup="characterCheck(this)" onkeydown="characterCheck(this)" minlength="4" maxlength = "4" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="비밀번호" required="">
                     </div>
+                    
+                    
+                    
                     <div class="col-span-2 sm:col-span-1">
                         <label for="updateMeetingMemberNum" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">회의 최대 인원수</label>
                         <input type="number" name="updateMeetingMemberNum" id="updateMeetingMemberNum" onkeyup="characterCheck(this)" onkeydown="characterCheck(this)" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 

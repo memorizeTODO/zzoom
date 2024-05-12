@@ -48,7 +48,7 @@ public class AdminMemberController {
 		model.addAttribute("endPage", endPage);		
 		
 
-		return "admin/member/memberlist";
+		return "member/memberlist";
 	}
 	
 	//회원 수정
@@ -74,7 +74,7 @@ public class AdminMemberController {
 		
 		model.addAttribute("result", result);
 		
-		return "admin/member/deleteresult";
+		return "member/deleteresult";
 	}
 	
 	

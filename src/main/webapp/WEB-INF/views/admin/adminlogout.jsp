@@ -10,7 +10,7 @@
 
 <script>
 	alert("관리자 로그아웃");
-	location.href="adminloginform";
+	location.href="loginform";
 </script>
 
 </body>

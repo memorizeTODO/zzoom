@@ -15,16 +15,15 @@ public class AdminSessionCheckInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		HttpSession session = request.getSession();
-		String member_id = (String) session.getAttribute("member_id");
-		if (member_id ==null) {
-			return true;
-		}
-		if (member_id.equals("admin")) {
+		String member_id = (String) session.getAttribute("adminid");
+	
+		if (member_id ==null||!member_id.equals("admin")) {
 			
-			System.out.println("입장 허용");
+			System.out.println("입장 불가");
+			response.sendRedirect("/admin/login");
 			return false;
 		}
-		System.out.println("입장 불가");
+		System.out.println("입장 허용");
 		return true;
 	}
 

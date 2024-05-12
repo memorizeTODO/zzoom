@@ -19,14 +19,14 @@ public class AdminManagerController {
 	
 	
 	// 로그인 폼
-	@RequestMapping("admin/loginform")
+	@RequestMapping("/admin/loginform")
 	public String adminloginform() {
 		return "admin/adminloginform";
 	}
 	
 	
 	// 로그인
-	@RequestMapping("admin/login")
+	@RequestMapping("/admin/login")
 	public String adminlogin(AdminManager manager, HttpSession session, Model model) {
 		
 		System.out.println("adminlogin");
@@ -47,13 +47,13 @@ public class AdminManagerController {
 	}
 	
 	// 관라자 메인
-	@RequestMapping("admin/main")
+	@RequestMapping("/admin/main")
 	public String adminmain() {
 		return "admin/adminmain";
 	}
 	
 	// 관리자 로그아웃
-	@RequestMapping("adminlogout")
+	@RequestMapping("/admin/logout")
 	public String adminlogout(HttpSession session) {
 		session.invalidate();
 		

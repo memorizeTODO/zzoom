@@ -91,7 +91,7 @@ public class MemberController {
 	}
 	
 	   @RequestMapping("meeting_reservation")
-	   public String gotoMainPage(HttpSession session, Model model){
+	   public String gotoMeetingReservation(HttpSession session, Model model){
 		  HashMap<String,Object> user_info = (HashMap<String,Object>)session.getAttribute("member_info");
 		  String member_id = (String)user_info.get("member_id");
 		  String member_name = (String)user_info.get("member_name");

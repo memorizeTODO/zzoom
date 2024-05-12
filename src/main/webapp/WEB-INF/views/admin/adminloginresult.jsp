@@ -13,7 +13,7 @@
 <c:if test="${result == 1 }">
 	<script>
 		alert("관리자 로그인 성공");
-		location.href="adminmain";
+		location.href="main";
 	</script>
 </c:if>
 

@@ -30,7 +30,7 @@ public class AdminReplyController {
 		model.addAttribute("member_id", member_id);
 		model.addAttribute("page", page);
 		
-		return "admin/reply/replyform";
+		return "reply/replyform";
 	}
 	
 	
@@ -49,7 +49,7 @@ public class AdminReplyController {
 		model.addAttribute("result", result);	
 		model.addAttribute("page", page);
 		
-		return "admin/reply/writeresult";
+		return "reply/writeresult";
 	}
 	
 	
