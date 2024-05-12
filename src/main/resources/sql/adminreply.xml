@@ -12,5 +12,6 @@
 	<update id="inquiryState" parameterType="int">
 		update inquiry set inquiry_completed='2' where inquiry_id=#{inquiry_id}
 	</update>
+	
 
 </mapper>

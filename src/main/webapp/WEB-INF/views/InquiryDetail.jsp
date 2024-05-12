@@ -186,7 +186,7 @@
 			관리자
 		</label>
 		<div class="flex flex-center">
-			<input type="text" name="manager_name" id="manager_name" value="${reply.manager_name }"
+			<input type="text" name="manager_name" id="manager_name" value="${reply.manager_name}"
 				class="bg-gray-50 border border-purple-700 text-gray-900 text-sm rounded-xl focus:ring-purple-500 focus:border-purpel-500 block w-full h-10 p-2.5"
 				readonly/>
 		</div>
@@ -199,7 +199,7 @@
 			답변일자
 		</label>
 		<div class="flex flex-center">
-			<input type="text" name="reply_date" id="reply_date" value="${reply.reply_date }"
+			<input type="text" name="reply_date" id="reply_date" value="${reply.reply_date}"
 				class="bg-gray-50 border border-purple-700 text-gray-900 text-sm rounded-xl focus:ring-purple-500 focus:border-purpel-500 block w-full h-10 p-2.5"
 				readonly/>
 		</div>	

@@ -214,15 +214,7 @@ public class MeetingRoomController {
 		return Integer.toString(returnVal); 
 	}
 	
-	@PostMapping("/put/updateMeetingRoomJoin")
-	public String updateMeetingRoomJoin(@RequestParam HashMap<String,String> params) {
-		String returnVal = "1";
-		
-		int roomNum = Integer.parseInt(params.get("room_num"));
-		int meetingMemberNowNum = Integer.parseInt(params.get("participants_num"));
-		
-		return null; 
-	}
+	
 	
 	
 	@PostMapping("joinMeetingRoom")

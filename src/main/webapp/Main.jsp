@@ -71,7 +71,7 @@
 		<ul 
 		class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
 			<li>
-				<a href="meeting_reservation" aria-current="page"
+				<a href="login" aria-current="page"
 					class="font-bold block py-3 px-4 text-white bg-gray-900 rounded md:bg-transparent md:text-purple-700 md:p-0">
 					회의시작
 				</a>
@@ -112,7 +112,7 @@
 	<!-- 텍스트와 버튼 -->
 	<div class="absolute inset-0 flex flex-col items-center justify-center text-center text-white" >
 		<!-- 버튼 -->
-		<button class="bg-purple-700 hover:bg-purple-500 px-8 py-3 rounded-lg text-lg md:text-lg font-bold" > 회의 참가 </button>
+		<button class="bg-purple-700 hover:bg-purple-500 px-8 py-3 rounded-lg text-lg md:text-lg font-bold" onclick="location='login'"> 회의 참가 </button><!--   -->
 	</div>
 	</div>
 	

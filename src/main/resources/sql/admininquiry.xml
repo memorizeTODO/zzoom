@@ -17,6 +17,9 @@
 	<select id="getInquiry" parameterType="int" resultType="adminInquiry">
 		select * from inquiry where inquiry_id=#{inquiry_id}
 	</select>
-
+	
+	<select id="getReply" parameterType="int" resultType = "adminReply">
+		select * from reply where inquiry_id=#{inquiry_id}
+	</select>
 
 </mapper>

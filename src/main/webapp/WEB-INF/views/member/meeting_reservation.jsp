@@ -126,14 +126,14 @@ function updateMeeting() {
 	var startdate = startdatearr[0]+" "+startdatearr[1];
 	
 	 
-	if(passwd.length == 4 && (existingPasswd.length == 4 || existingPasswd.length == 0  )){
+	if(passwd.length == 4){
 		if(memNum > 1){
 		  if(startdate > dateString){ 
         var jsonData2 = {
             meeting_id: document.getElementById("updateMeetingID").value,
             member_id: document.getElementById("updateMemberID").value,
             member_name: document.getElementById("updateMemberName").value,
-            member_num: 6,//회의룸 정원 제한 6명 고정
+            meeting_member_num: 6,//회의룸 정원 제한 6명 고정
             meeting_topic: document.getElementById("updateMeetingTopic").value,
             meeting_passwd: document.getElementById("updateMeetingPasswd").value,
             meeting_start_date: document.getElementById("updateMeetingStartDate").value,
@@ -367,6 +367,74 @@ function updateMeeting() {
 
 
         }
+        
+        function search() {
+			
+			  var resJson = null;
+              $.ajax({
+  	            type: "GET",
+  	            url: "/get/meetingroom?code="+document.getElementById("meeting_id").value, // 요청을 처리하는 컨트롤러의 엔드포인트
+  	            data: {}, // JSON 데이터를 문자열로 변환하여 전송
+  	            async : false,
+  	            success: function(res) {
+  					resJson=res;
+  	                // 성공적으로 처리된 경우 실행할 코드
+  	            },
+  	            error: function(xhr, status, error) {
+  	                console.error("Error: " + error);
+  	                // 오류 발생 시 실행할 코드
+  	                
+  	            }
+  	        });		
+			
+			
+			var meeting_ID = resJson.meeting_id;
+				
+			var room_num = resJson.meeting_room_num;
+			var meeting_room_num = Number(room_num);
+			
+			var today = new Date();
+			
+			var year = today.getFullYear();
+			var month = ('0' + (today.getMonth() + 1)).slice(-2);
+			var day = ('0' + today.getDate()).slice(-2);
+			var hours = ('0' + today.getHours()).slice(-2); 
+			var minutes = ('0' + today.getMinutes()).slice(-2);
+
+			var timeString = hours + ':' + minutes;
+			var dateString = year + '-' + month  + '-' + day;
+			
+			
+			var startdt = resJson.meeting_start_date;
+			var startdatearr = startdt.split("T");
+			
+			var startdate = startdatearr[0];
+			
+			
+		
+				 	if(resJson.meeting_join == 1){
+				 			if(resJson.meeting_passwd === document.getElementById("enter-passwd").value){
+					 			if(  dateString >= startdate){		
+								 			
+										$("#meeting_room_num").val(meeting_room_num);
+										return true;
+										  
+					 		
+				 		      }else{
+				 			     alert("입장 가능한 시간이 아닙니다.")
+				 			    return false;
+				 		      }
+				 			}else{
+							 	alert("비밀번호가 맞지 않습니다.");	
+							 	return false;
+					 		}
+						}else{
+						 	alert("입장 불가능한 방입니다.");	
+						 	return false;
+						}
+						
+	        }        
+        
        
     </script>
 
@@ -474,85 +542,14 @@ function updateMeeting() {
                             </button>
                         </div>
                         
-                        <script>
- //                       async function search1() {
-                        function search1() {
-                            alert("in");
-                           
-                			
-                			  var resJson = null;
-                              $.ajax({
-                  	            type: "GET",
-                  	            url: "/get/meetingroom?code="+document.getElementById("meeting_id").value, // 요청을 처리하는 컨트롤러의 엔드포인트
-                  	            data: {}, // JSON 데이터를 문자열로 변환하여 전송
-                  	            async : false,
-                  	            success: function(res) {
-                  					resJson=res;
-                  	                // 성공적으로 처리된 경우 실행할 코드
-                  	            },
-                  	            error: function(xhr, status, error) {
-                  	                console.error("Error: " + error);
-                  	                // 오류 발생 시 실행할 코드
-                  	                
-                  	            }
-                  	        });		
-                			
-                			
-                			var meeting_ID = resJson.meeting_id;
-                				
-                			var room_num = resJson.meeting_room_num;
-                			var meeting_room_num = Number(room_num);
-                			
-                			var today = new Date();
-                			
-                			var year = today.getFullYear();
-                			var month = ('0' + (today.getMonth() + 1)).slice(-2);
-                			var day = ('0' + today.getDate()).slice(-2);
-                			var hours = ('0' + today.getHours()).slice(-2); 
-                			var minutes = ('0' + today.getMinutes()).slice(-2);
 
-                			var timeString = hours + ':' + minutes;
-                			var dateString = year + '-' + month  + '-' + day;
-                			
-                			
-                			var startdt = resJson.meeting_start_date;
-                			var startdatearr = startdt.split("T");
-                			
-                			var startdate = startdatearr[0];
-                			
-                			
-                		
-                				 	if(resJson.meeting_join == 1){
-                				 			if(resJson.meeting_passwd === document.getElementById("enter-passwd").value){
-                					 			if(  dateString >= startdate){		
-                								 			
-                										$("#meeting_room_num").val(meeting_room_num);
-                										return true;
-                										  
-                					 		
-                				 		      }else{
-                				 			     alert("입장 가능한 시간이 아닙니다.")
-                				 			    return false;
-                				 		      }
-                				 			}else{
-                							 	alert("비밀번호가 맞지 않습니다.");	
-                							 	return false;
-                					 		}
-                						}else{
-                						 	alert("입장 불가능한 방입니다.");	
-                						 	return false;
-                						}
-                						
-                	        		}        
-                        
-                        </script>
                        
                         
                         
                         
                         
                         <!-- Modal body -->
-                            <form class="max-w-sm mx-auto my-5" method="POST" id = "passwdform"  action="joinMeetingRoom"  onSubmit="return search1()">
+                            <form class="max-w-sm mx-auto my-5" method="POST" id = "passwdform"  action="joinMeetingRoom"  onSubmit="return search()">
                                <input type="hidden" id="meeting_room_num" name="meeting_room_num" value=""/>
                                 <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
                                 <div class="relative">

@@ -112,7 +112,7 @@
 	<!-- 텍스트와 버튼 -->
 	<div class="absolute inset-0 flex flex-col items-center justify-center text-center text-white" >
 		<!-- 버튼 -->
-		<button class="bg-purple-700 hover:bg-purple-500 px-8 py-3 rounded-lg text-lg md:text-lg font-bold" > 회의 참가 </button>
+		<button class="bg-purple-700 hover:bg-purple-500 px-8 py-3 rounded-lg text-lg md:text-lg font-bold" onclick="location='login'" > 회의 참가 </button>
 	</div>
 	</div>
 	

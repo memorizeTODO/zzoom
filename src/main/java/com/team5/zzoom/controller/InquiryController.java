@@ -28,7 +28,8 @@ public class InquiryController {
 
 	// 문의사항 작성 폼
 	@RequestMapping("inquiryform")
-	public String inquiryfrom(HttpSession session) {
+	public String inquiryfrom(HttpSession session, Model model) {
+		
 		return "InquiryInsert";
 	}
 
@@ -36,6 +37,9 @@ public class InquiryController {
 	@RequestMapping("submit_inquiry")
 	public String inquiryinsert(InquiryVO inquiry,
 														HttpSession session) {
+		if((String)session.getAttribute("member_id")==null) {
+			return "/member/member_login";
+		}
 		//회원 아이디값 구해옴
 //		String member_id = (String)session.getAttribute("member_id");
 		String member_id = "test"; //테스트용이라 지워야함 나중에				
@@ -47,7 +51,7 @@ public class InquiryController {
 		int result = inquiryService.insert(inquiry);
 		System.out.println("inquiry : " + inquiry);
 
-		return "redirct:inquirylist";
+		return "redirect:/inquirylist";
 	}
 
 	// 문의글 목록

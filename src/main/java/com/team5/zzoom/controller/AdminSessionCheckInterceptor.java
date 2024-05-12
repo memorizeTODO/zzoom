@@ -20,7 +20,7 @@ public class AdminSessionCheckInterceptor implements HandlerInterceptor {
 		if (member_id ==null||!member_id.equals("admin")) {
 			
 			System.out.println("입장 불가");
-			response.sendRedirect("/admin/login");
+			response.sendRedirect("/admin/loginform");
 			return false;
 		}
 		System.out.println("입장 허용");

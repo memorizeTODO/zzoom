@@ -19,12 +19,20 @@
             <img src="/img/zzoom_logo.png" class="h-10" alt="ZZOM Logo" />
             <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span>
         </a>
-        <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-   			<button type="button"   onClick="location.href='logout' "
-            	    class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-md px-4 py-2.5 text-center mt-2 mb-2">
-                    로그아웃
-            </button>
-        </div>
+        <div class="flex flex-row-reverse md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+			<c:if test="${sessionScope.adminid == null}">
+			<button type="button" onClick="location='loginform'"
+				class="text-white font-bold bg-purple-700 hover:bg-purple-500 focus:ring-2 focus:outline-none font-large rounded-lg text-md px-4 py-2.5 text-center mt-3 mb-3 mr-5">
+				로그인
+			</button>
+			</c:if>
+		<c:if test="${sessionScope.adminid != null}">
+			<button type="button" onClick="location='logout'"
+				class="text-white font-bold bg-purple-700 hover:bg-purple-500 focus:ring-2 focus:outline-none font-large rounded-lg text-md px-4 py-2.5 text-center mt-3 mb-3 mr-5">
+				로그아웃
+			</button>
+		</c:if>
+			</div>
     </div>
 </nav>
 </header> 
@@ -44,11 +52,11 @@
 <center>
 		<div class="max-w-lg bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
 			<div class="mb-6">
-				<label for="inquiry_content"
+				<label for="reply_content"
 					class="block mb-2 text-sm font-large text-gray-900 dark:text-white">
 					문의 답변</label>
 				<td>
-				<textarea id="inquiry_content" name="inquiry_content" rows="20" class="block p-5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+				<textarea id="reply_content" name="reply_content" rows="20" class="block p-5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
 				</textarea>
 				</td>
 			</div>

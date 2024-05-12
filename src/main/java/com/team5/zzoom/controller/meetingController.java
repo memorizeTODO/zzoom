@@ -21,7 +21,6 @@ import com.team5.zzoom.model.MemberDTO;
 import com.team5.zzoom.service.MemberDAOImpl;
 
 import com.team5.zzoom.model.ReservationDTO;
-import com.team5.zzoom.model.ReservationDTOExt;
 import com.team5.zzoom.service.ReservationDAOImpl;
 
 import jakarta.servlet.http.HttpServletResponse;

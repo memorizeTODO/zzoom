@@ -23,28 +23,28 @@ public class CheckKeepAliveSchedule {
 
 	@Scheduled(cron = "0/10 * * * * ?")
 	public void checkKeepAlive() {
-		System.out.println("scheduler start");
+		System.out.println("keepalive 체크 스케쥴러 가동");
 		List<MemberDTO> memberList= null;
-		Timestamp nowMinus3 = new Timestamp(System.currentTimeMillis()-5000);
+		Timestamp nowMinus5 = new Timestamp(System.currentTimeMillis()-5000);
 		
 		
 		memberList= meetingRoomService.getAllMemberKeepAlive();
-		System.out.println("success0 : "+ memberList);
+		System.out.println("현재 회의룸을 사용중인 이용자 리스트 : "+ memberList);
 		
 		for (MemberDTO member : memberList) {
-			System.out.println("success1 : "+ member);
+			System.out.println(" 현재 회의룸을 사용중인 이용자 : "+ member);
 			Timestamp memberKeepAlive  = member.getMember_meeting_keepalive(); // 멤버 테이블에서 가져온 레코드 중 하나의 keepalive 컬럼의 엔티티를 저장
 			
 			int comparison = 1;  
 			if(memberKeepAlive!= null) {
-				comparison=nowMinus3.compareTo(memberKeepAlive);// 가져온 멤버쪽의 keepAlive값이 null이면 그냥 연결 해제 처리(1~)
+				comparison=nowMinus5.compareTo(memberKeepAlive);// 가져온 멤버쪽의 keepAlive값이 null이면 그냥 연결 해제 처리(1~)
 			}
 			
-			System.out.println("success2 : "+ comparison);
+			System.out.println("비교결과(1이면 현재시간으로부터 5초 전이 현재 멤버의 keepalive 값보다 이후의 시간대 ) : "+ comparison);
 			if (comparison <= 0) {
-			    System.out.println("nowMinus3(현재 시간으로부터 5초전)은 memberKeepAlive와 같거나 이전 시간을 나타냅니다.(연결상태로 간주)");
+			    System.out.println(member.getMember_id()+": 현재시간으로부터 5초 전이 현재 멤버의 keepalive 값보다 이전의 시간대(연결상태로 간주)");
 			} else {
-			    System.out.println("nowMinus3(현재 시간으로부터 5초전)은 memberKeepAlive보다 이후의 시간을 나타냅니다.(연결해제 됨)");
+			    System.out.println(member.getMember_id()+": 현재시간으로부터 5초 전이 현재 멤버의 keepalive 값보다 이후의 시간대(연결해제 됨)");
 			    // 화상회의룸에서 제거
 			    meetingRoomService.updateMyNowRoomState(member.getMember_id(), null);
 			    //keepAlive 값 제거

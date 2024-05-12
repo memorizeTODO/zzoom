@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,6 +16,7 @@
 	
 	<!-- jQuery 라이브러리 추가 -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	
 </head>
 
 <!-- 상단 고정바 -->
@@ -91,7 +93,7 @@
 			아이디 
 		</label>
 		<div class="flex flex-center">
-			<input type="text" id="member_id" name="member_id" value="${inquiry.member_id}"
+			<input type="text" id="member_id" name="member_id" value="${sessionScope.member_id}"
 				class="bg-gray-50 border border-purple-700 text-gray-900 text-sm rounded-xl focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5"
 				readonly/>
 		</div>
@@ -104,9 +106,15 @@
 			문의일자
 		</label>
 		<div class="flex flex-center">
-			<input type="text" name="inquiry_date" id="inquiry_date" value="${inquiry.inquiry_date}" 
+			<input type="text" name="inquiry_date" id="inquiry_date" value="" 
 				class="bg-gray-50 border border-purple-700 text-gray-900 text-sm rounded-xl focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5"
 				 readonly/>
+				 <script>
+				 	var now = new Date().toISOString().slice(0, -1);
+				 	nowArr = now.split("T");
+				 	nowDate = nowArr[0]; 
+  					document.getElementById('inquiry_date').value = nowDate;
+  				</script>
 		</div>
 	</div>
 	</div>		

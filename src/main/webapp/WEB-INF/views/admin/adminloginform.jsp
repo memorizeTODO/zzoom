@@ -14,16 +14,10 @@
 <header> 
 <nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
-        <a href="adminmain" class="flex items-center space-x-3 rtl:space-x-reverse">
+        <a href="main" class="flex items-center space-x-3 rtl:space-x-reverse">
             <img src="/img/zzoom_logo.png" class="h-10" alt="ZZOM Logo" />
             <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span>
         </a>
-        <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-   			<button type="button"   onClick="location.href='logout' "
-            	    class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-md px-4 py-2.5 text-center mt-2 mb-2">
-                    로그아웃
-            </button>
-        </div>
     </div>
 </nav>
 </header>

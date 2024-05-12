@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import com.team5.zzoom.dao.ReservationDAO;
 import com.team5.zzoom.model.ReservationDTO;
-import com.team5.zzoom.model.ReservationDTOExt;
+
 
 	@Service
 	public class ReservationDAOImpl implements ReservationDAO {

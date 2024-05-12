@@ -21,6 +21,7 @@
 	<!-- Swiper JS -->
 	<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
 	<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+	
 </head>
 
 <!-- 상단 고정바 -->
@@ -112,7 +113,7 @@
 	<!-- 텍스트와 버튼 -->
 	<div class="absolute inset-0 flex flex-col items-center justify-center text-center text-white" >
 		<!-- 버튼 -->
-		<button class="bg-purple-700 hover:bg-purple-500 px-8 py-3 rounded-lg text-lg md:text-lg font-bold" > 회의 참가 </button>
+		<button class="bg-purple-700 hover:bg-purple-500 px-8 py-3 rounded-lg text-lg md:text-lg font-bold" onclick="location='meeting_reservation'" > 회의 참가 </button> <!-- 모달 추가예정 -->
 	</div>
 	</div>
 	
