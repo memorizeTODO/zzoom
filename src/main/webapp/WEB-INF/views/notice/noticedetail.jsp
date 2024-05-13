@@ -105,7 +105,7 @@
 			class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">수정</button>
 	<button type="button"  onClick="location.href='deleteform?notice_id=${notice.notice_id}&page=${page }' "
 			class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">삭제</button>
-	<button type="button"  onClick="location.href='noticelist' "
+	<button type="button"  onClick="location.href='noticelist?page=${page}' "
 			class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">목록으로 돌아가기</button>
 </center>
 

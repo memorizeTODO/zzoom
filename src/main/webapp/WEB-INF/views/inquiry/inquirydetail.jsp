@@ -84,7 +84,7 @@
 	<button type="button"  onClick="location.href='replyform?inquiry_id=${inquiry.inquiry_id}&member_id=${member_id }&page=${page }' "
 			class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">답변</button>
 	</c:if>	
-	<button type="button"  onClick="location.href='inquirylist&page=${page }' "
+	<button type="button"  onClick="location.href='inquirylist?page=${page}'"
 			class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">목록으로 돌아가기</button>
 	
 </center>

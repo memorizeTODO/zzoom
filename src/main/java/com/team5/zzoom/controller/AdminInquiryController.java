@@ -20,7 +20,7 @@ public class AdminInquiryController {
 	private AdminInquiryService service;
 	
 	// 문의사항 목록
-	@RequestMapping("admin/inquirylist")
+	@RequestMapping("/admin/inquirylist")
 	public String inquirylist(@RequestParam(value="page",defaultValue = "1") int page,  Model model) {
 		
 		int limit = 10;
