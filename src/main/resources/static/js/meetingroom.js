@@ -7,6 +7,8 @@ var version = 1.2;
 var server = null;
 server = "https://janus.jsflux.co.kr/janus"; //jsflux janus server url
 
+var is_published=false;
+
 var janus = null;
 var sfutest = null;
 var opaqueId = "videoroomtest-"+Janus.randomString(12);
@@ -451,7 +453,9 @@ function participantsList(room){
 
 function publishOwnFeed(useAudio) {
 	// Publish our stream
-	
+	if (is_published!==false){
+		return
+	}
 	sfutest.createOffer(
 		{	
 			// Add data:true here if you want to publish datachannels as well
@@ -483,6 +487,7 @@ function publishOwnFeed(useAudio) {
 				$('template0').show();
 				$('#mute').html(is_mute ? '<img class="bottom-bar-button-icon-layout" src="/img/now-mute.png"/>' : '<img class="bottom-bar-button-icon-layout" src="/img/now-unmute.png"/>');
 				$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/img/now-cam-on.png"/>').off("click").on('click',function() { unpublishOwnFeed(); });
+				is_published=true;
 			},
 			error: function(error) {
 				Janus.error("WebRTC error:", error);
@@ -523,12 +528,15 @@ function toggleMute() {
 // [jsflux] 영상송출 중단하기
 function unpublishOwnFeed() {
 	// Unpublish our stream
-	
+	if (is_published!==true){
+		return
+	}
 	
 	var unpublish = { request: "unpublish" };
 	sfutest.send({ message: unpublish });
 	$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/img/now-cam-off.png"/>').off('click').on('click',function(){publishOwnFeed(true);});
 	$('template0').hide();
+	is_published=false;
 	changeGridLayout();
 }
 /* function publishOwnFeed() {
