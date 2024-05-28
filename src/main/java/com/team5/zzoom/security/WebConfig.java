@@ -14,8 +14,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("Authorization", "Content-Type")
-                .exposedHeaders("Custom-Header")
-                //.allowCredentials(true) //true면 허용 대상을 명시해야함
+                //.exposedHeaders("Custom-Header")
+                .allowCredentials(false) //true면 허용 대상을 명시해야함
                 .maxAge(3600);
     }
 }
