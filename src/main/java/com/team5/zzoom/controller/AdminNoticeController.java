@@ -20,7 +20,7 @@ public class AdminNoticeController {
 	private AdminNoticeService service;
 
 	// 공지사항 목록
-	@RequestMapping("noticelist")
+	@RequestMapping("admin/noticelist")
 	public String noticelist(@RequestParam(value = "page", defaultValue = "1") int page, Model model) {
 
 		int limit = 10;
@@ -53,7 +53,7 @@ public class AdminNoticeController {
 	}
 
 	// 공지사항 상세페이지
-	@RequestMapping("noticedetail")
+	@RequestMapping("admin/noticedetail")
 	public String noticedetail(@RequestParam("notice_id") int notice_id, @RequestParam("page") int page, Model model) {
 		AdminNotice notice = service.getNotice(notice_id); // 상세정보 구하기
 
@@ -64,13 +64,13 @@ public class AdminNoticeController {
 	}
 
 	// 공지사항 작성폼
-	@RequestMapping("noticeform")
+	@RequestMapping("admin/noticeform")
 	public String noticeform() {
 		return "notice/noticeform";
 	}
 
 	// 공지사항 글작성
-	@RequestMapping("noticewrite")
+	@RequestMapping("admin/noticewrite")
 	public String noticewrite(@ModelAttribute AdminNotice notice, Model model) {
 
 		int result = service.insert(notice);
@@ -83,7 +83,7 @@ public class AdminNoticeController {
 	}
 
 	// 공지사항 수정폼
-	@RequestMapping("updateform")
+	@RequestMapping("admin/updateform")
 	public String updateform(@RequestParam("notice_id") int notice_id, @RequestParam("page") int page, Model model) {
 
 		AdminNotice notice = service.getNotice(notice_id); // 상세정보 구하기
@@ -95,7 +95,7 @@ public class AdminNoticeController {
 	}
 
 	// 공지사항 글수정
-	@RequestMapping("noticeupdate")
+	@RequestMapping("admin/noticeupdate")
 	public String noticeupdate(@ModelAttribute AdminNotice notice, @RequestParam("page") int page, Model model) {
 		System.out.println("controller in");
 		System.out.println("notice_id:"+ notice.getNotice_id());
@@ -116,7 +116,7 @@ public class AdminNoticeController {
 	}
 	
 	// 공지사항 삭제
-		@RequestMapping("deleteform")
+		@RequestMapping("admin/deleteform")
 		public String deleteform(@RequestParam("notice_id") int notice_id, @RequestParam("page") int page, Model model) {
 
 			int result = service.delete(notice_id); // 상세정보 구하기

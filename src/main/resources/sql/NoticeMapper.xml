@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.team5.zzoom.dao.NoticeDAO">
+
+	<insert id="insert"  parameterType="notice">
+		insert into notice(notice_subject, notice_content, notice_date)  values(#{notice_subject}, #{notice_content}, now()  )
+	</insert>
+	
+	<select id="getCount"   resultType="int">
+		select count(*) from notice
+	</select>  
+    
+    <!-- 공지사항 목록 -->
+     <select  id="getBoardList"     parameterType="int"    resultType="notice" >
+        SELECT *   FROM  notice  order by  notice_id    desc   limit   #{start},  10  
+    </select>      
+    
+    
+    <!-- 상세보기 select -->
+    <select id="getNotice"    parameterType="int"   resultType="notice">
+    	select * from notice where notice_id = #{notice_id}
+    </select>
+    
+    <!-- 공지사항 수정 -->
+    <update id="update"     parameterType="notice">
+    		update notice set notice_subject=#{notice_subject}, notice_content=#{notice_content} where notice_id=#{notice_id}
+    </update>
+    
+    <!-- 공지사항 삭제 -->
+    <delete id="delete"    parameterType="int">
+    	delete from notice where notice_id=#{notice_id}
+    </delete>
+    
+    <!-- 조회수 증가 -->
+    <update id="noticeCount" parameterType="int">
+    	update notice set notice_count = notice_count + 1 where notice_id = #{notice_id}
+    </update>
+    
+</mapper>

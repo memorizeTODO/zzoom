@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.team5.zzoom.dao.MemberDAO">
+
+	<!-- 회원가입 쿼리문 -->
+	<insert id="memberInsert" parameterType="member">
+		insert into member
+		(member_id, member_passwd, member_phone, member_name,
+		member_email,
+		member_zipcode, member_address, member_address_detail, member_state, member_regiDate)
+		values(#{member_id}, #{member_passwd}, #{member_phone},
+		#{member_name}, #{member_email}, #{member_zipcode}, #{member_address},
+		#{member_address_detail}, 0, NOW())
+	</insert>
+
+	<!-- 로그인 인증 -->
+	<select id="memberCheck" parameterType="member"
+		resultType="member">
+		select * from member where member_id=#{member_id} and
+		member_state=0 and
+		member_passwd = #{member_passwd}
+	</select>
+
+	<!-- 아이디 중복체크 -->
+	<select id="memberCheckId" parameterType="String"
+		resultType="member">
+		select * from member where member_id = #{member_id}
+	</select>
+
+	<!-- 회원수정 -->
+	<update id="memberUpdate" parameterType="member">
+		update member set
+		member_passwd=#{member_passwd},
+		member_phone=#{member_phone},
+		member_name =#{member_name},
+		member_email = #{member_email},
+		member_zipcode= #{member_zipcode},
+		member_address = #{member_address},
+		member_address_detail = #{member_address_detail}
+		where member_id = #{member_id}
+	</update>
+
+<!-- 회원정보 수정 페이지에 기존정보 표출 -->
+	<select id="myPage" parameterType="String"
+		resultType="member">
+		select member_id, member_passwd, member_phone, member_name, member_email, member_zipcode, member_address, member_address_detail from member where member_id = #{member_id}
+	</select>
+
+	<!-- 회원탈퇴 -->
+	<update id="memberDelete" parameterType="String">
+		update member set
+		member_state = 2 where member_id= #{member_id}
+	</update>
+
+	<!-- 비밀번호 찾기 -->
+	<select id="passwdFind" parameterType="member"
+		resultType="member">
+		select * from member
+		where
+		member_email = #{member_email} and
+		member_id = #{member_id} and member_state = 0
+	</select>
+	
+	<!-- 아이디 찾기 -->
+	<select id="findId" parameterType="member"
+		resultType="member">
+		select * from member
+		where
+		member_email = #{member_email} and
+		member_passwd = #{member_passwd} and member_state = 0
+	</select>
+
+</mapper>

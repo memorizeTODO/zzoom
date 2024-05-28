@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.team5.zzoom.model.AdminInquiry;
 import com.team5.zzoom.model.AdminNotice;
+import com.team5.zzoom.model.AdminReply;
 import com.team5.zzoom.service.AdminInquiryService;
 
 @Controller
@@ -19,7 +20,7 @@ public class AdminInquiryController {
 	private AdminInquiryService service;
 	
 	// 문의사항 목록
-	@RequestMapping("inquirylist")
+	@RequestMapping("/admin/inquirylist")
 	public String inquirylist(@RequestParam(value="page",defaultValue = "1") int page,  Model model) {
 		
 		int limit = 10;
@@ -55,13 +56,14 @@ public class AdminInquiryController {
 	}
 	
 	// 문의사항 상세페이지
-	@RequestMapping("inquirydetail")
+	@RequestMapping("admin/inquirydetail")
 	public String inquirydetail(@RequestParam("inquiry_id") int inquiry_id, 
 								@RequestParam("member_id") String member_id, 
 			                    @RequestParam("page") int page, Model model) {
 		AdminInquiry inquiry = service.getInquiry(inquiry_id); // 상세정보 구하기
-
+		AdminReply reply = service.getReply(inquiry_id);
 		model.addAttribute("inquiry", inquiry);
+		model.addAttribute("reply", reply);
 		model.addAttribute("member_id", member_id);
 		model.addAttribute("page", page);
 

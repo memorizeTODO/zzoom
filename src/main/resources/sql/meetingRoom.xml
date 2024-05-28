@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.team5.zzoom.dao.MeetingRoomDAO">
+
+	<select id="getMemberList" parameterType="int" resultType="member">
+		select member_id,member_name from member
+		where member_nowroom_code = #{room_num}
+	</select>
+	
+	<update id="updateMyNowRoomState">
+		update member 
+		set member_nowroom_code = #{room_num}
+		where member_id = #{member_id} 
+	</update>
+	
+	<select id="getMeetingJoin" resultType="int">
+		select meeting_join 
+		from meeting
+		where meeting_room_num = #{room_num}
+	</select>
+	
+	<update id="updateMeetingNowNumPlus">
+		update meeting 
+		set meeting_member_nownum = meeting_member_nownum + 1
+		where <![CDATA[ meeting_member_nownum < meeting_member_num]]> and meeting_room_num = #{room_num} 
+	</update>
+	
+	<update id="updateMeetingNowNumMinus">
+		update meeting 
+		set meeting_member_nownum = meeting_member_nownum - 1
+		where <![CDATA[meeting_member_nownum > 0]]> and meeting_room_num = #{room_num} 
+	</update>
+	
+	<select id="getAllMemberKeepAlive" resultType="member">
+		select member_id, member_name, member_nowroom_code, member_meeting_keepalive 
+		from member 
+		where member_nowroom_code is not null || member_nowroom_code != ''
+	</select>
+	
+	
+	<update id="updateKeepAlive">
+		update member 
+		set member_meeting_keepalive = #{now_time}
+		where member_id = #{member_id}
+	</update>
+	
+	<update id="updateMeetingNowNum">
+		update meeting 
+		set meeting_member_nownum = (select count(*) from member where member_nowroom_code = #{room_num_str})
+		where meeting_room_num = #{room_num}
+	</update>
+	
+	<select id="getMeetingRoom" resultType="meetingRoomDTO">
+		select * from meeting
+		where meeting_room_num = #{room_num} 
+	</select>
+	
+	<update id="updateMeetingRoomJoin">
+		update meeting 
+		set meeting_join = #{value}
+		where meeting_room_num = #{room_num}
+	</update>
+	
+	<select id="getMyNowRoomState" parameterType ="String" resultType = "String">
+		select member_nowroom_code from member
+		where member_id = #{member_id}
+	</select>
+	
+	<select id="getAllMeetingRoom" resultType = "meetingRoomDTO">
+		select * from meeting
+	</select>
+	
+	<delete id="deleteMeetingRoom" parameterType = "String">
+		delete from meeting
+		where meeting_id = #{meeting_id}
+	</delete>
+</mapper>

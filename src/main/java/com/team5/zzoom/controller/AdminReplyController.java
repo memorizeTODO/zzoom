@@ -17,7 +17,7 @@ public class AdminReplyController {
 	private AdminReplyService service;
 	
 	//답변
-	@RequestMapping("replyform")
+	@RequestMapping("admin/replyform")
 	public String replyform(@RequestParam(value="inquiry_id", required=false) String inquiry_id,
 						    @RequestParam(value="member_id", required=false) String member_id, 
 						    @RequestParam("page") int page, 
@@ -34,7 +34,7 @@ public class AdminReplyController {
 	}
 	
 	
-	@RequestMapping("reply")
+	@RequestMapping("admin/reply")
 	public String reply(@ModelAttribute AdminReply reply,  @RequestParam("page") int page, Model model) {
 		
 		int result = service.insert(reply);    // 답변글 작성

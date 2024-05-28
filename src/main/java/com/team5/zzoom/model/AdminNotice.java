@@ -11,7 +11,7 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
-@Alias("notice")
+@Alias("adminNotice")
 public class AdminNotice {
 	private int notice_id;
 	private String notice_subject;

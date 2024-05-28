@@ -18,7 +18,7 @@ public class AdminMemberController {
 	private AdminMemberService service;
 
 	// 회원목록
-	@RequestMapping("memberlist")
+	@RequestMapping("admin/memberlist")
 	public String memberlist(@RequestParam(value="page",defaultValue = "1") int page,  Model model) {
 		
 		int limit = 10;
@@ -52,7 +52,7 @@ public class AdminMemberController {
 	}
 	
 	//회원 수정
-	@RequestMapping("memberupdate")
+	@RequestMapping("admin/memberupdate")
 	public String memberupdate(@RequestParam("member_id") String member_id, Model model) {
 		System.out.println("member_id:"+ member_id);
 		
@@ -65,7 +65,7 @@ public class AdminMemberController {
 	}
 
 	// 회원탈퇴
-	@RequestMapping("memberdelete")
+	@RequestMapping("admin/memberdelete")
 	public String delete(@RequestParam("member_id") String member_id, Model model) {
 		System.out.println("member_id:"+ member_id);
 		

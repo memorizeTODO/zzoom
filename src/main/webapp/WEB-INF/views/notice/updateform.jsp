@@ -15,16 +15,24 @@
 <header> 
 <nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
-        <a href="adminmain" class="flex items-center space-x-3 rtl:space-x-reverse">
-            <img src="img/zzoom_logo.png" class="h-10" alt="ZZOM Logo" />
+        <a href="main" class="flex items-center space-x-3 rtl:space-x-reverse">
+            <img src="/img/zzoom_logo.png" class="h-10" alt="ZZOM Logo" />
             <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span>
         </a>
-        <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-  			 <button type="button"   onClick="location.href='adminlogout' "
-            	     class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-md px-4 py-2.5 text-center mt-2 mb-2">
-                   로그아웃
-            </button>
-        </div>
+     <div class="flex flex-row-reverse md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+			<c:if test="${sessionScope.adminid == null}">
+			<button type="button" onClick="location='loginform'"
+				class="text-white font-bold bg-purple-700 hover:bg-purple-500 focus:ring-2 focus:outline-none font-large rounded-lg text-md px-4 py-2.5 text-center mt-3 mb-3 mr-5">
+				로그인
+			</button>
+			</c:if>
+		<c:if test="${sessionScope.adminid != null}">
+			<button type="button" onClick="location='logout'"
+				class="text-white font-bold bg-purple-700 hover:bg-purple-500 focus:ring-2 focus:outline-none font-large rounded-lg text-md px-4 py-2.5 text-center mt-3 mb-3 mr-5">
+				로그아웃
+			</button>
+		</c:if>
+			</div>
     </div>
 </nav>
 </header> 

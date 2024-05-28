@@ -3,7 +3,7 @@
 
 <mapper namespace="com.team5.zzoom.dao.AdminReplyDAO">
 
-	<insert id="insert" parameterType="reply">
+	<insert id="insert" parameterType="adminReply">
 		insert into reply(manager_id, member_id, inquiry_id, manager_name, reply_content, reply_date)
 		values(#{manager_id}, #{member_id}, #{inquiry_id}, #{manager_name}, #{reply_content}, now())
 	</insert>
@@ -12,5 +12,6 @@
 	<update id="inquiryState" parameterType="int">
 		update inquiry set inquiry_completed='2' where inquiry_id=#{inquiry_id}
 	</update>
+	
 
 </mapper>

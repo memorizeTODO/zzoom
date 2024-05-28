@@ -10,6 +10,8 @@ public interface AdminReplyDAO {
 	public int insert(AdminReply reply);
 
 	public void inquiryState(int inquiry_id);
+	
+	
 
 
 

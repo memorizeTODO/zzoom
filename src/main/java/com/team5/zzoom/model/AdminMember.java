@@ -7,7 +7,7 @@ import org.apache.ibatis.type.Alias;
 import lombok.Data;
 
 @Data
-@Alias("member")
+@Alias("adminMember")
 public class AdminMember {
 	
 	private String member_id;

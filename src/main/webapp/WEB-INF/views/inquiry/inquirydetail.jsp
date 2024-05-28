@@ -17,15 +17,24 @@
 <header> 
 <nav class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
-        <a href="adminmain" class="flex items-center space-x-3 rtl:space-x-reverse">
-            <img src="img/zzoom_logo.png" class="h-10" alt="ZZOM Logo" />
+        <a href="main" class="flex items-center space-x-3 rtl:space-x-reverse">
+            <img src="/img/zzoom_logo.png" class="h-10" alt="ZZOM Logo" />
             <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span>
         </a>
         <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-   			<button type="button"   onClick="location.href='adminlogout' "
-            	    class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-md px-4 py-2.5 text-center mt-2 mb-2">
-                    로그아웃
-            </button>
+   			<div class="flex flex-row-reverse md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+			<c:if test="${sessionScope.adminid == null}">
+			<button type="button" onClick="location='loginform'"
+				class="text-white font-bold bg-purple-700 hover:bg-purple-500 focus:ring-2 focus:outline-none font-large rounded-lg text-md px-4 py-2.5 text-center mt-3 mb-3 mr-5">
+				로그인
+			</button>
+			</c:if>
+		<c:if test="${sessionScope.adminid != null}">
+			<button type="button" onClick="location='logout'"
+				class="text-white font-bold bg-purple-700 hover:bg-purple-500 focus:ring-2 focus:outline-none font-large rounded-lg text-md px-4 py-2.5 text-center mt-3 mb-3 mr-5">
+				로그아웃
+			</button>
+		</c:if>
         </div>
     </div>
 </nav>
@@ -51,20 +60,36 @@
 			
 			<div class="mb-6">
 				<label for="inquiry_content"
-					class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">공지
+					class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 					문의 내용</label>
 				<p id="inquiry_content" class="block p-5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
 					${inquiry.inquiry_content}</p>
 			</div>
+			<c:if test="${inquiry.inquiry_completed == 2}">
+					<div class="mb-6">
+				<label for="reply_content"
+					class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+					답변 내용</label>
+				<p id="reply_content" class="block p-5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+					${reply.reply_content}</p>
+			</div>
+			</c:if>
 		</div>
 </center>
 
 <center>
+	
+
+	<c:if test="${inquiry.inquiry_completed == 1}">
 	<button type="button"  onClick="location.href='replyform?inquiry_id=${inquiry.inquiry_id}&member_id=${member_id }&page=${page }' "
 			class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">답변</button>
-	<button type="button"  onClick="location.href='inquirylist' "
+	</c:if>	
+	<button type="button"  onClick="location.href='inquirylist?page=${page}'"
 			class="text-white bg-purple-500 hover:bg-purple-700 focus:ring-2 focus:outline-none font-large rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">목록으로 돌아가기</button>
+	
 </center>
+
+	
 
 <!-- 사이드바 -->
 <aside id="logo-sidebar" class="fixed top-0 left-0 z-200 w-200 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 " aria-label="Sidebar">

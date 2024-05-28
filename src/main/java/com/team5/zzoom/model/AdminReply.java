@@ -7,7 +7,7 @@ import org.apache.ibatis.type.Alias;
 import lombok.Data;
 
 @Data
-@Alias("reply")
+@Alias("adminReply")
 public class AdminReply {
 	
 	private int reply_id;
