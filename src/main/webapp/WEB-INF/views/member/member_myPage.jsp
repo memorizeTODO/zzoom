@@ -5,7 +5,7 @@
 <html class="scroll-smooth">
 <head>
 <meta charset="UTF-8">
-<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="https://code.jquery.com/jquery-latest.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
