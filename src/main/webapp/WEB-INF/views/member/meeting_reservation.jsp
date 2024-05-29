@@ -104,7 +104,7 @@
     
     
 function updateMeeting() {
-	var memNum = 6; // 의논결과 회의룸 정원 제한은 6명 고정값을 주기로 했습니다.
+	var memNum = document.getElementById("updateMeetingMemberNum").value; // 의논결과 회의룸 정원 제한은 6명 고정값을 주기로 했습니다.
 	var passwd = document.getElementById("updateMeetingPasswd").value
 	
 	
@@ -133,7 +133,7 @@ function updateMeeting() {
             meeting_id: document.getElementById("updateMeetingID").value,
             member_id: document.getElementById("updateMemberID").value,
             member_name: document.getElementById("updateMemberName").value,
-            meeting_member_num: 6,//회의룸 정원 제한 6명 고정
+            meeting_member_num: memNum,//회의룸 정원 제한 6명 고정
             meeting_topic: document.getElementById("updateMeetingTopic").value,
             meeting_passwd: document.getElementById("updateMeetingPasswd").value,
             meeting_start_date: document.getElementById("updateMeetingStartDate").value,
@@ -258,7 +258,7 @@ function updateMeeting() {
         // 사용자가 입력한 데이터를 가져와서 JSON 객체 생성
 		        var jsonData = {
 		        	meeting_id: ${"uuidresult"},
-		            meeting_member_num: 6,
+		            meeting_member_num: document.getElementById("meetingMemberNum").value,
 		            meeting_topic: document.getElementById("meetingTopic").value,
 		            meeting_passwd: document.getElementById("meetingPasswd").value,
 		            meeting_start_date: document.getElementById("meetingStartDate").value,
@@ -610,7 +610,7 @@ function updateMeeting() {
                         <label for="meetingMemberNum" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">회의 최대 인원수</label>
                         <input type="number" name="meetingMemberNum" onkeyup="characterCheck(this)" onkeydown="characterCheck(this)" id="meetingMemberNum"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
                         																		  focus:ring-primary-600 focus:border-primary-600 
-                        																		  block w-full p-2.5" placeholder="인원수" required="">
+                        																		  block w-full p-2.5" value="6" placeholder="인원수" required="" readonly>
                     </div>
                     <div class="col-span-2 sm:col-span-1">
                         <label for="meetingStartDate" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">회의 시작일</label>
@@ -710,7 +710,7 @@ function updateMeeting() {
                         <label for="updateMeetingMemberNum" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">회의 최대 인원수</label>
                         <input type="number" name="updateMeetingMemberNum" id="updateMeetingMemberNum" onkeyup="characterCheck(this)" onkeydown="characterCheck(this)" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
                         																		  focus:ring-primary-600 focus:border-primary-600 
-                        																		  block w-full p-2.5" placeholder="인원수" required="">
+                        																		  block w-full p-2.5" value="6" placeholder="인원수" required="" readonly>
                     </div>
                     <div class="col-span-2 sm:col-span-1">
                         <label for="updateMeetingStartDate"  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">회의 시작일</label>

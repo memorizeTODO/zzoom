@@ -7,12 +7,15 @@ var version = 1.2;
 var server = null;
 server = "https://janus.jsflux.co.kr/janus"; //jsflux janus server url
 
-var is_published=false;
+
 
 var janus = null;
 var sfutest = null;
 var opaqueId = "videoroomtest-"+Janus.randomString(12);
-var is_mute = false;
+var is_mute = true;
+var is_published=false;
+var is_audioUsed=false;
+var is_requested=false;
 
 var myroom = 1234;	// Demo room
 if(getQueryStringValue("room") !== "") //getQueryStringValue(파라미터)에서 파라미터 값이 빈 문자열이 아니라면 함수의 리턴 값을 int형으로 바꿔 지정함  
@@ -139,7 +142,7 @@ function generateJanus(){
 										$('#videojoin').hide();
 										$('#videos').removeClass('hide').show();
 									} else {
-										$("#video-publish-btn").on('click',function(){publishOwnFeed()}); 
+										$("#video-publish-btn").one('click',function(){publishOwnFeed(true);});
 									}
 									// Any new feed to attach to?
 									if(msg["publishers"]) {
@@ -228,13 +231,13 @@ function generateJanus(){
 												"configuration file? If not, make sure you copy the details of room <code>" + myroom + "</code> " +
 												"from that sample in your current configuration file, then restart Janus and try again."
 											);
-											unpublishOwnFeed(); // 송출 중단 요청
-											$("#video-publish-btn").off('click').one('click',function(){generateJanus()}); //야누스 객체 생성 이벤트 추가
+											//unpublishOwnFeed(); // 송출 중단 요청
+											//$("#video-publish-btn").off('click').one('click',function(){generateJanus()}); //야누스 객체 생성 이벤트 추가
 											
 										} else {
 											bootbox.alert(msg["error"]);
-											unpublishOwnFeed(); // 송출 중단 요청
-											$("#video-publish-btn").off('click').one('click',function(){generateJanus()}); //야누스 객체 생성 이벤트 추가
+											//unpublishOwnFeed(); // 송출 중단 요청
+											//$("#video-publish-btn").off('click').one('click',function(){generateJanus()}); //야누스 객체 생성 이벤트 추가
 
 										}
 									}
@@ -271,8 +274,7 @@ function generateJanus(){
 							$('#videojoin').hide();
 							//$('#meetingroom').removeClass('hide').show();
 							
-							$("#template0").show();
-							changeGridLayout();
+							
 									if($('#myname').length === 0){
 										$('#myname-box').html('<span class="text-white text-xs font-bold" id="myname">'+ myusername+'</span>');
 									}
@@ -280,30 +282,47 @@ function generateJanus(){
 										$("#me").show();
 										$('#videolocal').remove('#myvideo-unpublished');
 										$('#videolocal').html('<video class="video-layout-inner" id="myvideo" controls autoplay playsinline muted="muted"/>');
-										if($('#video-publish-btn').length){	
+											
 											// Add an 'unpublish' button
-											$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/img/now-cam-on.png"/>')
-											$('#video-publish-btn').off('click').on('click',function(){unpublishOwnFeed();});
+											
 											/* $('#user_ui_options').append('<button class="btn btn-warning btn-xs" id="video-publish-btn" style="margin: 0px; padding:0px;">'
 											+'<img class="bottom-bar-button-icon-layout" src="/img/now-cam-on.png"/>'
 											+'</button>'); */
-										}
+										
 									}
+									$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/img/now-cam-on.png"/>');
+									$('#video-publish-btn').off('click').one('click',function(){unpublishOwnFeed();});
 
-									if($('#mute').length){
-										if(sfutest.isAudioMuted()===true){
-											is_mute===true;
-											$('#mute').html('<img class="bottom-bar-button-icon-layout" src="/img/now-mute.png"/>')
-											$('#mute').off('click').on('click',function(){toggleMute();});
+									
+									if (is_audioUsed){
+										if (is_mute===true){
+											sfutest.muteAudio();
+											alert("mute");
 										}else{
-											is_mute===false;
-											$('#mute').html('<img class="bottom-bar-button-icon-layout" src="/img/now-unmute.png"/>')
-											$('#mute').off('click').on('click',function(){toggleMute();});
+											sfutest.unmuteAudio();
+											alert("unmute");
 										}
+										if (sfutest.isAudioMuted()){
+											$('#mute').html('<img class="bottom-bar-button-icon-layout" src="/img/now-mute.png"/>')
+											is_mute=true;
+										}else{
+											$('#mute').html('<img class="bottom-bar-button-icon-layout" src="/img/now-unmute.png"/>')
+											is_mute=false;
+										}
+										
+									}else{
+										is_mute=true;
+										$('#mute').html('<img class="bottom-bar-button-icon-layout" src="/img/now-mute.png"/>');
+										
+									}
+									$('#mute').off('click').on('click',function(){toggleMute();});
+										
 										/* $('#user_ui_options').append('<button class="btn btn-warning btn-xs" id="mute" type="button" style="margin: 0px; padding: 0px;">'
 										+'<img class="bottom-bar-button-icon-layout" src="/img/now-unmute.png"/>'
 										+'</button>'); */
-									}
+									
+									$("#template0").show();
+									changeGridLayout();
 
 									
 							$('#publisher').removeClass('hide').html(myusername).show();
@@ -339,22 +358,29 @@ function generateJanus(){
 						onremotestream: function(stream) {
 							// The publisher stream is sendonly, we don't expect anything here
 						},
-						 oncleanup: function() {
+						oncleanup: function() {
 							 Janus.log(" ::: Got a cleanup notification: we are unpublished now :::");
 							 mystream = null;
-							 if($("myvideo-unpublished").length===0){
+							 //if($("myvideo-unpublished").length===0){
 								 //$('#videolocal').remove('#myvideo');
 								 //$('myname-box').hide()
 								 //$('#videolocal').html('<img class="video-layout-inner" id="myvideo-unpublished" src="/img/no-video.png" >'); // 수정이 필요한 부분, 타인 화상화면의 출력을 제어할때는 원본을 참고할것
 								 //$('#videolocal').parent().hide();
 								 	
-							 }
+							 //}
 							 $('myname').empty();
 							 $("#template0").hide();
-							 $('#video-publish-btn').click(function() { publishOwnFeed(true); });//publish-btn으로 변경 예정
+							 
 							 $("#videolocal").parent().parent().unblock();
 							 $('#bitrate').parent().parent().addClass('hide');
 							 $('#bitrate a').unbind('click');
+
+							 //unpublishOwnFeed에서 넘어옴
+							 $('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/img/now-cam-off.png"/>').off('click').one('click',function(){publishOwnFeed(true);});
+							 $('#template0').hide();
+							 is_published=false;
+							 
+							 changeGridLayout();
 
 							 
 						 }
@@ -454,7 +480,7 @@ function participantsList(room){
 function publishOwnFeed(useAudio) {
 	// Publish our stream
 	if (is_published!==false){
-		return
+		return;
 	}
 	sfutest.createOffer(
 		{	
@@ -479,15 +505,12 @@ function publishOwnFeed(useAudio) {
 				// allowed codecs in a room. With respect to the point (2) above,
 				// refer to the text in janus.plugin.videoroom.jcfg for more details
 				sfutest.send({ message: publish, jsep: jsep });
-				if(is_mute){ 
-					sfutest.muteAudio(); 
-				}else{
-					sfutest.unmuteAudio();
-				}
-				$('template0').show();
-				$('#mute').html(is_mute ? '<img class="bottom-bar-button-icon-layout" src="/img/now-mute.png"/>' : '<img class="bottom-bar-button-icon-layout" src="/img/now-unmute.png"/>');
-				$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/img/now-cam-on.png"/>').off("click").on('click',function() { unpublishOwnFeed(); });
+				
+				//$('#template0').show();
+				//$('#mute').html(is_mute ? '<img class="bottom-bar-button-icon-layout" src="/img/now-mute.png"/>' : '<img class="bottom-bar-button-icon-layout" src="/img/now-unmute.png"/>');
+				//$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/img/now-cam-on.png"/>').off("click").one('click',function() { unpublishOwnFeed(); });
 				is_published=true;
+				is_audioUsed=useAudio;
 			},
 			error: function(error) {
 				Janus.error("WebRTC error:", error);
@@ -496,7 +519,8 @@ function publishOwnFeed(useAudio) {
 					
 				} else {
 					bootbox.alert("WebRTC error... " + error.message);
-					$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/img/now-cam-off.png"/>').off('click').on('click',function() { publishOwnFeed(true); });
+					$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/img/now-cam-off.png"/>').off('click').one('click',function() { publishOwnFeed(true); });
+					
 				}
 			}
 			
@@ -506,38 +530,57 @@ function publishOwnFeed(useAudio) {
 
 // [jsflux] 음소거
 function toggleMute() {
-	name = $('#myvideo').prop('tagName');
+	localvideo = $('#myvideo').prop('tagName');
 
-	if(name!=='VIDEO'){
-		return;
-	}
-
-	if(is_mute){
-		
-		if(sfutest.unmuteAudio()){
+	if(is_published!==true){
+		if(is_mute===true){
+			
 			is_mute = false;
-		}
-	}else{
-		if(sfutest.muteAudio()){
+			alert("unmute");
+			
+		}else{
+			
 			is_mute = true;
+			alert("mute");
+			
+		}
+		$('#mute').html(is_mute ? '<img class="bottom-bar-button-icon-layout" src="/img/now-mute.png"/>' : '<img class="bottom-bar-button-icon-layout" src="/img/now-unmute.png"/>');
+		return;
+	}else{
+		if (is_audioUsed===true){
+			if(is_mute===true){
+				
+				if(sfutest.unmuteAudio()){
+					is_mute = false;
+					alert("unmute");
+				}
+			}else{
+				if(sfutest.muteAudio()){
+					is_mute = true;
+					alert("mute");
+				}
+			}
+		}else{
+			is_mute = true;
+			alert("현재 마이크 연결이 되어있지 않습니다.\n화상영상 송출을 중단하고 마이크를 연결한 후 다시 시도해 주세요. ");
+			
 		}
 	}
 	$('#mute').html(is_mute ? '<img class="bottom-bar-button-icon-layout" src="/img/now-mute.png"/>' : '<img class="bottom-bar-button-icon-layout" src="/img/now-unmute.png"/>');
 }
 
+
 // [jsflux] 영상송출 중단하기
 function unpublishOwnFeed() {
 	// Unpublish our stream
 	if (is_published!==true){
-		return
+		return; 
 	}
 	
 	var unpublish = { request: "unpublish" };
 	sfutest.send({ message: unpublish });
-	$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/img/now-cam-off.png"/>').off('click').on('click',function(){publishOwnFeed(true);});
-	$('template0').hide();
-	is_published=false;
-	changeGridLayout();
+	
+	
 }
 /* function publishOwnFeed() {
 	$('#video-publish-btn').html('<img class="bottom-bar-button-icon-layout" src="/img/now-cam-on.png"/>').off("click").on('click',function() { unpublishOwnFeed(); });
